@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 font-semibold rounded-full shadow-md focus:outline-none;
+  }
+
+  .btn-indigo {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+  }
+}

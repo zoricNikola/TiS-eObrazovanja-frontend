@@ -12,4 +12,84 @@
   .btn-indigo {
     @apply bg-indigo-600 text-white hover:bg-indigo-700;
   }
+
+  .router-link {
+    @apply cursor-pointer h-full flex relative items-center text-sm text-white hover:text-orange-500 tracking-normal transition duration-150 ease-in-out group;
+  }
+
+  .active-router-link {
+    @apply text-orange-500;
+  }
+
+  .avatar-ring {
+    @apply ring-2 ring-orange-500 ring-offset-4 ring-offset-gray-800;
+  }
+
+  .router-outlet-content {
+    @apply flex flex-col flex-auto overflow-y-auto;
+  }
+
+  .input-underlined {
+    @apply h-10
+    px-2
+    w-full
+    text-white
+    bg-indigo-900
+    rounded-lg
+    mt-2
+    border-0 border-b-2
+    focus:border-orange-500
+    focus:ring-0
+    focus:outline-none
+    shadow-md;
+  }
+
+  .input-underlined.ng-touched.ng-invalid {
+    @apply border-red-500;
+  }
+
+  .input-underlined.ng-valid {
+    @apply border-green-500;
+  }
+
+  .input-error-holder {
+    @apply flex
+    px-2
+    h-auto
+    min-h-10
+    items-center
+    rounded-b-lg
+    text-opacity-50
+    bg-red-800 bg-opacity-50;
+  }
+}
+
+@layer base {
+  router-outlet + * {
+    @apply router-outlet-content;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    @apply w-3;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-perfectDark;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-800;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-coolGray-600;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    @apply bg-coolGray-700;
+  }
 }

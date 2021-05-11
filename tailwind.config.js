@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   prefix: "",
   purge: {
@@ -6,12 +8,27 @@ module.exports = {
   },
   darkMode: "class", // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        perfectDark: {
+          DEFAULT: '#323334',
+        },
+        orange: colors.orange,
+        violet: colors.violet,
+        coolGray: colors.coolGray,
+      },
+      minHeight: {
+        '10': '2.5rem'
+      }
+    },
   },
   variants: {
     extend: {
-      backgroundColor: ['active']
+      backgroundColor: ['active', 'disabled'],
+      display: ['hover', 'group-hover'],
+      borderWidth: ['focus'],
+      opacity: ['disabled'],
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"), require("tailwind-scrollbar")],
 };

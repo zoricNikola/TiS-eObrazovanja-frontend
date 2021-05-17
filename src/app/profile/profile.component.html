@@ -1,15 +1,88 @@
-<!-- <div class="flex flex-col flex-auto justify-center items-center">
-  <div class="bg-indigo-800 w-4/5 h-full">
-    <div class="card-heading p-4">
-      <h3>This is heading</h3>
+<div class="flex flex-col flex-auto justify-center items-center">
+  <div class="w-full lg:w-1/2 bg-indigo-800 h-full">
+    <div class="card-heading p-4 text-4xl font-bold text-center">
+      <h1>My Profile</h1>
     </div>
-    <div class="flex flex-row flex-wrap card-body p-4 space-y-2 space-x-2">
-      <div class="bg-orange-500 w-20 h-20"></div>
-      <div class="self-center bg-orange-500 w-20 h-20"></div>
-      <div class="bg-orange-500 w-full h-20"></div>
-      <div class="bg-orange-500 w-full h-20"></div>
-    </div>
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+      <div
+        class="
+          flex flex-row flex-wrap
+          card-body
+          p-4
+          space-y-3
+          justify-items-center
+          text-indigo-800
+        "
+      >
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="firstName">First Name</label>
+          <input
+            ngModel="{{ user.firstName }}"
+            name="firstName"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="firstName"
+            type="text"
+          />
+        </div>
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="lastName">Last Name</label>
+          <input
+            ngModel="{{ user.lastName }}"
+            name="lastName"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="lastName"
+            type="text"
+          />
+        </div>
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="username">Username</label>
+          <input
+            ngModel="{{ user.username }}"
+            name="username"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="username"
+            type="text"
+          />
+        </div>
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="email">Email</label>
+          <input
+            ngModel="{{ user.email }}"
+            name="email"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="email"
+            type="text"
+          />
+        </div>
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="address">Address</label>
+          <input
+            ngModel="{{ user.address }}"
+            name="address"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="address"
+            type="text"
+          />
+        </div>
+        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
+          <label class="font-semibold" for="phoneNumber">Phone number</label>
+          <input
+            ngModel="{{ user.phoneNumber }}"
+            name="phoneNumber"
+            [disabled]="!editMode"
+            class="input-underlined w-1/2"
+            id="phoneNumber"
+            type="text"
+          />
+        </div>
+      </div>
+      <button class="btn btn-indigo">Save</button>
+    </form>
+    <button (click)="editMode = !editMode" class="btn btn-indigo">Edit</button>
   </div>
-</div> -->
-
-<p>profile works...</p>
+</div>

@@ -540,6 +540,27 @@ export class FakeBackendService {
       fullName: () => `Boris Jankovic`,
     },
   ];
+  private courses: any[] = [
+    {
+      id: 1,
+      name: "Mathematics 1",
+    },
+    {
+      id: 1,
+      name: "Mathematics 2",
+    },
+    {
+      id: 1,
+      name: "Mathematics 3",
+    },
+    {
+      id: 1,
+      name: "Mathematics 4",
+    },
+    {
+      id: 1,
+      name: "Mathematics 5",
+    }];
 
   constructor() { }
 
@@ -558,6 +579,10 @@ export class FakeBackendService {
 
   getStudents(): Observable<any> {
     return of(this.students);
+  }
+
+  getCourses(): Observable<any>{
+    return of(this.courses);
   }
 }
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,13 @@ import { AuthGuard } from './services/auth-guards/auth-guard.service';
 import { LogoutComponent } from './logout/logout.component';
 import { DocumentsComponent } from './documents/documents.component';
 import { FinancialCardComponent } from './financial-card/financial-card.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search-form/exam-period-search-form.component';
 
 @NgModule({
   declarations: [
@@ -35,13 +42,21 @@ import { FinancialCardComponent } from './financial-card/financial-card.componen
     HomeComponent,
     LogoutComponent,
     DocumentsComponent,
-    FinancialCardComponent
+    FinancialCardComponent,
+    ExamPeriodSearchFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [
     AuthService,

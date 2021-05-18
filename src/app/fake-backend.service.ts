@@ -540,6 +540,27 @@ export class FakeBackendService {
       fullName: () => `Boris Jankovic`,
     },
   ];
+  private courses: any[] = [
+    {
+      id: 1,
+      name: "Mathematics 1",
+    },
+    {
+      id: 1,
+      name: "Mathematics 2",
+    },
+    {
+      id: 1,
+      name: "Mathematics 3",
+    },
+    {
+      id: 1,
+      name: "Mathematics 4",
+    },
+    {
+      id: 1,
+      name: "Mathematics 5",
+    }];
 
   private examPeriods : any[] = [
     {_id: 1,
@@ -577,7 +598,11 @@ export class FakeBackendService {
   }
 
   getExamPeriods() : Observable<any> {
-    return of(this.examPeriods);
+    return of(this.examPeriods);}
+
+  getCourses(): Observable<any>{
+    return of(this.courses);
+
   }
 }
 

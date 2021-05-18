@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
@@ -20,6 +20,7 @@ import { AuthGuard } from './services/auth-guards/auth-guard.service';
 import { LogoutComponent } from './logout/logout.component';
 import { DocumentsComponent } from './documents/documents.component';
 import { FinancialCardComponent } from './financial-card/financial-card.component';
+import { AppErrorHandler } from './common/app-error-handler';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { FinancialCardComponent } from './financial-card/financial-card.componen
     AuthService,
     AuthGuard,
     AdminAuthGuard,
+    { provide: ErrorHandler, useClass: AppErrorHandler }
   ],
   bootstrap: [AppComponent]
 })

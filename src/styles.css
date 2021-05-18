@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -67,6 +66,17 @@
     @apply grid grid-cols-7
     justify-items-center
     bg-indigo-900
+    px-2
+    py-4
+    text-white
+    font-semibold
+    rounded-2xl
+    shadow-md;
+  }
+
+  .exam-period-table-row{
+    @apply grid grid-cols-4
+    justify-items-center
     px-2
     py-4
     text-white

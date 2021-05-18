@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ExamPeriodService } from '../services/exam-period.service';
 
 @Component({
   selector: 'app-exam-periods',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExamPeriodsComponent implements OnInit {
 
-  constructor() { }
+  examPeriods: any[] = []; 
+  
+  showSearchBox: boolean = false; 
+
+  constructor(private examPeriodService: ExamPeriodService) { }
 
   ngOnInit(): void {
+    this.loadExamPeriods();
+  }
+
+  loadExamPeriods(){
+    this.examPeriodService.getExamPeriods().subscribe(result => {
+      this.examPeriods = result;
+    })
   }
 
 }

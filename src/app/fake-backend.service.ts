@@ -541,6 +541,22 @@ export class FakeBackendService {
     },
   ];
 
+  private examPeriods : any[] = [
+    {_id: 1,
+    name: 'January exam period',
+    startDate: '2020-01-23',
+    endDate: '2020-02-03'},
+  {_id: 2,
+    name: 'February exam period',
+    startDate: '2020-02-04',
+    endDate: '2020-02-14'
+  },
+  {_id: 3,
+    name: 'April exam period',
+    startDate: '2020-04-04',
+    endDate: '2020-04-10'
+  }];
+
   constructor() { }
 
   login(credentials: LoginCredentials): Observable<any> {
@@ -558,6 +574,10 @@ export class FakeBackendService {
 
   getStudents(): Observable<any> {
     return of(this.students);
+  }
+
+  getExamPeriods() : Observable<any> {
+    return of(this.examPeriods);
   }
 }
 

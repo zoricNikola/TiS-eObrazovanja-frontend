@@ -41,7 +41,7 @@ import { FinancialCardComponent } from './financial-card/financial-card.componen
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
+    FormsModule
   ],
   providers: [
     AuthService,

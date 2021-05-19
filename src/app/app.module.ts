@@ -27,6 +27,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search-form/exam-period-search-form.component';
+import { ExamPeriodDialogComponent } from './dialogs/input-dialogs/exam-period-dialog/exam-period-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search
     LogoutComponent,
     DocumentsComponent,
     FinancialCardComponent,
-    ExamPeriodSearchFormComponent
+    ExamPeriodSearchFormComponent,
+    ExamPeriodDialogComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -56,12 +61,14 @@ import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search
     MatInputModule,
     MatNativeDateModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [
     AuthService,
     AuthGuard,
     AdminAuthGuard,
+    { provide: MAT_DIALOG_DATA, useValue: [] }
   ],
   bootstrap: [AppComponent]
 })

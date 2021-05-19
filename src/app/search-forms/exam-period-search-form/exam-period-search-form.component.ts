@@ -8,11 +8,6 @@ import { FormControl, FormGroup, NgForm } from '@angular/forms';
 })
 export class ExamPeriodSearchFormComponent implements OnInit {
 
-  // range = new FormGroup({
-  //   start: new FormControl(),
-  //   end: new FormControl()
-  // });
-
   constructor() { }
 
   ngOnInit(): void {

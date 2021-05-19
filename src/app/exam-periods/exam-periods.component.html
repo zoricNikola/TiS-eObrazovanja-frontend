@@ -7,7 +7,7 @@
             Filter
             <div [hidden]="!showSearchBox" class="w-full h-full bg-red-200 rounded-2xl">
               <div class="flex justify-between w-full h-15">
-                <button class="justify-self-auto w-1/4 bg-red-300 text-indigo-800 font-bold mb-5 mt-5 mx-3 rounded-full">+ Add a new exam period</button>
+                <button (click)="openDialog(0)" class="justify-self-auto w-1/4 bg-red-300 text-indigo-800 font-bold mb-5 mt-5 mx-3 rounded-full">+ Add a new exam period</button>
                 
                 <div class="w-3/5 h-15">
                   <app-exam-period-search-form class="w-full text-indigo-800 font-bold rounded-full"></app-exam-period-search-form>
@@ -27,6 +27,10 @@
               <div>{{ item.name }}</div>
               <div>{{ item.startDate }}</div>
               <div>{{ item.endDate }}</div>
+              <div class="space-x-2">
+                <button mat-stroked-button><mat-icon class="material-icons" (click)="openDialog(item._id)">edit</mat-icon></button>
+                <button mat-stroked-button><mat-icon class="material-icons text-red-500">delete</mat-icon></button>
+              </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-exam-period-search-form',
@@ -8,14 +8,18 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class ExamPeriodSearchFormComponent implements OnInit {
 
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl()
-  });
+  // range = new FormGroup({
+  //   start: new FormControl(),
+  //   end: new FormControl()
+  // });
 
   constructor() { }
 
   ngOnInit(): void {
   }
+
+  onSubmit(form: NgForm) {
+    console.log('My search form data : ', form.value);
+}
 
 }

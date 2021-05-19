@@ -6,21 +6,22 @@
             </button>
             Filter
             <div [hidden]="!showSearchBox" class="w-full h-full bg-red-200 rounded-2xl">
-                <form class="w-full h-15">
-                    <button class="bg-red-300 text-indigo-800 font-bold py-3 mb-4 px-2 mx-3 rounded-full">
-                     + Add a new exam period
-                    </button>
-
-                    <app-exam-period-search-form class="w-full text-indigo-800 font-bold rounded-full"></app-exam-period-search-form>
-                </form>
+              <div class="flex justify-between w-full h-15">
+                <button class="justify-self-auto w-1/4 bg-red-300 text-indigo-800 font-bold mb-5 mt-5 mx-3 rounded-full">+ Add a new exam period</button>
+                
+                <div class="w-3/5 h-15">
+                  <app-exam-period-search-form class="w-full text-indigo-800 font-bold rounded-full"></app-exam-period-search-form>
+                </div>
+              </div>
             </div>
-          </div>
+        </div>
+          
 
-          <div class="grid grid-rows-3 gap-4 mt-4 w-3/4">
-            <div class="exam-period-table-row bg-red-300 text-indigo-800">
-              <div>Exam period name</div>
-              <div>Start date</div>
-              <div>End date</div>
+            <div class="grid grid-rows-3 gap-4 mt-4 w-3/4">
+              <div class="exam-period-table-row bg-red-300 text-indigo-800">
+                <div>Exam period name</div>
+                <div>Start date</div>
+                <div>End date</div>
             </div>
             <div *ngFor="let item of examPeriods" class="exam-period-table-row bg-indigo-900">
               <div>{{ item.name }}</div>

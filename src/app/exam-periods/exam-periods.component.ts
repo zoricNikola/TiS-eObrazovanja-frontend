@@ -34,15 +34,21 @@ export class ExamPeriodsComponent implements OnInit {
     dialogConfig.autoFocus = true;
 
     let dialogRef = null;
+    let description = "";
 
     if(id === 0){//CREATE MODE
+      description = "Please create a new exam period";
+      dialogConfig.data = {description : description};
       dialogRef = this.dialog.open(ExamPeriodDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => this.addExamPeriod(val));
+      dialogRef.afterClosed().subscribe(val => this.addExamPeriod(val.data));
 
     }else if(id > 0){//EDIT MODE
-      dialogConfig.data = this.examPeriods.find(examPeriod => examPeriod._id === id);
+      var examPeriodForEdit = this.examPeriods.find(examPeriod => examPeriod._id === id);
+      description = "Please edit a selected exam period";
+      dialogConfig.data = {examPeriod : examPeriodForEdit, description : description};
       dialogRef = this.dialog.open(ExamPeriodDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => this.editExamPeriod(val));
+      dialogRef.afterClosed().subscribe(val => {this.editExamPeriod(id, val.data);});
+      
     }
   }
 
@@ -50,6 +56,8 @@ export class ExamPeriodsComponent implements OnInit {
     this.examPeriods.push(newExamPeriod);
   }
 
-  editExamPeriod(editedExamPeriod: ExamPeriod){
+  editExamPeriod(id: number, examPeriod: ExamPeriod){
+    var foundIndex = this.examPeriods.findIndex(obj => obj._id === id);
+    this.examPeriods[foundIndex] = examPeriod;
   }
 }

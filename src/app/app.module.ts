@@ -35,7 +35,7 @@ import { FinancialCardComponent } from './financial-card/financial-card.componen
     HomeComponent,
     LogoutComponent,
     DocumentsComponent,
-    FinancialCardComponent
+    FinancialCardComponent,
   ],
   imports: [
     BrowserModule,

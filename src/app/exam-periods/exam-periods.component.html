@@ -25,11 +25,11 @@
             </div>
             <div *ngFor="let item of examPeriods" class="exam-period-table-row bg-indigo-900">
               <div>{{ item.name }}</div>
-              <div>{{ item.startDate }}</div>
-              <div>{{ item.endDate }}</div>
+              <div>{{ datePipe.transform(item.startDate, 'yyyy-MM-dd') }}</div>
+              <div>{{ datePipe.transform(item.endDate, 'yyyy-MM-dd') }}</div>
               <div class="space-x-2">
                 <button mat-stroked-button><mat-icon class="material-icons" (click)="openDialog(item._id)">edit</mat-icon></button>
-                <button mat-stroked-button><mat-icon class="material-icons text-red-500">delete</mat-icon></button>
+                <button mat-stroked-button><mat-icon class="material-icons text-red-500" (click)="openDeleteDialog(item._id)">delete</mat-icon></button>
               </div>
             </div>
         </div>

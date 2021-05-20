@@ -30,6 +30,7 @@ import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search
 import { ExamPeriodDialogComponent } from './dialogs/input-dialogs/exam-period-dialog/exam-period-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     FinancialCardComponent,
     ExamPeriodSearchFormComponent,
     ExamPeriodDialogComponent,
-
+    DeleteConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

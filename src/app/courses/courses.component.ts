@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {CoursesService} from '../services/courses.service';
 
@@ -33,11 +33,30 @@ export class CoursesComponent implements OnInit {
 
     showSearchBox: boolean = false;
 
+    showModal: boolean = false;
+
+    arrow: string = '˅';
+
     constructor(private router: Router, private courseService: CoursesService) { }
 
   ngOnInit(): void {
       const url: string = this.router.url;
       this.courseService.getCourses().subscribe((courses: any[]) => this.courses = courses);
+  }
+
+  onFilterClick(): void{
+    this.showSearchBox = !this.showSearchBox;
+
+    if (this.showSearchBox === true){
+      this.arrow = '˄';
+    }else{
+      this.arrow = '˅';
+    }
+  }
+
+  onCreateClick(): void{
+      this.showModal = !this.showModal;
+      console.log(this.showModal);
   }
 
 }

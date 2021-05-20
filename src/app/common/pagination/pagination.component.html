@@ -1,0 +1,153 @@
+<div *ngIf="numberOfPages > 1" class="inline-flex float-right">
+  <div
+    class="inline-flex rounded-md shadow-sm -space-x-px"
+    aria-label="Pagination"
+    class="
+      inline-flex
+      bg-indigo-900
+      text-orange-500
+      border border-orange-500
+      rounded-xl
+      divide-x-2 divide-orange-500 divide-opacity-80
+      font-medium
+    "
+  >
+    <div
+      (click)="onPageChange(1)"
+      class="px-2 py-2 cursor-pointer hover:bg-indigo-800 rounded-l-xl"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+        />
+      </svg>
+    </div>
+    <div
+      (click)="onPageChange(currentPage - 1)"
+      class="px-2 py-2 cursor-pointer hover:bg-indigo-800"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </div>
+    <div *ngIf="slicedPages[0] !== pages[0]" class="px-2 py-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+        />
+      </svg>
+    </div>
+    <div
+      *ngFor="let page of slicedPages"
+      (click)="onPageChange(page)"
+      class="px-4 py-2 hover:bg-indigo-800"
+      [class.cursor-pointer]="page !== currentPage"
+      [class.hover:bg-orange-500]="page === currentPage"
+      [class.bg-orange-500]="page === currentPage"
+      [class.text-indigo-900]="page === currentPage"
+    >
+      {{ page }}
+    </div>
+    <div
+      *ngIf="slicedPages[slicedPages.length - 1] !== pages[pages.length - 1]"
+      class="px-2 py-2"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+        />
+      </svg>
+    </div>
+    <div
+      (click)="onPageChange(currentPage + 1)"
+      class="px-2 py-2 cursor-pointer hover:bg-indigo-800"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </div>
+    <div
+      (click)="onPageChange(numberOfPages)"
+      class="px-2 py-2 cursor-pointer hover:bg-indigo-800 rounded-r-xl"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 5l7 7-7 7M5 5l7 7-7 7"
+        />
+      </svg>
+    </div>
+  </div>
+  <select
+    class="
+      ml-2
+      bg-indigo-900
+      text-orange-500
+      border border-orange-500
+      rounded-xl
+    "
+    [ngModel]="pageSize"
+    (ngModelChange)="onPageSizeChange($event)"
+  >
+    <option *ngFor="let option of pageSizeOptions" [ngValue]="option">
+      {{ option }}
+    </option>
+  </select>
+</div>

@@ -1,29 +1,41 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FakeBackendService } from '../fake-backend.service';
-import { map } from "rxjs/operators";
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { map, catchError } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoginCredentials } from './../model/login-credentials';
-import { User } from './../model/user';
-import { Observable } from 'rxjs';
+import { CurrentUser } from '../model/current-user';
+import { Observable, of, throwError } from 'rxjs';
+import { environment } from './../../environments/environment';
+import { AppError } from '../common/app-error';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private backend: FakeBackendService) { }
+  constructor(private http: HttpClient) {}
 
   login(credentials: LoginCredentials): Observable<boolean> {
-    const loginDTO = { username: credentials.username, password: credentials.password };
-    return this.backend.login(loginDTO)
-      .pipe(
-        map((jwt) => {
-          if (jwt) {
-            localStorage.setItem('token', jwt);
+    const loginDTO = {
+      username: credentials.username,
+      password: credentials.password,
+    };
 
-            return true;
-          }
-          return false;
+    return this.http
+      .post(`${environment.apiUrl}/users/login`, loginDTO, {
+        observe: 'response',
+        responseType: 'text',
+      })
+      .pipe(
+        map((response: HttpResponse<Object>) => {
+          const token = response.body as string;
+          localStorage.setItem('token', token);
+          return true;
+        })
+      )
+      .pipe(
+        catchError((error: Response) => {
+          if (error.status === 400) return of(false);
+          return throwError(new AppError(error));
         })
       );
   }
@@ -32,17 +44,21 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  isLoggedIn() {
-    const jwt = localStorage.getItem('token');
-    if (!jwt) return false;
-    return true;
-    // return new JwtHelperService().isTokenExpired(jwt);
+  get authorizationToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  get currentUser(): User | null {
-    const jwt = localStorage.getItem('token');
-    if (!jwt) return null;
-    let user = new JwtHelperService().decodeToken(jwt);
+  isLoggedIn() {
+    const jwt = this.authorizationToken;
+    if (!jwt) return false;
+    return !new JwtHelperService().isTokenExpired(jwt);
+  }
+
+  get currentUser(): CurrentUser | null {
+    if (!this.isLoggedIn()) return null;
+    let user = new JwtHelperService().decodeToken(
+      this.authorizationToken as string
+    );
     user['fullName'] = () => `${user.firstName} ${user.lastName}`;
     return user;
   }

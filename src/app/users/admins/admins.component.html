@@ -1,0 +1,173 @@
+<div *ngIf="adminsPage$ | async as adminsPage">
+  <div class="w-full">
+    <button class="btn btn-green inline-flex items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </button>
+    <button
+      *ngIf="!selectable"
+      (click)="showSearchBox = !showSearchBox"
+      class="btn btn-indigo inline-flex items-center ml-2"
+    >
+      <svg
+        *ngIf="!showSearchBox"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
+      <svg
+        *ngIf="showSearchBox"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 15l7-7 7 7"
+        />
+      </svg>
+      Filter
+    </button>
+    <button
+      *ngIf="selectable && selectedAdmin"
+      (click)="onAdminTake()"
+      class="btn btn-green float-right inline-flex items-center"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+        />
+      </svg>
+      Take
+    </button>
+  </div>
+  <accordion [opened]="showSearchBox">
+    <table class="w-full table-fixed text-center font-semibold">
+      <tbody>
+        <tr class="bg-red-300 text-white shadow-md">
+          <td>
+            <input
+              placeholder="FirstName"
+              class="input-underlined text-center mt-0"
+            />
+          </td>
+          <td>
+            <input
+              placeholder="LastName"
+              class="input-underlined text-center mt-0"
+            />
+          </td>
+          <td>
+            <input
+              placeholder="Username"
+              class="input-underlined text-center mt-0"
+            />
+          </td>
+          <td>
+            <input
+              placeholder="Email"
+              class="input-underlined text-center mt-0"
+            />
+          </td>
+          <td>
+            <input
+              placeholder="Phone"
+              class="input-underlined text-center mt-0"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </accordion>
+  <div class="mb-2"></div>
+  <table
+    class="
+      w-full
+      table-fixed
+      text-center
+      border-separate
+      table-row-spacing-y-4
+      font-semibold
+    "
+  >
+    <thead>
+      <tr class="bg-red-300 text-indigo-800 shadow-md">
+        <th class="">First Name</th>
+        <th class="">Last Name</th>
+        <th class="">Username</th>
+        <th class="">Email</th>
+        <th class="">Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let admin of adminsPage.content"
+        class="hover:bg-indigo-600 text-white shadow-md"
+        [class.cursor-pointer]="selectable"
+        [ngClass]="
+          !selectable
+            ? 'bg-indigo-900'
+            : selectedAdmin === admin
+            ? 'bg-indigo-700'
+            : 'bg-indigo-900'
+        "
+        (click)="selectable && onAdminSelect(admin)"
+      >
+        <td>{{ admin.firstName }}</td>
+        <td>{{ admin.lastName }}</td>
+        <td>
+          <a
+            [routerLink]="'/admins/' + admin.id"
+            class="hover:text-orange-500"
+            >{{ admin.username }}</a
+          >
+        </td>
+        <td>{{ admin.email }}</td>
+        <td>{{ admin.phoneNumber }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination
+    [itemsCount]="adminsPage.totalItemsCount"
+    [pagesCount]="adminsPage.totalPagesCount"
+    [pageSize]="adminsPage.pageSize"
+    [currentPage]="adminsPage.currentPage"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
+  </pagination>
+</div>

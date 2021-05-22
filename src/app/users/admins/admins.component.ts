@@ -8,7 +8,7 @@ import { switchMap } from 'rxjs/operators';
 import { PageParams } from './../../model/http/page-params';
 
 @Component({
-  selector: 'admins',
+  selector: '[admins]',
   templateUrl: './admins.component.html',
   styleUrls: ['./admins.component.css'],
 })

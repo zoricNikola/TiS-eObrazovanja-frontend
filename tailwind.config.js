@@ -18,7 +18,20 @@ module.exports = {
         coolGray: colors.coolGray,
       },
       minHeight: {
-        '10': '2.5rem'
+        '10': '2.5rem',
+        '1/4': '25%'
+      },
+      minWidth: {
+        '10': '2.5rem',
+        '1/4': '25%'
+      },
+      maxHeight: {
+        '10': '2.5rem',
+        '3/4': '75%'
+      },
+      maxWidth: {
+        '10': '2.5rem',
+        '3/4': '75%'
       },
       margin: {
         '1/12': '8.333333%'

@@ -1,4 +1,4 @@
-<div *ngIf="adminsPage$ | async as adminsPage">
+<ng-container *ngIf="adminsPage$ | async as adminsPage">
   <div class="w-full">
     <button class="btn btn-green inline-flex items-center">
       <svg
@@ -75,7 +75,7 @@
       Take
     </button>
   </div>
-  <accordion [opened]="showSearchBox">
+  <div accordion [opened]="showSearchBox">
     <table class="w-full table-fixed text-center font-semibold">
       <tbody>
         <tr class="bg-red-300 text-white shadow-md">
@@ -112,8 +112,7 @@
         </tr>
       </tbody>
     </table>
-  </accordion>
-  <div class="mb-2"></div>
+  </div>
   <table
     class="
       w-full
@@ -161,13 +160,14 @@
       </tr>
     </tbody>
   </table>
-  <pagination
+  <div
+    class="flex justify-end"
+    pagination
     [itemsCount]="adminsPage.totalItemsCount"
     [pagesCount]="adminsPage.totalPagesCount"
     [pageSize]="adminsPage.pageSize"
     [currentPage]="adminsPage.currentPage"
     (pageChange)="onPageChange($event)"
     (pageSizeChange)="onPageSizeChange($event)"
-  >
-  </pagination>
-</div>
+  ></div>
+</ng-container>

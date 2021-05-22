@@ -11,7 +11,7 @@ import * as _ from 'lodash-es';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'pagination',
+  selector: '[pagination]',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css'],
 })

@@ -25,6 +25,7 @@ import { AccordionComponent } from './common/accordion/accordion.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { AdminsComponent } from './users/admins/admins.component';
 import { AuthInterceptor } from './auth-interceptor.service';
+import { DialogComponent } from './common/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { AuthInterceptor } from './auth-interceptor.service';
     AccordionComponent,
     PaginationComponent,
     AdminsComponent,
+    DialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [

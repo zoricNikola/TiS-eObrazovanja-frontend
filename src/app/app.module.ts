@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -31,6 +31,9 @@ import { ExamPeriodDialogComponent } from './dialogs/input-dialogs/exam-period-d
 import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/delete-confirm-dialog/delete-confirm-dialog.component';
+import { AppErrorHandler } from './common/app-error-handler';
+import { AccordionComponent } from './common/accordion/accordion.component';
+import { PaginationComponent } from './common/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,8 @@ import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/del
     ExamPeriodSearchFormComponent,
     ExamPeriodDialogComponent,
     DeleteConfirmDialogComponent,
+    AccordionComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
@@ -63,14 +68,18 @@ import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/del
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule
-  ],
+    MatDialogModule,
+    BrowserModule, 
+    AppRoutingModule, 
+    HttpClientModule, 
+    FormsModule],
   providers: [
     AuthService,
     AuthGuard,
     AdminAuthGuard,
-    { provide: MAT_DIALOG_DATA, useValue: [] }
+    { provide: MAT_DIALOG_DATA, useValue: [] },
+    { provide: ErrorHandler, useClass: AppErrorHandler },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,7 +1,9 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +36,8 @@ import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/del
 import { AppErrorHandler } from './common/app-error-handler';
 import { AccordionComponent } from './common/accordion/accordion.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
+import { AdminsComponent } from './users/admins/admins.component';
+import { AuthInterceptor } from './auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,8 @@ import { PaginationComponent } from './common/pagination/pagination.component';
     ExamPeriodDialogComponent,
     DeleteConfirmDialogComponent,
     AccordionComponent,
-    PaginationComponent
+    PaginationComponent,
+    AdminsComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +84,7 @@ import { PaginationComponent } from './common/pagination/pagination.component';
     AdminAuthGuard,
     { provide: MAT_DIALOG_DATA, useValue: [] },
     { provide: ErrorHandler, useClass: AppErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

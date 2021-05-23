@@ -8,6 +8,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import * as _ from 'lodash-es';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'pagination',
@@ -16,36 +17,41 @@ import * as _ from 'lodash-es';
 })
 export class PaginationComponent implements OnInit, OnChanges {
   @Input('itemsCount') itemsCount: number = 0;
-  @Input('pageSize') pageSize: number = 20;
-  @Input('currentPage') currentPage: number = 0;
+  @Input('pageSize') pageSize: number = environment.defaultPageSize;
+  @Input('pagesCount') pagesCount: number = 0;
+  @Input('currentPage') currentPage: number = 1;
   @Output('pageChange') pageChange: EventEmitter<number> = new EventEmitter();
   @Output('pageSizeChange') pageSizeChange: EventEmitter<number> =
     new EventEmitter();
 
   pageSizeOptions: number[] = [10, 20, 50, 100];
 
-  numberOfPages: number = 0;
   pages: number[] = [];
   slicedPages: number[] = [];
+  firstPageItemIndex: number = 0;
+  lastPageItemIndex: number = this.itemsCount;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.refreshPagination();
+  }
 
   refreshPagination(): void {
+    this.pages = _.range(1, this.pagesCount + 1);
+
+    if (!this.pages.includes(this.currentPage)) this.pageChange.emit(1);
+
     if (!this.pageSizeOptions.includes(this.pageSize)) {
       this.pageSizeOptions.push(this.pageSize);
       this.pageSizeOptions = _.sortBy(this.pageSizeOptions);
     }
 
-    this.numberOfPages = Math.ceil(this.itemsCount / this.pageSize);
-    this.pages = _.range(1, this.numberOfPages + 1);
-
-    if (this.numberOfPages > 5) {
+    if (this.pagesCount > 5) {
       if (this.currentPage < 4) {
         this.slicedPages = this.pages.slice(0, 5);
-      } else if (this.currentPage > this.numberOfPages - 3) {
-        this.slicedPages = this.pages.slice(this.numberOfPages - 5);
+      } else if (this.currentPage > this.pagesCount - 3) {
+        this.slicedPages = this.pages.slice(this.pagesCount - 5);
       } else {
         this.slicedPages = this.pages.slice(
           this.currentPage - 3,
@@ -54,23 +60,20 @@ export class PaginationComponent implements OnInit, OnChanges {
       }
     } else this.slicedPages = this.pages;
 
-    if (!this.slicedPages.includes(this.currentPage)) this.pageChange.emit(1);
+    this.firstPageItemIndex = (this.currentPage - 1) * this.pageSize + 1;
+    this.lastPageItemIndex =
+      this.currentPage === this.pagesCount
+        ? this.itemsCount
+        : this.firstPageItemIndex + (this.pageSize - 1);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes.currentPage &&
-      this.numberOfPages > 0 &&
-      (changes.currentPage.currentValue < 1 ||
-        changes.currentPage.currentValue > this.numberOfPages)
-    )
-      return;
     this.refreshPagination();
   }
 
   onPageChange(selectedPage: number): void {
     if (selectedPage === this.currentPage) return;
-    if (selectedPage < 1 || selectedPage > this.numberOfPages) return;
+    if (selectedPage < 1 || selectedPage > this.pagesCount) return;
     this.pageChange.emit(selectedPage);
   }
 

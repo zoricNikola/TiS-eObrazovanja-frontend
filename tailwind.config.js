@@ -19,6 +19,9 @@ module.exports = {
       },
       minHeight: {
         '10': '2.5rem'
+      },
+      margin: {
+        '1/12': '8.333333%'
       }
     },
   },
@@ -28,6 +31,7 @@ module.exports = {
       display: ['hover', 'group-hover'],
       borderWidth: ['focus'],
       opacity: ['disabled'],
+      borderRadius: ['first', 'last']
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"), require("tailwind-scrollbar")],

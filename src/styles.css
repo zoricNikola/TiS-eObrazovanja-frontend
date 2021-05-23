@@ -9,7 +9,11 @@
   }
 
   .btn-indigo {
-    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+    @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-500;
+  }
+
+  .btn-green {
+    @apply bg-green-600 text-white hover:bg-green-700 active:bg-green-500;
   }
 
   .router-link {
@@ -92,6 +96,29 @@
     @apply router-outlet-content;
   }
 
+  .accordion:first-child {
+    @apply mt-2;
+  }
+
+  .accordion:last-child {
+    @apply mb-2;
+  }
+
+  table tr th:first-child,
+  table tr td:first-child {
+    @apply rounded-l-2xl;
+  }
+
+  table tr th:last-child,
+  table tr td:last-child {
+    @apply rounded-r-2xl;
+  }
+
+  table tr th,
+  table tr td {
+    @apply py-4 px-2;
+  }
+
   /* width */
   ::-webkit-scrollbar {
     @apply w-3;
@@ -119,3 +146,9 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@layer utilities {
+  .table-row-spacing-y-4 {
+    border-spacing: 0 1rem;
+  }
+}

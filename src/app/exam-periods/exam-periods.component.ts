@@ -1,10 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DeleteConfirmDialogComponent } from '../dialogs/confirmation-dialogs/delete-confirm-dialog/delete-confirm-dialog.component';
-import { ExamPeriodDialogComponent } from '../dialogs/input-dialogs/exam-period-dialog/exam-period-dialog.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { FORM_STATE } from '../model/common/form-state';
 import { ExamPeriod } from '../model/exam-period';
+import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
+import { PageParams } from '../model/http/page-params';
 import { ExamPeriodService } from '../services/exam-period.service';
 
 @Component({
@@ -15,35 +17,39 @@ import { ExamPeriodService } from '../services/exam-period.service';
 })
 export class ExamPeriodsComponent implements OnInit {
 
+  @Input('selectable') selectable: boolean = false;
 
   showSearchBox: boolean = false;
-
   examperiodFormDialogOpened: boolean = false;
   examPeriodFormDialogState: FORM_STATE = FORM_STATE.ADD;
 
   examPeriodForEdit: ExamPeriod | undefined = undefined;
+  selectedEXamPeriod: ExamPeriod | undefined = undefined;
 
-
-
-  examPeriods: any[] = []; 
+  examPeriodsPage$ : Observable<ExamPeriodPage> = of();
   
 
-  constructor(private examPeriodService: ExamPeriodService, private dialog: MatDialog, public datePipe: DatePipe) { }
+  constructor(private examPeriodService: ExamPeriodService, 
+              private router: Router, 
+              private route: ActivatedRoute, 
+              public datePipe: DatePipe) { }
 
   get FORM_STATE() {
     return FORM_STATE;
   }
 
   ngOnInit(): void {
-    this.loadExamPeriods();
+    this.examPeriodsPage$ = this.route.queryParamMap.pipe(
+      switchMap((paramMap) => {
+        let pageParams: PageParams = new PageParams(
+          paramMap.get('page'),
+          paramMap.get('size')
+        );
+        return this.examPeriodService.getExamPeriods(pageParams);
+      })
+    );
   }
-
-  loadExamPeriods(){
-    this.examPeriodService.getExamPeriods().subscribe(result => {
-      this.examPeriods = result;
-    });
-  }
-
+  
   openExamPeriodFormDialog(state: FORM_STATE){
     this.examPeriodFormDialogState = state;
     this.examperiodFormDialogOpened = true;
@@ -58,78 +64,19 @@ export class ExamPeriodsComponent implements OnInit {
     console.log('new exam period: ' + examPeriod);
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  openDialog(id: number): void {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    let dialogRef = null;
-    let description = "";
-
-    if(id === 0){//CREATE MODE
-      description = "Please create a new exam period";
-      dialogConfig.data = {description : description};
-      dialogRef = this.dialog.open(ExamPeriodDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => this.addExamPeriod(val.data));
-
-    }else if(id > 0){//EDIT MODE
-      var examPeriodForEdit = this.examPeriods.find(examPeriod => examPeriod._id === id);
-      description = "Please edit a selected exam period";
-      dialogConfig.data = {examPeriod : examPeriodForEdit, description : description};
-      dialogRef = this.dialog.open(ExamPeriodDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => {this.editExamPeriod(id, val.data);});
-      
-    }
+  onPageChange(selectedPage: number): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: selectedPage === 1 ? null : selectedPage },
+      queryParamsHandling: 'merge',
+    });
   }
 
-  openDeleteDialog(id: number): void{
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    let dialogRef = null;
-
-    if(id != 0 && id != null){
-      var examPeriodName = this.examPeriods.find(examPeriod => examPeriod._id === id).name;
-      dialogConfig.data = {id: id, name: examPeriodName};
-      dialogRef = this.dialog.open(DeleteConfirmDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => {
-        if(val.confirmation == true) {
-          this.deleteExamPeriod(val.data);}
-      });
-    }
-  }
-
-  addExamPeriod(newExamPeriod: ExamPeriod){
-    this.examPeriods.push(newExamPeriod);
-  }
-
-  editExamPeriod(id: number, examPeriod: ExamPeriod){
-    var foundIndex = this.examPeriods.findIndex(obj => obj._id === id);
-    this.examPeriods[foundIndex] = examPeriod;
-  }
-
-  deleteExamPeriod(id: number){
-    this.examPeriods = this.examPeriods.filter(obj => obj._id !== id);
+  onPageSizeChange(selectedPageSize: number): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { size: selectedPageSize },
+      queryParamsHandling: 'merge',
+    });
   }
 }

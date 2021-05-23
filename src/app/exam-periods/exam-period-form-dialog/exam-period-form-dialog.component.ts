@@ -18,8 +18,8 @@ export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
 
   examPeriod: ExamPeriod = {
     _id: 0,
-    startDate: new Date,
-    endDate: new Date,
+    startDate: new Date(''),
+    endDate: new Date(''),
     name: ''
   };
 
@@ -31,7 +31,7 @@ export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
       this.inputExamPeriod &&
       this.state === FORM_STATE.EDIT
     ) {
-      this.examPeriod = this.inputExamPeriod;
+      this.examPeriod = {...this.inputExamPeriod};
     }
   }
 

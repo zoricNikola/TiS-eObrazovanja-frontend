@@ -5,4 +5,5 @@ export interface Page<T> {
   totalPagesCount: number;
   pageSize: number;
   currentPage: number;
+  queryParams: any;
 }

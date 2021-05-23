@@ -13,26 +13,59 @@ import { ProfileComponent } from './profile/profile.component';
 import { AdminAuthGuard } from './services/auth-guards/admin-auth-guard.service';
 import { AuthGuard } from './services/auth-guards/auth-guard.service';
 import { StudentAuthGuardService } from './services/auth-guards/student-auth-guard.service';
+import { AdminsComponent } from './users/admins/admins.component';
 import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-  { path: 'courses',  component: CoursesComponent, canActivate: [AuthGuard]},
-  { path: 'examPeriods',  component: ExamPeriodsComponent, canActivate: [AuthGuard, AdminAuthGuard]},
-  { path: 'admins',  component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard]},
-  { path: 'teachers',  component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard]},
-  { path: 'students',  component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard]},
-  { path: 'applyExams',  component: ExamsApplyComponent, canActivate: [AuthGuard, StudentAuthGuardService]},
-  { path: 'examResults',  component: ExamsResultsComponent, canActivate: [AuthGuard, StudentAuthGuardService]},
-  { path: 'financialCard',  component: FinancialCardComponent, canActivate: [AuthGuard, StudentAuthGuardService]},
-  { path: 'documents',  component: DocumentsComponent, canActivate: [AuthGuard, StudentAuthGuardService]},
-  { path: 'login',  component: LoginComponent},
-  { path: 'logout', component: LogoutComponent},
+  { path: '', component: HomeComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'courses', component: CoursesComponent, canActivate: [AuthGuard] },
+  {
+    path: 'examPeriods',
+    component: ExamPeriodsComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'admins',
+    component: AdminsComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'teachers',
+    component: UsersComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'students',
+    component: UsersComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'applyExams',
+    component: ExamsApplyComponent,
+    canActivate: [AuthGuard, StudentAuthGuardService],
+  },
+  {
+    path: 'examResults',
+    component: ExamsResultsComponent,
+    canActivate: [AuthGuard, StudentAuthGuardService],
+  },
+  {
+    path: 'financialCard',
+    component: FinancialCardComponent,
+    canActivate: [AuthGuard, StudentAuthGuardService],
+  },
+  {
+    path: 'documents',
+    component: DocumentsComponent,
+    canActivate: [AuthGuard, StudentAuthGuardService],
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

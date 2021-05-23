@@ -1,0 +1,7 @@
+/* .input-underlined.ng-valid {
+  @apply border-white;
+} */
+
+.input-underlined {
+  @apply border-orange-500;
+}

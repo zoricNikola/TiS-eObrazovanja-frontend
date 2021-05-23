@@ -18,8 +18,12 @@ export class AdminsService extends BaseService {
     super(`${environment.apiUrl}/users`, http);
   }
 
-  getAdmins(pageParams: PageParams): Observable<AdminPage> {
-    let params: any = { page: pageParams.page, size: pageParams.size };
+  getAdmins(pageParams: PageParams, queryParams?: any): Observable<AdminPage> {
+    let params: any = {
+      page: pageParams.page,
+      size: pageParams.size,
+      ...queryParams,
+    };
 
     return this.http
       .get(`${this.url}/admins`, { params, observe: 'response' })
@@ -33,6 +37,7 @@ export class AdminsService extends BaseService {
             totalPagesCount: body.totalPages,
             pageSize: pageParams.size,
             currentPage: pageParams.page,
+            queryParams: queryParams,
           };
           return page;
         })

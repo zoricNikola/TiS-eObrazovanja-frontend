@@ -79,7 +79,6 @@
     text-white
     bg-indigo-900
     rounded-lg
-    mt-2
     border-0 border-b-2
     focus:border-orange-500
     focus:ring-0
@@ -117,11 +116,35 @@
     rounded-2xl
     shadow-md;
   }
+
+  .custom-input-holder {
+    @apply relative;
+  }
 }
 
 @layer base {
   router-outlet + * {
     @apply router-outlet-content;
+  }
+
+  .custom-input-holder input {
+    @apply pt-8 h-14;
+  }
+
+  .custom-input-holder input + label {
+    @apply absolute
+    left-2
+    top-6
+    opacity-50
+    transition-all
+    ease-out
+    duration-300
+    pointer-events-none;
+  }
+
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    @apply opacity-100 text-orange-500 transform -translate-y-6;
   }
 
   .accordion:first-child {

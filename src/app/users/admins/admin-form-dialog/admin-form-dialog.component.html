@@ -1,4 +1,4 @@
-<app-dialog [opened]="opened" [modal]="true">
+<app-dialog [opened]="true" [modal]="true">
   <ng-container class="heading">{{
     state === FORM_STATE.ADD
       ? "Create new admin"
@@ -8,18 +8,18 @@
     <form #f="ngForm" (ngSubmit)="f.valid && submit(f)">
       <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
         <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
-          <div>
-            <label for="firstName">First Name</label>
+          <div class="custom-input-holder">
             <input
               required
               id="firstName"
               name="firstName"
               type="text"
-              placeholder="First Name"
-              class="input-underlined text-center"
+              placeholder=" "
+              class="input-underlined"
               [(ngModel)]="admin.firstName"
               #firstName="ngModel"
             />
+            <label for="firstName">First Name</label>
             <div
               *ngIf="firstName.touched && firstName.invalid"
               class="input-error-holder"
@@ -31,17 +31,18 @@
               </div>
             </div>
           </div>
-          <div>
+          <div class="custom-input-holder">
             <input
               required
               id="lastName"
               name="lastName"
               type="text"
-              placeholder="Last Name"
-              class="input-underlined text-center"
+              placeholder=" "
+              class="input-underlined"
               [(ngModel)]="admin.lastName"
               #lastName="ngModel"
             />
+            <label for="lastName">Last Name</label>
             <div
               *ngIf="lastName.touched && lastName.invalid"
               class="input-error-holder"
@@ -53,17 +54,18 @@
               </div>
             </div>
           </div>
-          <div>
+          <div class="custom-input-holder">
             <input
               required
               id="username"
               name="username"
               type="text"
-              placeholder="Username"
-              class="input-underlined text-center"
+              placeholder=" "
+              class="input-underlined"
               [(ngModel)]="admin.username"
               #username="ngModel"
             />
+            <label for="username">Username</label>
             <div
               *ngIf="username.touched && username.invalid"
               class="input-error-holder"
@@ -77,18 +79,19 @@
           </div>
         </div>
         <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
-          <div>
+          <div class="custom-input-holder">
             <input
               required
               email
               id="email"
               name="email"
               type="text"
-              placeholder="email@example.com"
-              class="input-underlined text-center"
+              placeholder=" "
+              class="input-underlined"
               [(ngModel)]="admin.email"
               #email="ngModel"
             />
+            <label for="email">email@example.com</label>
             <div
               *ngIf="email.touched && email.invalid"
               class="input-error-holder"
@@ -101,17 +104,18 @@
               </div>
             </div>
           </div>
-          <div>
+          <div class="custom-input-holder">
             <input
               required
               id="phoneNumber"
               name="phoneNumber"
               type="text"
-              placeholder="Phone Number"
-              class="input-underlined text-center"
+              placeholder=" "
+              class="input-underlined"
               [(ngModel)]="admin.phoneNumber"
               #phoneNumber="ngModel"
             />
+            <label for="phoneNumber">Phone Number</label>
             <div
               *ngIf="phoneNumber.touched && phoneNumber.invalid"
               class="input-error-holder"

@@ -26,6 +26,7 @@ import { PaginationComponent } from './common/pagination/pagination.component';
 import { AdminsComponent } from './users/admins/admins.component';
 import { AuthInterceptor } from './auth-interceptor.service';
 import { DialogComponent } from './common/dialog/dialog.component';
+import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DialogComponent } from './common/dialog/dialog.component';
     PaginationComponent,
     AdminsComponent,
     DialogComponent,
+    AdminFormDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [

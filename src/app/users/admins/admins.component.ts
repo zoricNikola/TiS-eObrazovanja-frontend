@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from 'src/app/model/user/user';
 import { Observable, of } from 'rxjs';
 import { AdminPage } from './../../model/user/admin-page';
-import { Router, ActivatedRoute } from '@angular/router';
 import { AdminsService } from './../../services/admins.service';
 import { switchMap } from 'rxjs/operators';
 import { PageParams } from './../../model/http/page-params';
+import { FORM_STATE } from 'src/app/model/common/form-state';
 
 @Component({
   selector: '[admins]',
@@ -26,6 +26,11 @@ export class AdminsComponent implements OnInit {
 
   showSearchBox: boolean = false;
 
+  adminFormDialogOpened: boolean = false;
+  adminFormDialogState: FORM_STATE = FORM_STATE.ADD;
+
+  adminForEdit: User | undefined = undefined;
+
   constructor(private adminsService: AdminsService) {}
 
   ngOnInit(): void {
@@ -34,6 +39,10 @@ export class AdminsComponent implements OnInit {
         return this.adminsService.getAdmins(params);
       })
     );
+  }
+
+  get FORM_STATE() {
+    return FORM_STATE;
   }
 
   onPageChange(selectedPage: number): void {
@@ -50,5 +59,19 @@ export class AdminsComponent implements OnInit {
 
   onAdminTake(): void {
     this.adminTake.emit(this.selectedAdmin);
+  }
+
+  openAdminFormDialog(state: FORM_STATE): void {
+    this.adminFormDialogState = state;
+    this.adminFormDialogOpened = true;
+  }
+
+  onAdminFormDialogCancel(): void {
+    this.adminFormDialogOpened = false;
+    this.adminForEdit = undefined;
+  }
+
+  onAdminSave(admin: User): void {
+    console.log(admin);
   }
 }

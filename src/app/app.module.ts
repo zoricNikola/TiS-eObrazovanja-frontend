@@ -27,6 +27,7 @@ import { AdminsComponent } from './users/admins/admins.component';
 import { AuthInterceptor } from './auth-interceptor.service';
 import { DialogComponent } from './common/dialog/dialog.component';
 import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin-form-dialog.component';
+import { CourseFormDialogComponent } from './courses/course-form-dialog/course-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin
     AdminsComponent,
     DialogComponent,
     AdminFormDialogComponent,
+    CourseFormDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [

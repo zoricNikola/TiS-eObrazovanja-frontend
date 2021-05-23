@@ -38,6 +38,9 @@ import { AccordionComponent } from './common/accordion/accordion.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { AdminsComponent } from './users/admins/admins.component';
 import { AuthInterceptor } from './auth-interceptor.service';
+import { DialogComponent } from './common/dialog/dialog.component';
+import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin-form-dialog.component';
+import { ExamPeriodFormDialogComponent } from './exam-periods/exam-period-form-dialog/exam-period-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,9 @@ import { AuthInterceptor } from './auth-interceptor.service';
     AccordionComponent,
     PaginationComponent,
     AdminsComponent,
+    DialogComponent,
+    AdminFormDialogComponent,
+    ExamPeriodFormDialogComponent,
   ],
   imports: [
     BrowserModule,

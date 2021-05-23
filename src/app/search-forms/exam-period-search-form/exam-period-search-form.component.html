@@ -1,5 +1,11 @@
 <form  #f="ngForm" (ngSubmit)="onSubmit(f)" class="h-15 mr-0">
-  <mat-form-field appearance="outline" class="pt-6">
+
+  <mat-form-field appearance="outline" class="ml-5 mr-5">
+    <mat-label>Enter a name</mat-label>
+    <input matInput placeholder="Exam period name" name="name" ngModel> 
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="pt-6 mr-3">
     <mat-label>Enter a date range</mat-label>
     <mat-date-range-input [rangePicker]="picker">
       <input matStartDate placeholder="Start date" name="startDate" ngModel>
@@ -9,10 +15,5 @@
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="ml-3 mr-3">
-    <mat-label>Enter a name</mat-label>
-    <input matInput placeholder="Exam period name" name="name" ngModel> 
-  </mat-form-field>
-
-  <button mat-stroked-button type="submit"><mat-icon>search</mat-icon>Search</button>
+  <button mat-stroked-button type="submit">Search</button>
 </form>

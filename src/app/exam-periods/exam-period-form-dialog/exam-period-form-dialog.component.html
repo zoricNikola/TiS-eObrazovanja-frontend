@@ -1,0 +1,59 @@
+<app-dialog [opened]="opened" [modal]="true">
+    <ng-container class="heading">{{
+        state === FORM_STATE.ADD
+          ? "Create a new exam period"
+          : "Edit a selected " + examPeriod?.name
+      }}</ng-container>
+
+    <ng-container class="content">
+        <form #f="ngForm" (ngSubmit)="f.valid && submit(f)">
+          <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
+              <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
+                <input
+                required
+                id="examPeriodName"
+                name="examPeriodName"
+                type="text"
+                placeholder="Name"
+                class="input-underlined text-center font-extrabold w-full"
+                [(ngModel)]="examPeriod.name"
+                #name="ngModel"/>
+                <div
+                    *ngIf="name.touched && name.invalid"
+                    class="input-error-holder">
+                    <div class="flex-col space-y-2">
+                        <div *ngIf="name.errors?.required">
+                        Exam period name is required
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
+                <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
+                <mat-form-field appearance="outline" class="block w-full">
+                <mat-label class="text-white">Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate required placeholder="Start date" name="startDate" [ngModel]="examPeriod?.startDate" #startDate="ngModel">
+                    <input matEndDate required placeholder="End date" name="endDate" [ngModel]="examPeriod?.endDate" #endDate="ngModel">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            </div>
+            <button hidden></button>
+        </form> 
+    </ng-container> 
+
+    <ng-container class="footer">
+        <div class="inline-flex w-full justify-end space-x-2">
+          <button class="btn-sm-red" (click)="onDialogCancel(f)">Cancel</button>
+          <button
+            [disabled]="f.invalid"
+            class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+            (click)="submit(f)">Save</button>
+        </div>
+    </ng-container>
+</app-dialog>

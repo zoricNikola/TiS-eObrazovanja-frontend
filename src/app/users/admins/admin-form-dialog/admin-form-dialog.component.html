@@ -1,0 +1,142 @@
+<app-dialog [opened]="opened" [modal]="true">
+  <ng-container class="heading">{{
+    state === FORM_STATE.ADD
+      ? "Create new admin"
+      : "Edit admin " + originalAdminUsername
+  }}</ng-container>
+  <ng-container class="content">
+    <form #f="ngForm" (ngSubmit)="f.valid && submit(f)">
+      <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
+        <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
+          <div>
+            <input
+              required
+              id="firstName"
+              name="firstName"
+              type="text"
+              placeholder="First Name"
+              class="input-underlined text-center"
+              [(ngModel)]="admin.firstName"
+              #firstName="ngModel"
+            />
+            <div
+              *ngIf="firstName.touched && firstName.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="firstName.errors?.required">
+                  First Name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input
+              required
+              id="lastName"
+              name="lastName"
+              type="text"
+              placeholder="Last Name"
+              class="input-underlined text-center"
+              [(ngModel)]="admin.lastName"
+              #lastName="ngModel"
+            />
+            <div
+              *ngIf="lastName.touched && lastName.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="lastName.errors?.required">
+                  Last Name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input
+              required
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Username"
+              class="input-underlined text-center"
+              [(ngModel)]="admin.username"
+              #username="ngModel"
+            />
+            <div
+              *ngIf="username.touched && username.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="username.errors?.required">
+                  Username is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
+          <div>
+            <input
+              required
+              email
+              id="email"
+              name="email"
+              type="text"
+              placeholder="email@example.com"
+              class="input-underlined text-center"
+              [(ngModel)]="admin.email"
+              #email="ngModel"
+            />
+            <div
+              *ngIf="email.touched && email.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="email.errors?.required">Email is required</div>
+                <div *ngIf="email.errors?.email">
+                  Email must be a valid email
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input
+              required
+              id="phoneNumber"
+              name="phoneNumber"
+              type="text"
+              placeholder="Phone Number"
+              class="input-underlined text-center"
+              [(ngModel)]="admin.phoneNumber"
+              #phoneNumber="ngModel"
+            />
+            <div
+              *ngIf="phoneNumber.touched && phoneNumber.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="phoneNumber.errors?.required">
+                  Phone Number is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button hidden></button>
+    </form>
+  </ng-container>
+  <ng-container class="footer">
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button class="btn-sm-red" (click)="onDialogCancel(f)">Cancel</button>
+      <button
+        [disabled]="f.invalid"
+        class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+        (click)="submit(f)"
+      >
+        Save
+      </button>
+    </div>
+  </ng-container>
+</app-dialog>

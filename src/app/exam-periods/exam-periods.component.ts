@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DeleteConfirmDialogComponent } from '../dialogs/confirmation-dialogs/delete-confirm-dialog/delete-confirm-dialog.component';
 import { ExamPeriodDialogComponent } from '../dialogs/input-dialogs/exam-period-dialog/exam-period-dialog.component';
+import { FORM_STATE } from '../model/common/form-state';
 import { ExamPeriod } from '../model/exam-period';
 import { ExamPeriodService } from '../services/exam-period.service';
 
@@ -14,11 +15,24 @@ import { ExamPeriodService } from '../services/exam-period.service';
 })
 export class ExamPeriodsComponent implements OnInit {
 
+
+  showSearchBox: boolean = false;
+
+  examperiodFormDialogOpened: boolean = false;
+  examPeriodFormDialogState: FORM_STATE = FORM_STATE.ADD;
+
+  examPeriodForEdit: ExamPeriod | undefined = undefined;
+
+
+
   examPeriods: any[] = []; 
   
-  showSearchBox: boolean = false; 
 
   constructor(private examPeriodService: ExamPeriodService, private dialog: MatDialog, public datePipe: DatePipe) { }
+
+  get FORM_STATE() {
+    return FORM_STATE;
+  }
 
   ngOnInit(): void {
     this.loadExamPeriods();
@@ -29,6 +43,38 @@ export class ExamPeriodsComponent implements OnInit {
       this.examPeriods = result;
     });
   }
+
+  openExamPeriodFormDialog(state: FORM_STATE){
+    this.examPeriodFormDialogState = state;
+    this.examperiodFormDialogOpened = true;
+  }
+
+  onExamPeriodDialogCancel(): void{
+    this.examperiodFormDialogOpened = false;
+    this.examPeriodForEdit = undefined;
+  }
+
+  onExamPeriodSave(examPeriod: ExamPeriod): void{
+    console.log('new exam period: ' + examPeriod);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   openDialog(id: number): void {
     const dialogConfig = new MatDialogConfig();

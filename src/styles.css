@@ -16,6 +16,45 @@
     @apply bg-green-600 text-white hover:bg-green-700 active:bg-green-500;
   }
 
+  .btn-sm-red {
+    @apply px-2
+          py-1
+          font-semibold
+          rounded-lg
+          shadow-md
+          focus:outline-none
+          bg-red-700
+          text-white
+          hover:bg-red-800
+          active:bg-red-600;
+  }
+
+  .btn-sm-yellow {
+    @apply px-2
+          py-1
+          font-semibold
+          rounded-lg
+          shadow-md
+          focus:outline-none
+          bg-yellow-600
+          text-white
+          hover:bg-yellow-700
+          active:bg-yellow-500;
+  }
+
+  .btn-sm-blue {
+    @apply px-2
+          py-1
+          font-semibold
+          rounded-lg
+          shadow-md
+          focus:outline-none
+          bg-blue-700
+          text-white
+          hover:bg-blue-800
+          active:bg-blue-600;
+  }
+
   .router-link {
     @apply cursor-pointer h-full flex relative items-center text-sm text-white hover:text-orange-500 tracking-normal transition duration-150 ease-in-out group;
   }

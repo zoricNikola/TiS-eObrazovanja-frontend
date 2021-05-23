@@ -1,0 +1,87 @@
+<div
+  *ngIf="opened ? true : (delayedClosed$ | async)"
+  [class.opacity-100]="opened ? (delayedOpened$ | async) : false"
+  [class.bg-gray-500]="mask"
+  [class.bg-opacity-60]="mask"
+  [class.pointer-events-none]="!maskPointerEvents"
+  class="
+    flex
+    fixed
+    top-0
+    left-0
+    h-screen
+    w-screen
+    justify-center
+    items-center
+    opacity-0
+    duration-300
+    transition-opacity
+  "
+  (click)="maskPointerEvents && !modal && onDialogClose()"
+>
+  <div
+    class="
+      pointer-events-auto
+      flex flex-col
+      min-w-1/4 min-h-1/4
+      max-w-3/4 max-h-3/4
+      w-auto
+      h-auto
+      bg-perfectDark
+      rounded-2xl
+      shadow-md
+    "
+    (click)="$event.stopPropagation()"
+  >
+    <div
+      class="
+        inline-flex
+        justify-between
+        flex-none
+        w-full
+        min-h-12
+        text-xl
+        bg-gray-800
+        p-2
+        rounded-t-2xl
+        shadow-md
+      "
+    >
+      <ng-content select=".heading"></ng-content>
+      <button
+        *ngIf="!modal"
+        class="
+          text-orange-500
+          hover:bg-gray-700
+          active:bg-gray-600
+          focus:outline-none
+          rounded-lg
+        "
+        (click)="onDialogClose()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="flex-auto w-full overflow-auto">
+      <ng-content select=".content"></ng-content>
+    </div>
+    <div
+      class="flex-none w-full min-h-12 bg-gray-800 p-2 rounded-b-2xl shadow-md"
+    >
+      <ng-content select=".footer"></ng-content>
+    </div>
+  </div>
+</div>

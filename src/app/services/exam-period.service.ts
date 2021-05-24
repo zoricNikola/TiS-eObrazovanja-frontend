@@ -1,12 +1,13 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { FakeBackendService } from '../fake-backend.service';
-import { ExamPeriod } from '../model/exam-period';
+import { ExamPeriod } from '../model/exam-period/exam-period';
 import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
 import { PageParams } from '../model/http/page-params';
 import { ResponsePage } from '../model/http/response-page';
+import { AuthService } from './auth.service';
 import { BaseService } from './base.service';
 
 @Injectable({
@@ -14,7 +15,7 @@ import { BaseService } from './base.service';
 })
 export class ExamPeriodService extends BaseService {
 
-  constructor(http: HttpClient, private backend: FakeBackendService) { 
+  constructor(http: HttpClient, private authService: AuthService) { 
     super(`${environment.apiUrl}/examPeriods`, http);
   }
 
@@ -43,5 +44,21 @@ export class ExamPeriodService extends BaseService {
       })
     )
     .pipe(catchError(this.handleError));
+  }
+
+  createExamPeriod(examPeriod: ExamPeriod): Observable<number>{
+    let body = {
+      ...examPeriod,
+      institution: {id: this.authService.currentUser?.institutionId}
+    };
+    return this.create(body);
+  }
+
+  updateExamPeriod(examPeriod: ExamPeriod): Observable<void>{
+    let body = {
+      ...examPeriod,
+      institution: {id: this.authService.currentUser?.institutionId}
+    };
+    return this.update(body);
   }
 }

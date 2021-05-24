@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ExamPeriod } from 'src/app/model/exam-period';
+import { ExamPeriod } from 'src/app/model/exam-period/exam-period';
 
 @Component({
   selector: 'app-exam-period-dialog',

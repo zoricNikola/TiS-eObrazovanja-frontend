@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FORM_STATE } from '../model/common/form-state';
-import { ExamPeriod } from '../model/exam-period';
+import { ExamPeriod } from '../model/exam-period/exam-period';
 import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
 import { PageParams } from '../model/http/page-params';
 import { ExamPeriodService } from '../services/exam-period.service';
@@ -39,6 +39,10 @@ export class ExamPeriodsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onLoadExamPeriods();
+  }
+
+  onLoadExamPeriods(){
     this.examPeriodsPage$ = this.route.queryParamMap.pipe(
       switchMap((paramMap) => {
         let pageParams: PageParams = new PageParams(
@@ -61,7 +65,10 @@ export class ExamPeriodsComponent implements OnInit {
   }
 
   onExamPeriodSave(examPeriod: ExamPeriod): void{
-    console.log('new exam period: ' + examPeriod);
+    this.examPeriodService.createExamPeriod(examPeriod).subscribe((result) => 
+    console.log(result));
+    this.examperiodFormDialogOpened = false;
+    this.onLoadExamPeriods();
   }
 
   onPageChange(selectedPage: number): void {

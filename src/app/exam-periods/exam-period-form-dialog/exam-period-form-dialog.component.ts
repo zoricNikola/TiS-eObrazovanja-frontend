@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FORM_STATE } from 'src/app/model/common/form-state';
-import { ExamPeriod } from 'src/app/model/exam-period';
+import { ExamPeriod } from 'src/app/model/exam-period/exam-period';
 
 @Component({
   selector: 'app-exam-period-form-dialog',
@@ -11,13 +11,12 @@ import { ExamPeriod } from 'src/app/model/exam-period';
 export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened: boolean = false;
   @Input('state') state!: FORM_STATE;
-  @Input('admin') inputExamPeriod: ExamPeriod | undefined;
+  @Input('examPeriod') inputExamPeriod: ExamPeriod | undefined;
   @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
   @Output('formSubmit') formSubmit: EventEmitter<ExamPeriod> = new EventEmitter();
 
 
   examPeriod: ExamPeriod = {
-    _id: 0,
     startDate: new Date(''),
     endDate: new Date(''),
     name: ''

@@ -1,5 +1,5 @@
 export interface ExamPeriod{
-    _id: number,
+    id?: number,
     name: string,
     startDate: Date,
     endDate: Date

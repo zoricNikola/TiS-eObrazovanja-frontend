@@ -35,13 +35,13 @@
                 <mat-form-field appearance="outline" class="block w-full">
                 <mat-label class="text-white">Enter a date range</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
-                    <input matStartDate required placeholder="Start date" name="startDate" [ngModel]="examPeriod?.startDate" #startDate="ngModel">
-                    <input matEndDate required placeholder="End date" name="endDate" [ngModel]="examPeriod?.endDate" #endDate="ngModel">
+                    <input matStartDate required placeholder="Start date" name="startDate" [(ngModel)]="examPeriod.startDate" #startDate="ngModel">
+                    <input matEndDate required placeholder="End date" name="endDate" [(ngModel)]="examPeriod.endDate" #endDate="ngModel">
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
-            </div>
+                </div>
             </div>
             <button hidden></button>
         </form> 

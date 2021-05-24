@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ExamPeriod } from './model/exam-period';
+import { ExamPeriod } from './model/exam-period/exam-period';
 
 @Injectable({
   providedIn: 'root'
@@ -563,24 +563,6 @@ export class FakeBackendService {
       name: "Mathematics 5",
     }];
 
-  private examPeriods : ExamPeriod[] = [
-    { _id: 1,
-      name: 'January exam period',
-      startDate: new Date("2020-01-23"),
-      endDate: new Date("2020-02-03"),
-    },
-    { _id: 2,
-      name: 'February exam period',
-      startDate: new Date("2020-02-04"),
-      endDate: new Date("2020-02-15"),
-    },
-    { _id: 3,
-      name: 'April exam period',
-      startDate: new Date("2020-04-06"),
-      endDate: new Date("2020-04-10"),
-    }
-  ]
-
   constructor() { }
 
   login(credentials: LoginCredentials): Observable<any> {
@@ -599,9 +581,6 @@ export class FakeBackendService {
   getStudents(): Observable<any> {
     return of(this.students);
   }
-
-  getExamPeriods() : Observable<any> {
-    return of(this.examPeriods);}
 
   getCourses(): Observable<any>{
     return of(this.courses);

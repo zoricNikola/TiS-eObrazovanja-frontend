@@ -33,20 +33,22 @@
       </div>
       <form #f="ngForm" (ngSubmit)="submit(f)">
         <div class="mt-12 w-full px-2 sm:px-6">
-          <div class="flex flex-col mt-5">
-            <label for="username" class="text-lg font-semibold leading-tight"
-              >Username</label
-            >
+          <div class="custom-input-holder mt-5">
             <input
               required
               id="username"
               name="username"
               type="text"
-              placeholder="your-username"
+              placeholder=" "
               class="input-underlined text-center"
               ngModel
               #username="ngModel"
             />
+            <label
+              for="username"
+              class="text-lg text-center font-semibold leading-tight"
+              >Username</label
+            >
             <div
               *ngIf="(username.touched && username.invalid) || invalidLogin"
               class="input-error-holder"
@@ -59,20 +61,22 @@
               </div>
             </div>
           </div>
-          <div class="flex flex-col mt-5">
-            <label for="password" class="text-lg font-semibold fleading-tight"
-              >Password</label
-            >
+          <div class="custom-input-holder mt-5">
             <input
               required
               id="password"
               name="password"
               type="password"
-              placeholder="your-password"
+              placeholder=" "
               class="input-underlined text-center"
               ngModel
               #password="ngModel"
             />
+            <label
+              for="password"
+              class="text-lg text-center font-semibold fleading-tight"
+              >Password</label
+            >
             <div
               *ngIf="(password.touched && password.invalid) || invalidLogin"
               class="input-error-holder"

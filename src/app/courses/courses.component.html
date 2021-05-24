@@ -1,74 +1,243 @@
 <div class="flex flex-col flex-auto justify-center items-center">
-  <div class="w-full lg:w-4/5 bg-indigo-800 h-full p-4">
-    <div >
+  <div class="w-full lg:w-4/5 bg-indigo-800 h-full my-10 p-4">
+    <div *ngIf="coursesPage$ | async as coursesPage">
+      <course-form-dialog
+        [opened]="courseFormDialogOpened"
+        [state]="courseFormDialogState"
+        [course]="courseForEdit"
+        (dialogCancel)="onCourseFormDialogCancel()"
+        (formSubmit)="onCourseSave($event)"
+      ></course-form-dialog>
       <div class="w-full">
-        <button (click)="onCreateClick()" class="bg-green-600 btn btn-indigo m-1.5 ">
-          +
+        <button
+          class="btn btn-green inline-flex items-center"
+          (click)="openCourseFormDialog(FORM_STATE.ADD)"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          New
         </button>
-        <button (click)="onFilterClick()" class="btn btn-indigo">
-          {{ arrow }}
+        <button
+          (click)="showSearchBox = !showSearchBox"
+          class="btn btn-indigo inline-flex items-center ml-2"
+        >
+          <svg
+            *ngIf="!showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            *ngIf="showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 15l7-7 7 7"
+            />
+          </svg>
+          Filter
         </button>
-        Filter
-        <div [hidden]="!showSearchBox" class=" w-full h-25 bg-indigo-800 rounded-md">
-          <input
-            class="input-underlined w-full"
-            id="searchCoursesInput"
-            type="text"
-            placeholder="Input course name"
-          />
-          <button class="btn btn-indigo mt-2 mb-4">
-            Search
-          </button>
-        </div>
+        <button
+          *ngIf="selectable && selectedCourse"
+          (click)="onCourseTake()"
+          class="btn btn-green float-right inline-flex items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+            />
+          </svg>
+          Take
+        </button>
       </div>
-      <table class="grid grid-flow-row gap-4 auto-rows-max mt-4">
-        <thead class="custom-table-row bg-red-400 text-indigo-700 shadow-md">
-          <th>Course Name</th>
+      <div accordion [opened]="showSearchBox">
+        <form #f="ngForm">
+          <table class="w-full table-fixed text-center font-semibold">
+            <tbody>
+            <tr class="bg-red-300 text-white shadow-md">
+              <td>
+                <input
+                  [ngModel]="coursesPage.queryParams.name"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="name"
+                  placeholder="Course name"
+                  class="input-underlined text-center mt-0"
+                />
+              </td>
+              <td class="w-16"></td>
+              <td class="w-16"></td>
+            </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+      <table
+        class="
+          w-full
+          table-fixed
+          text-center
+          border-separate
+          table-row-spacing-y-4
+          font-semibold
+        "
+      >
+        <thead>
+        <tr class="bg-red-300 text-indigo-800 shadow-md">
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+                onSortOptionsChange(coursesPage.queryParams.sort, 'name')
+              "
+          >
+            <div class="flex justify-center">
+              Course name
+              <svg
+                *ngIf="isSortASC(coursesPage.queryParams.sort, 'name')"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+              </svg>
+              <svg
+                *ngIf="
+                    coursesPage.queryParams.sort.includes('name,desc') ||
+                    coursesPage.queryParams.sort.includes('name,DESC')
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+              </svg>
+            </div>
+          </th>
         </thead>
-        <tbody *ngFor="let course of courses" class="custom-table-row">
-          <td>{{ course.name }}</td>
+        <tbody>
+        <tr
+          *ngFor="let course of coursesPage.content"
+          class="hover:bg-indigo-600 text-white shadow-md"
+          [class.cursor-pointer]="selectable"
+          [ngClass]="
+              selectable && selectedCourse === course
+                ? 'bg-indigo-700'
+                : 'bg-indigo-900'
+            "
+          (click)="selectable && onCourseSelect(course)"
+        >
+          <td>
+            <a
+              [routerLink]="'/courses/' + course.id"
+              class="hover:text-orange-500"
+            >{{ course.name }}</a
+            >
+          </td>
+
+          <td class="w-16">
+            <button
+              class="btn-sm-yellow"
+              (click)="
+                  courseForEdit = course; openCourseFormDialog(FORM_STATE.EDIT)
+                "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+            </button>
+          </td>
+          <td class="w-16">
+            <button class="btn-sm-red">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
-
       <div
-        [hidden]="!showModal"
-        class="overflow-x-hidden overflow-y-auto pt-1/3 fixed inset-0 pt-48 z-50 outline-none focus:outline-none justify-center items-center"
-        id="modal-example-regular">
-        <div class="relative w-auto my-6 mx-auto max-w-3xl">
-          <!--content-->
-          <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-            <!--header-->
-            <div class="flex items-start justify-between p-5 border-b border-solid border-gray-200 rounded-t">
-              <h3 class="text-3xl font-semibold text-orange-600">
-                Create Course
-              </h3>
-
-            </div>
-            <!--body-->
-            <div class="relative p-6 flex-auto">
-              <input class="my-4 text-gray-500 text-lg leading-relaxed"
-                class="input-underlined w-full"
-                id="courseInput"
-                type="text"
-                placeholder="Input course name"/>
-            </div>
-            <!--footer-->
-            <div class="flex items-center justify-end p-6 border-t border-solid border-gray-200 rounded-b">
-              <button
-                class="text-indigo-800 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button" (click)="onCreateClick()">
-                Close
-              </button>
-              <button
-                class="bg-green-600 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button">
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        class="flex justify-end"
+        pagination
+        [itemsCount]="coursesPage.totalItemsCount"
+        [pagesCount]="coursesPage.totalPagesCount"
+        [pageSize]="coursesPage.pageSize"
+        [currentPage]="coursesPage.currentPage"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+      ></div>
     </div>
   </div>
 </div>

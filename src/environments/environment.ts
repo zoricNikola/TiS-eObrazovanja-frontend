@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
   defaultPageSize: 20,
+  defaultPageSizeOptions: [10, 20, 50, 100],
 };
 
 /*

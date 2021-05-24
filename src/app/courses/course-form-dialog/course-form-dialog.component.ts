@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {User} from '../../model/user/user';
 import {NgForm} from '@angular/forms';
 import {Course} from '../../model/course/course';
 import {FORM_STATE} from '../../model/common/form-state';
@@ -10,7 +9,7 @@ import {FORM_STATE} from '../../model/common/form-state';
   styleUrls: ['./course-form-dialog.component.css']
 })
 export class CourseFormDialogComponent implements OnInit, OnChanges {
-  @Input('opened') opened: boolean = false;
+  @Input('opened') opened = false;
   @Input('state') state!: FORM_STATE;
   @Input('course') inputCourse: Course | undefined;
   @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
@@ -22,11 +21,11 @@ export class CourseFormDialogComponent implements OnInit, OnChanges {
     name: ''
   };
 
-  constructor() {}
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes.inputAdmin &&
+      changes.inputCourse &&
       this.inputCourse &&
       this.state === FORM_STATE.EDIT
     ) {
@@ -35,7 +34,9 @@ export class CourseFormDialogComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
   get FORM_STATE() {
     return FORM_STATE;

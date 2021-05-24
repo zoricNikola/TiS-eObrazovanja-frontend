@@ -14,34 +14,34 @@ import {PageParams} from '../model/http/page-params';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  @Input('selectable') selectable: boolean = false;
+  @Input('selectable') selectable = false;
   @Output('itemTake') courseTake: EventEmitter<Course> = new EventEmitter<Course>();
 
   selectedCourse: Course | undefined = undefined;
 
   coursesPage$: Observable<CoursePage> = of ();
 
-  showSearchBox: boolean = false;
+  showSearchBox = false;
 
-  courseFormDialogOpened: boolean = false;
+  courseFormDialogOpened = false;
   courseFormDialogState: FORM_STATE = FORM_STATE.ADD;
 
   courseForEdit: Course | undefined = undefined;
 
   constructor(private router: Router,
               private courseService: CoursesService,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.coursesPage$ = this.route.queryParamMap.pipe(
       switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
+        const pageParams: PageParams = new PageParams(
           paramMap.get('page'),
           paramMap.get('size')
         );
 
-        let queryParams = {
+        const queryParams = {
           name: paramMap.get('name'),
           sort: paramMap.getAll('sort')
         };
@@ -71,8 +71,8 @@ export class CoursesComponent implements OnInit {
   }
 
   onSearchOptionsChange(queryParams: any): void {
-    for (let key of Object.keys(queryParams)) {
-      if (!queryParams[key]) queryParams[key] = null;
+    for (const key of Object.keys(queryParams)) {
+      if (!queryParams[key]) { queryParams[key] = null; }
     }
 
     this.router.navigate([], {
@@ -83,7 +83,7 @@ export class CoursesComponent implements OnInit {
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
-    let newSortParams = [...sortParams];
+    const newSortParams = [...sortParams];
     if (newSortParams.includes(triggeredProperty)) {
       newSortParams.splice(newSortParams.indexOf(triggeredProperty), 1);
       newSortParams.push(`${triggeredProperty},DESC`);
@@ -154,7 +154,10 @@ export class CoursesComponent implements OnInit {
   }
 
   onCourseSave(course: Course): void {
-    console.log(course);
+    this.courseService.createCourse(course).subscribe( );
+
+    this.courseFormDialogOpened = false;
+    this.courseForEdit = undefined;
   }
 
 }

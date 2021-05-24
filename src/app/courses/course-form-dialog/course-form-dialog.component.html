@@ -2,7 +2,7 @@
   <ng-container class="heading">{{
     state === FORM_STATE.ADD
       ? "Create new course"
-      : "Edit course " + originalCourseName
+      : "Edit course: " + originalCourseName
     }}</ng-container>
   <ng-container class="content">
     <form #f="ngForm" (ngSubmit)="f.valid && submit(f)">
@@ -26,7 +26,7 @@
             >
               <div class="flex-col space-y-2">
                 <div *ngIf="name.errors?.required">
-                  Course Name is required
+                  Course name is required
                 </div>
               </div>
             </div>

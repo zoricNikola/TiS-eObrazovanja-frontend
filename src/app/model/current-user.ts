@@ -4,7 +4,7 @@ export interface CurrentUser {
   firstName: string;
   lastName: string;
   authorities: string[];
-  institutionId?: number;
+  institutionId: number;
   studentId?: number;
   teacherId?: number;
   fullName(): string;

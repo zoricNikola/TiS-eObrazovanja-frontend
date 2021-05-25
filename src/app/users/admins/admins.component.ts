@@ -63,6 +63,7 @@ export class AdminsComponent implements OnInit {
   }
 
   onPageChange(selectedPage: number): void {
+    this.selectable ? (this.selectedAdmin = undefined) : {};
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: selectedPage === 1 ? null : selectedPage },
@@ -71,6 +72,7 @@ export class AdminsComponent implements OnInit {
   }
 
   onPageSizeChange(selectedPageSize: number): void {
+    this.selectable ? (this.selectedAdmin = undefined) : {};
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { size: selectedPageSize },
@@ -79,6 +81,7 @@ export class AdminsComponent implements OnInit {
   }
 
   onSearchOptionsChange(queryParams: any): void {
+    this.selectable ? (this.selectedAdmin = undefined) : {};
     for (let key of Object.keys(queryParams)) {
       if (!queryParams[key]) queryParams[key] = null;
     }
@@ -91,6 +94,7 @@ export class AdminsComponent implements OnInit {
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
+    this.selectable ? (this.selectedAdmin = undefined) : {};
     let newSortParams = this.sortParamsUtils.updateSortParams(
       sortParams,
       triggeredProperty

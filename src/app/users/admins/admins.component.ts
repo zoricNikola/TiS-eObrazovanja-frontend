@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from 'src/app/model/user/user';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject, AsyncSubject } from 'rxjs';
 import { AdminPage } from './../../model/user/admin-page';
 import { AdminsService } from './../../services/admins.service';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { PageParams } from './../../model/http/page-params';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SortParamsUtils } from './../../services/utils/sort-params-utils.service';
 
 @Component({
   selector: '[admins]',
@@ -14,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./admins.component.css'],
 })
 export class AdminsComponent implements OnInit {
-  @Input('selectable') selectable: boolean = false;
+  @Input('selectable') selectable: boolean = true;
   @Output('itemTake') adminTake: EventEmitter<User> = new EventEmitter();
 
   selectedAdmin: User | undefined = undefined;
@@ -31,7 +32,8 @@ export class AdminsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private adminsService: AdminsService
+    private adminsService: AdminsService,
+    public sortParamsUtils: SortParamsUtils
   ) {}
 
   ngOnInit(): void {
@@ -89,56 +91,15 @@ export class AdminsComponent implements OnInit {
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
-    let newSortParams = [...sortParams];
-    if (newSortParams.includes(triggeredProperty)) {
-      newSortParams.splice(newSortParams.indexOf(triggeredProperty), 1);
-      newSortParams.push(`${triggeredProperty},DESC`);
-    } else if (newSortParams.includes(`${triggeredProperty},asc`)) {
-      newSortParams.splice(
-        newSortParams.indexOf(`${triggeredProperty},asc`),
-        1
-      );
-      newSortParams.push(`${triggeredProperty},DESC`);
-    } else if (newSortParams.includes(`${triggeredProperty},ASC`)) {
-      newSortParams.splice(
-        newSortParams.indexOf(`${triggeredProperty},ASC`),
-        1
-      );
-      newSortParams.push(`${triggeredProperty},DESC`);
-    } else if (newSortParams.includes(`${triggeredProperty},desc`)) {
-      newSortParams.splice(
-        newSortParams.indexOf(`${triggeredProperty},desc`),
-        1
-      );
-    } else if (newSortParams.includes(`${triggeredProperty},DESC`)) {
-      newSortParams.splice(
-        newSortParams.indexOf(`${triggeredProperty},DESC`),
-        1
-      );
-    } else {
-      newSortParams.push(`${triggeredProperty},ASC`);
-    }
-
+    let newSortParams = this.sortParamsUtils.updateSortParams(
+      sortParams,
+      triggeredProperty
+    );
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { sort: newSortParams },
       queryParamsHandling: 'merge',
     });
-  }
-
-  isSortASC(sortParams: string[], column: string): boolean {
-    return (
-      sortParams.includes(column) ||
-      sortParams.includes(`${column},asc`) ||
-      sortParams.includes(`${column},ASC`)
-    );
-  }
-
-  isSortDESC(sortParams: string[], column: string): boolean {
-    return (
-      sortParams.includes(`${column},desc`) ||
-      sortParams.includes(`${column},DESC`)
-    );
   }
 
   onAdminSelect(admin: User): void {
@@ -154,12 +115,83 @@ export class AdminsComponent implements OnInit {
     this.adminFormDialogOpened = true;
   }
 
-  onAdminFormDialogCancel(): void {
+  closeAdminFormDialog(): void {
     this.adminFormDialogOpened = false;
     this.adminForEdit = undefined;
   }
 
+  onAdminFormDialogCancel(): void {
+    this.closeAdminFormDialog();
+  }
+
+  refreshAdminsPage(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   onAdminSave(admin: User): void {
-    console.log(admin);
+    if (!admin.id)
+      this.adminsService
+        .createAdmin(admin)
+        .pipe(take(1))
+        .subscribe((id) => {
+          console.log(id);
+          this.closeAdminFormDialog();
+          this.refreshAdminsPage();
+        });
+    else
+      this.adminsService
+        .updateAdmin(admin.id, admin)
+        .pipe(take(1))
+        .subscribe(() => {
+          console.log('Updated ', admin.id);
+          this.closeAdminFormDialog();
+          this.refreshAdminsPage();
+        });
+  }
+
+  confirmationDialogOpened: boolean = false;
+  confirmationDialog$!: AsyncSubject<boolean>;
+
+  dialogOptions = {
+    opened: false,
+    decline: () => {},
+    confirm: () => {},
+  };
+
+  onAdminDelete(admin: User): void {
+    this.confirmationDialog$ = new AsyncSubject();
+
+    this.dialogOptions = {
+      opened: true,
+      decline: () => {
+        this.dialogOptions.opened = false;
+      },
+      confirm: () => {
+        console.log('Confirmed deleting ', admin.id);
+      },
+    };
+
+    // this.confirmationDialogOpened = true;
+
+    this.confirmationDialog$.subscribe((result) => {
+      if (result && admin.id)
+        this.adminsService
+          .deleteAdmin(admin.id)
+          .pipe(take(1))
+          .subscribe(() => {
+            setTimeout(() => {
+              console.log('Deleted ', admin.id);
+              this.confirmationDialogOpened = false;
+              this.refreshAdminsPage();
+            }, 2000);
+          });
+      else this.confirmationDialogOpened = false;
+    });
   }
 }

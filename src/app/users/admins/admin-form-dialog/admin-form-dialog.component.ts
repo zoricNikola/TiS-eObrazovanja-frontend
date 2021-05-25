@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -6,10 +7,11 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { User } from './../../../model/user/user';
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'admin-form-dialog',
@@ -23,6 +25,8 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
   @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
   @Output('formSubmit') formSubmit: EventEmitter<User> = new EventEmitter();
 
+  @ViewChild('f') form!: NgForm;
+
   originalAdminUsername: string | undefined;
 
   admin: User = {
@@ -33,7 +37,7 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
     phoneNumber: '',
   };
 
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -44,6 +48,24 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
       this.admin = { ...this.inputAdmin };
       this.originalAdminUsername = this.inputAdmin?.username;
     }
+
+    if (
+      changes.opened &&
+      !changes.opened.firstChange &&
+      !changes.opened.currentValue
+    ) {
+      setTimeout(() => {
+        this.form.resetForm();
+        this.admin = {
+          username: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+        };
+        this.originalAdminUsername = undefined;
+      }, 300);
+    }
   }
 
   ngOnInit(): void {}
@@ -52,15 +74,23 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
     return FORM_STATE;
   }
 
-  onDialogCancel(f: NgForm): void {
+  onDialogCancel(): void {
     this.dialogCancel.emit();
-    setTimeout(() => {
-      f.reset();
-      this.originalAdminUsername = undefined;
-    }, 300);
   }
 
-  submit(f: NgForm) {
-    this.formSubmit.emit(this.admin);
+  submit() {
+    this.form.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      (document.activeElement as HTMLElement).blur();
+      this.formSubmit.emit(this.admin);
+    }
+  }
+
+  validateUsername(usernameInput: NgModel) {
+    // console.log(this.form);
+    // this.form.form.markAllAsTouched();
+    // console.log(x.control.errors);
+    // x.control.setErrors({ ...x.control.errors, usernameTaken: true });
   }
 }

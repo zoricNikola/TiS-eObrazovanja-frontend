@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -17,9 +18,12 @@ export class LoginComponent implements OnInit {
   }
 
   submit(f: any) {
-    this.authService.login(f.value).subscribe((result) => {
-      if (result) this.router.navigate(['/']);
-      else this.invalidLogin = true;
-    });
+    this.authService
+      .login(f.value)
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result) this.router.navigate(['/']);
+        else this.invalidLogin = true;
+      });
   }
 }

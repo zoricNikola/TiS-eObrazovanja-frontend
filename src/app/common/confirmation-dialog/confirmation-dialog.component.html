@@ -1,0 +1,8 @@
+<app-dialog [opened]="options.opened" [modal]="true">
+  <ng-container class="heading">{{ title }}</ng-container>
+  <ng-container class="content">{{ message }}</ng-container>
+  <ng-container class="footer"
+    ><button (click)="onDeclined()">No</button>
+    <button (click)="onConfirmed()">Yes</button></ng-container
+  >
+</app-dialog>

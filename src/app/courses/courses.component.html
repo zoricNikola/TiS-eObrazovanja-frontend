@@ -1,6 +1,11 @@
 <div class="flex flex-col flex-auto justify-center items-center">
   <div class="w-full lg:w-4/5 bg-indigo-800 h-full my-10 p-4">
     <div *ngIf="coursesPage$ | async as coursesPage">
+      <confirmation-dialog
+        [opened]="confirmationDialogOpened"
+        [subject]="confirmationDialog$"
+        [options]="dialogOptions"
+      ></confirmation-dialog>
       <course-form-dialog
         [opened]="courseFormDialogOpened"
         [state]="courseFormDialogState"
@@ -102,7 +107,28 @@
                 />
               </td>
               <td class="w-16"></td>
-              <td class="w-16"></td>
+              <td class="w-16">
+                <button
+                  title="Clear search"
+                  class="btn-sm-red"
+                  (click)="f.resetForm(); onSearchOptionsChange(f.value)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -129,7 +155,7 @@
             <div class="flex justify-center">
               Course name
               <svg
-                *ngIf="isSortASC(coursesPage.queryParams.sort, 'name')"
+                *ngIf="sortParamUtils.isSortedByPropertyASC(coursesPage.queryParams.sort, 'name')"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
                 fill="none"
@@ -144,10 +170,7 @@
                 />
               </svg>
               <svg
-                *ngIf="
-                    coursesPage.queryParams.sort.includes('name,desc') ||
-                    coursesPage.queryParams.sort.includes('name,DESC')
-                  "
+                *ngIf="sortParamUtils.isSortedByPropertyDESC(coursesPage.queryParams.sort, 'name')"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
                 fill="none"
@@ -208,7 +231,10 @@
             </button>
           </td>
           <td class="w-16">
-            <button class="btn-sm-red">
+            <button
+              title="Delete course"
+              class="btn-sm-red"
+              (click)="onCourseDelete(course)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"

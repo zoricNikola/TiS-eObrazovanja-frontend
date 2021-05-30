@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AppError } from '../common/app-error';
 import { EntityValidationError } from '../common/entity-validation-error';
@@ -8,6 +8,10 @@ import { NotFoundError } from './../common/not-found-error';
 export abstract class BaseService {
   constructor(protected url: string, protected http: HttpClient) {}
   headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+  contentTypeJsonHeaders = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
 
   protected getOne(id: number): Observable<any> {
     return this.http
@@ -19,16 +23,18 @@ export abstract class BaseService {
   protected create(resource: any): Observable<number> {
     return this.http
       .post(this.url, JSON.stringify(resource), {
-        observe: 'response', headers: this.headers
+        observe: 'response',
+        headers: this.contentTypeJsonHeaders,
       })
       .pipe(map((response) => response.body as number))
       .pipe(catchError(this.handleError));
   }
 
-  protected update(resource: any): Observable<void> {
+  protected update(id: number, resource: any): Observable<void> {
     return this.http
-      .put(`${this.url}/${resource.id}`, JSON.stringify(resource), {
-        observe: 'response', headers: this.headers
+      .put(`${this.url}/${id}`, JSON.stringify(resource), {
+        observe: 'response',
+        headers: this.contentTypeJsonHeaders,
       })
       .pipe(map((response) => {}))
       .pipe(catchError(this.handleError));

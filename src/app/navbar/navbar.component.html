@@ -372,7 +372,7 @@
         </li>
         <a
           routerLink="/financialCard"
-          *ngIf="user"
+          *ngIf="user?.authorities?.includes('STUDENT')"
           [ngClass]="{ 'active-router-link': isActive('/financialCard') }"
           class="router-link ml-5"
         >
@@ -401,7 +401,7 @@
         </a>
         <a
           routerLink="/documents"
-          *ngIf="user"
+          *ngIf="user?.authorities?.includes('STUDENT')"
           [ngClass]="{ 'active-router-link': isActive('/documents') }"
           class="router-link ml-5"
         >

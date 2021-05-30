@@ -56,12 +56,60 @@
           
 
           <div accordion [opened]="showSearchBox">
-            <div class="bg-red-300 text-white shadow-md w-3/4 rounded-2xl">
-              <app-exam-period-search-form class="w-full text-indigo-800 font-bold rounded-full"></app-exam-period-search-form>
-            </div>
+              <form  #f="ngForm">
+                <table class="w-full table-fixed text-center font-semibold">
+                  <tbody>
+                    <tr class="bg-red-300 text-white shadow-md">
+                      <td>
+                        <input
+                          [ngModel]="examPeriodPage.queryParams?.name"
+                          (keyup)="onSearchOptionsChange(f.value)"
+                          name="name"
+                          placeholder="Name"
+                          class="input-underlined text-center mt-0"/>
+                      </td>
+                      <td>
+                        <input
+                          [ngModel]="examPeriodPage.queryParams?.startDate"
+                          (keyup)="onSearchOptionsChange(f.value)"
+                          name="startDate"
+                          type="date"
+                          placeholder="Start date"
+                          class="input-underlined text-center mt-0"/>
+                      </td>
+                      <td>
+                        <input
+                          [ngModel]="examPeriodPage.queryParams?.endDate"
+                          (keyup)="onSearchOptionsChange(f.value)"
+                          name="endDate"
+                          type="date"
+                          placeholder="End date"
+                          class="input-underlined text-center mt-0"/>
+                      </td>
+                      
+                      <td>
+                        <button title="Clear search"
+                          class="btn-sm-red"
+                          (click)="f.resetForm(); onSearchOptionsChange(f.value)">
+                          <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
           </div>
-
-
+          
           <table
               class="
               w-full

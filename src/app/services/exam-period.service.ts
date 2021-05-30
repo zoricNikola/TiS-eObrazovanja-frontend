@@ -54,11 +54,15 @@ export class ExamPeriodService extends BaseService {
     return this.create(body);
   }
 
-  updateExamPeriod(examPeriod: ExamPeriod): Observable<void>{
+  updateExamPeriod(id: number, examPeriod: ExamPeriod): Observable<void>{
     let body = {
       ...examPeriod,
       institution: {id: this.authService.currentUser?.institutionId}
     };
-    return this.update(body);
+    return this.update(id, body);
+  }
+
+  deleteExamPeriod(id: number): Observable<void>{
+    return this.delete(id);
   }
 }

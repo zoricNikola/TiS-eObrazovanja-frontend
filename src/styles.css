@@ -126,6 +126,21 @@
     @apply router-outlet-content;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgba(49, 46, 129, 1) inset !important;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: rgba(255, 255, 255, 1) !important;
+  }
+
+  button[disabled] {
+    @apply cursor-not-allowed;
+  }
+
   .custom-input-holder input {
     @apply pt-8 h-14;
   }

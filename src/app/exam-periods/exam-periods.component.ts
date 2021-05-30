@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { FORM_STATE } from '../model/common/form-state';
 import { ExamPeriod } from '../model/exam-period/exam-period';
 import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
@@ -42,6 +42,16 @@ export class ExamPeriodsComponent implements OnInit {
     this.onLoadExamPeriods();
   }
 
+  refreshExamPeriodsPage(){
+    this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+  }
+
   onLoadExamPeriods(){
     this.examPeriodsPage$ = this.route.queryParamMap.pipe(
       switchMap((paramMap) => {
@@ -49,7 +59,14 @@ export class ExamPeriodsComponent implements OnInit {
           paramMap.get('page'),
           paramMap.get('size')
         );
-        return this.examPeriodService.getExamPeriods(pageParams);
+
+        let queryParams = {
+          name: paramMap.get('name'),
+          startDate: paramMap.get('startDate'),
+          endDate: paramMap.get('endDate')
+        };
+
+        return this.examPeriodService.getExamPeriods(pageParams, queryParams);
       })
     );
   }
@@ -65,10 +82,24 @@ export class ExamPeriodsComponent implements OnInit {
   }
 
   onExamPeriodSave(examPeriod: ExamPeriod): void{
-    this.examPeriodService.createExamPeriod(examPeriod).subscribe((result) => 
-    console.log(result));
-    this.examperiodFormDialogOpened = false;
-    this.onLoadExamPeriods();
+    if(!examPeriod.id)
+        this.examPeriodService.
+        createExamPeriod(examPeriod).
+        pipe(take(1)).
+        subscribe((id) => {
+          console.log(id);
+          this.examperiodFormDialogOpened = false;
+          this.refreshExamPeriodsPage();
+        });
+    else
+        this.examPeriodService.
+        updateExamPeriod(examPeriod.id, examPeriod).
+        pipe(take(1)).
+        subscribe(() => {
+          console.log('Exam period updated: ' + examPeriod.id);
+          this.examperiodFormDialogOpened = false;
+          this.refreshExamPeriodsPage();
+        });
   }
 
   onPageChange(selectedPage: number): void {
@@ -83,6 +114,19 @@ export class ExamPeriodsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { size: selectedPageSize },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  onSearchOptionsChange(queryParams: any): void {
+    this.selectable ? (this.selectedEXamPeriod = undefined) : {};
+    for (let key of Object.keys(queryParams)) {
+      if (!queryParams[key]) queryParams[key] = null;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
       queryParamsHandling: 'merge',
     });
   }

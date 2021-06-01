@@ -54,12 +54,26 @@ export class CoursesService extends BaseService{
         ...course,
         institution: { id: this.authService.currentUser?.institutionId }
       };
-
       const url = `${environment.apiUrl}/courses`;
 
       return this.http.post<Course>(url, JSON.stringify(newCourse), {headers: this.headers})
         .pipe(catchError(this.handleError));
     }
 
+     updateCourse(id: number, course: Course): Observable<Course>{
+       const updatedCourse = {
+         ...course,
+         institution: { id: this.authService.currentUser?.institutionId }
+       };
+       const url = `${environment.apiUrl}/courses/${id}`;
+
+       return this.http.put<Course>(url, JSON.stringify(updatedCourse), {headers: this.headers}).pipe(catchError(this.handleError));
+     }
+
+     deleteCourse(id: number): Observable<void>{
+       const url = `${environment.apiUrl}/courses/${id}`;
+
+       return this.http.delete<void>(url, { headers : this.headers}).pipe(catchError(this.handleError));
+     }
   }
 

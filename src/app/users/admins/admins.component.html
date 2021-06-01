@@ -3,21 +3,17 @@
     <div *ngIf="adminsPage$ | async as adminsPage">
       <confirmation-dialog
         [opened]="confirmationDialogOpened"
-        [subject]="confirmationDialog$"
-        [options]="dialogOptions"
+        [options]="confirmationDialogOptions"
       ></confirmation-dialog>
       <admin-form-dialog
         [opened]="adminFormDialogOpened"
-        [state]="adminFormDialogState"
-        [admin]="adminForEdit"
-        (dialogCancel)="onAdminFormDialogCancel()"
-        (formSubmit)="onAdminSave($event)"
+        [options]="adminFormDialogOptions"
       ></admin-form-dialog>
       <div class="w-full">
         <button
           title="Create admin"
           class="btn btn-green inline-flex items-center"
-          (click)="openAdminFormDialog(FORM_STATE.ADD)"
+          (click)="onNewAdminClick()"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -465,9 +461,7 @@
               <button
                 title="Edit admin"
                 class="btn-sm-yellow"
-                (click)="
-                  adminForEdit = admin; openAdminFormDialog(FORM_STATE.EDIT)
-                "
+                (click)="onEditAdminClick(admin)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

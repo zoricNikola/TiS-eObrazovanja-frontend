@@ -1,13 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from 'src/app/model/user/user';
-import { Observable, of, BehaviorSubject, AsyncSubject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AdminPage } from './../../model/user/admin-page';
 import { AdminsService } from './../../services/admins.service';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { PageParams } from './../../model/http/page-params';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SortParamsUtils } from './../../services/utils/sort-params-utils.service';
+import { ConfirmationDialogOptions } from './../../common/confirmation-dialog/confirmation-dialog.component';
+import { AdminFormDialogOptions } from './admin-form-dialog/admin-form-dialog.component';
 
 @Component({
   selector: '[admins]',
@@ -15,7 +17,7 @@ import { SortParamsUtils } from './../../services/utils/sort-params-utils.servic
   styleUrls: ['./admins.component.css'],
 })
 export class AdminsComponent implements OnInit {
-  @Input('selectable') selectable: boolean = true;
+  @Input('selectable') selectable: boolean = false;
   @Output('itemTake') adminTake: EventEmitter<User> = new EventEmitter();
 
   selectedAdmin: User | undefined = undefined;
@@ -23,11 +25,6 @@ export class AdminsComponent implements OnInit {
   adminsPage$: Observable<AdminPage> = of();
 
   showSearchBox: boolean = false;
-
-  adminFormDialogOpened: boolean = false;
-  adminFormDialogState: FORM_STATE = FORM_STATE.ADD;
-
-  adminForEdit: User | undefined = undefined;
 
   constructor(
     private router: Router,
@@ -53,13 +50,9 @@ export class AdminsComponent implements OnInit {
           sort: paramMap.getAll('sort'),
         };
 
-        return this.adminsService.getAdmins(pageParams, queryParams);
+        return this.adminsService.filterAdmins(pageParams, queryParams);
       })
     );
-  }
-
-  get FORM_STATE() {
-    return FORM_STATE;
   }
 
   onPageChange(selectedPage: number): void {
@@ -114,20 +107,6 @@ export class AdminsComponent implements OnInit {
     this.adminTake.emit(this.selectedAdmin);
   }
 
-  openAdminFormDialog(state: FORM_STATE): void {
-    this.adminFormDialogState = state;
-    this.adminFormDialogOpened = true;
-  }
-
-  closeAdminFormDialog(): void {
-    this.adminFormDialogOpened = false;
-    this.adminForEdit = undefined;
-  }
-
-  onAdminFormDialogCancel(): void {
-    this.closeAdminFormDialog();
-  }
-
   refreshAdminsPage(): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -138,64 +117,84 @@ export class AdminsComponent implements OnInit {
     });
   }
 
-  onAdminSave(admin: User): void {
-    if (!admin.id)
-      this.adminsService
-        .createAdmin(admin)
-        .pipe(take(1))
-        .subscribe((id) => {
-          console.log(id);
-          this.closeAdminFormDialog();
-          this.refreshAdminsPage();
-        });
-    else
-      this.adminsService
-        .updateAdmin(admin.id, admin)
-        .pipe(take(1))
-        .subscribe(() => {
-          console.log('Updated ', admin.id);
-          this.closeAdminFormDialog();
-          this.refreshAdminsPage();
-        });
+  adminFormDialogOpened: boolean = false;
+  adminFormDialogOptions: AdminFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    adminForEdit: undefined,
+    cancel: () => {},
+    save: (admin: User) => {},
+  };
+
+  onNewAdminClick(): void {
+    this.adminFormDialogOpened = true;
+
+    this.adminFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      adminForEdit: undefined,
+      cancel: () => {
+        this.adminFormDialogOpened = false;
+      },
+      save: (admin: User) => {
+        this.adminsService
+          .createAdmin(admin)
+          .pipe(take(1))
+          .subscribe((id) => {
+            console.log('Created ', id);
+            this.adminFormDialogOpened = false;
+            this.refreshAdminsPage();
+          });
+      },
+    };
+  }
+
+  onEditAdminClick(admin: User): void {
+    this.adminFormDialogOpened = true;
+
+    this.adminFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      adminForEdit: admin,
+      cancel: () => {
+        this.adminFormDialogOpened = false;
+      },
+      save: (admin: User) => {
+        this.adminsService
+          .updateAdmin(admin.id!, admin)
+          .pipe(take(1))
+          .subscribe(() => {
+            console.log('Updated ', admin.id);
+            this.adminFormDialogOpened = false;
+            this.refreshAdminsPage();
+          });
+      },
+    };
   }
 
   confirmationDialogOpened: boolean = false;
-  confirmationDialog$!: AsyncSubject<boolean>;
-
-  dialogOptions = {
-    opened: false,
+  confirmationDialogOptions: ConfirmationDialogOptions = {
+    title: '',
+    message: '',
     decline: () => {},
     confirm: () => {},
   };
 
   onAdminDelete(admin: User): void {
-    this.confirmationDialog$ = new AsyncSubject();
+    this.confirmationDialogOpened = true;
 
-    this.dialogOptions = {
-      opened: true,
+    this.confirmationDialogOptions = {
+      title: `Delete ${admin.username}`,
+      message: `Are you sure?`,
       decline: () => {
-        this.dialogOptions.opened = false;
+        this.confirmationDialogOpened = false;
       },
       confirm: () => {
-        console.log('Confirmed deleting ', admin.id);
-      },
-    };
-
-    // this.confirmationDialogOpened = true;
-
-    this.confirmationDialog$.subscribe((result) => {
-      if (result && admin.id)
         this.adminsService
-          .deleteAdmin(admin.id)
+          .deleteAdmin(admin.id!)
           .pipe(take(1))
           .subscribe(() => {
-            setTimeout(() => {
-              console.log('Deleted ', admin.id);
-              this.confirmationDialogOpened = false;
-              this.refreshAdminsPage();
-            }, 2000);
+            this.confirmationDialogOpened = false;
+            this.refreshAdminsPage();
           });
-      else this.confirmationDialogOpened = false;
-    });
+      },
+    };
   }
 }

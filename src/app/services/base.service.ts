@@ -20,6 +20,13 @@ export abstract class BaseService {
       .pipe(catchError(this.handleError));
   }
 
+  protected filter(params: any): Observable<any> {
+    return this.http
+      .get(this.url, { params, observe: 'response' })
+      .pipe(map((response) => response.body))
+      .pipe(catchError(this.handleError));
+  }
+
   protected create(resource: any): Observable<number> {
     return this.http
       .post(this.url, JSON.stringify(resource), {

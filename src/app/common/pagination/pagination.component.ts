@@ -24,7 +24,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   @Output('pageSizeChange') pageSizeChange: EventEmitter<number> =
     new EventEmitter();
 
-  pageSizeOptions: number[] = [];
+  pageSizeOptions: number[] = environment.defaultPageSizeOptions;
   cachedPageSizeOption: number | undefined = undefined;
 
   pages: number[] = [];
@@ -43,26 +43,9 @@ export class PaginationComponent implements OnInit, OnChanges {
 
     if (!this.pages.includes(this.currentPage)) this.pageChange.emit(1);
 
-    this.pageSizeOptions = environment.defaultPageSizeOptions.filter(
-      (option) => option <= this.itemsCount
-    );
-
-    if (
-      this.cachedPageSizeOption &&
-      this.cachedPageSizeOption <= this.itemsCount
-    ) {
-      this.pageSizeOptions.push(this.cachedPageSizeOption);
-      this.pageSizeOptions = _.sortBy(this.pageSizeOptions);
-    }
-
     if (!this.pageSizeOptions.includes(this.pageSize)) {
-      if (this.pageSize > this.itemsCount)
-        this.pageSizeChange.emit(this.itemsCount);
-      else {
-        this.cachedPageSizeOption = this.pageSize;
-        this.pageSizeOptions.push(this.pageSize);
-        this.pageSizeOptions = _.sortBy(this.pageSizeOptions);
-      }
+      this.pageSizeOptions.push(this.pageSize);
+      this.pageSizeOptions = _.sortBy(this.pageSizeOptions);
     }
 
     if (this.pagesCount > 5) {

@@ -1,6 +1,6 @@
 <app-dialog [opened]="opened" [modal]="true">
   <ng-container class="heading">{{
-    state === FORM_STATE.ADD
+    options.state === FORM_STATE.ADD
       ? "Create new admin"
       : "Edit admin " + originalAdminUsername
   }}</ng-container>
@@ -135,7 +135,7 @@
   </ng-container>
   <ng-container class="footer">
     <div class="inline-flex w-full justify-end space-x-2">
-      <button class="btn-sm-red" (click)="onDialogCancel()">Cancel</button>
+      <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
       <button
         [disabled]="f.invalid"
         class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"

@@ -1,26 +1,27 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoursesService} from '../services/courses.service';
-import {Course} from '../model/course/course';
-import {AsyncSubject, Observable, of} from 'rxjs';
-import {CoursePage} from '../model/course/course-page';
-import {FORM_STATE} from '../model/common/form-state';
-import {switchMap, take} from 'rxjs/operators';
-import {PageParams} from '../model/http/page-params';
-import {SortParamsUtils} from '../services/utils/sort-params-utils.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesService } from '../services/courses.service';
+import { Course } from '../model/course/course';
+import { AsyncSubject, Observable, of } from 'rxjs';
+import { CoursePage } from '../model/course/course-page';
+import { FORM_STATE } from '../model/common/form-state';
+import { switchMap, take } from 'rxjs/operators';
+import { PageParams } from '../model/http/page-params';
+import { SortParamsUtils } from '../services/utils/sort-params-utils.service';
 
 @Component({
   selector: '[courses]',
   templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.css']
+  styleUrls: ['./courses.component.css'],
 })
 export class CoursesComponent implements OnInit {
   @Input('selectable') selectable = false;
-  @Output('itemTake') courseTake: EventEmitter<Course> = new EventEmitter<Course>();
+  @Output('itemTake') courseTake: EventEmitter<Course> =
+    new EventEmitter<Course>();
 
   selectedCourse: Course | undefined = undefined;
 
-  coursesPage$: Observable<CoursePage> = of ();
+  coursesPage$: Observable<CoursePage> = of();
 
   showSearchBox = false;
 
@@ -29,10 +30,11 @@ export class CoursesComponent implements OnInit {
 
   courseForEdit: Course | undefined = undefined;
 
-  constructor(private router: Router,
-              private courseService: CoursesService,
-              private route: ActivatedRoute,
-              public sortParamUtils: SortParamsUtils
+  constructor(
+    private router: Router,
+    private courseService: CoursesService,
+    private route: ActivatedRoute,
+    public sortParamUtils: SortParamsUtils
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,7 @@ export class CoursesComponent implements OnInit {
 
         const queryParams = {
           name: paramMap.get('name'),
-          sort: paramMap.getAll('sort')
+          sort: paramMap.getAll('sort'),
         };
         return this.courseService.getCourses(pageParams, queryParams);
       })
@@ -74,7 +76,9 @@ export class CoursesComponent implements OnInit {
 
   onSearchOptionsChange(queryParams: any): void {
     for (const key of Object.keys(queryParams)) {
-      if (!queryParams[key]) { queryParams[key] = null; }
+      if (!queryParams[key]) {
+        queryParams[key] = null;
+      }
     }
 
     this.router.navigate([], {
@@ -111,22 +115,22 @@ export class CoursesComponent implements OnInit {
     this.courseFormDialogOpened = true;
   }
 
-  closeCourseFormDialog(): void{
+  closeCourseFormDialog(): void {
     this.courseFormDialogOpened = false;
     this.courseForEdit = undefined;
   }
 
-  onCourseFormDialogCancel(): void{
+  onCourseFormDialogCancel(): void {
     this.closeCourseFormDialog();
   }
 
-  refreshCoursesPage(): void{
+  refreshCoursesPage(): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r'
+        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -156,39 +160,41 @@ export class CoursesComponent implements OnInit {
 
   dialogOptions = {
     opened: false,
+    title: '',
+    message: '',
     decline: () => {},
     confirm: () => {},
   };
 
-  onCourseDelete(course: Course): void{
+  onCourseDelete(course: Course): void {
     this.confirmationDialog$ = new AsyncSubject();
 
     this.dialogOptions = {
       opened: true,
+      title: '',
+      message: '',
       decline: () => {
         this.dialogOptions.opened = false;
       },
       confirm: () => {
         // console.log('Confirmed deleting ', course.id);
         this.dialogOptions.opened = false;
-      }
+      },
     };
 
     this.confirmationDialog$.subscribe((result) => {
-      if(result && course.id)
+      if (result && course.id)
         this.courseService
           .deleteCourse(course.id)
           .pipe(take(1))
           .subscribe(() => {
-            setTimeout( () => {
+            setTimeout(() => {
               // console.log('Deleted ', course.id);
               this.confirmationDialogOpened = false;
               this.refreshCoursesPage();
             }, 1000);
           });
-        else
-          this.confirmationDialogOpened = false;
+      else this.confirmationDialogOpened = false;
     });
   }
-
 }

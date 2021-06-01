@@ -56,6 +56,19 @@
           active:bg-blue-600;
   }
 
+  .btn-sm-green {
+    @apply px-2
+          py-1
+          font-semibold
+          rounded-lg
+          shadow-md
+          focus:outline-none
+          bg-green-600
+          text-white
+          hover:bg-green-700
+          active:bg-green-500;
+  }
+
   .router-link {
     @apply cursor-pointer h-full flex relative items-center text-sm text-white hover:text-orange-500 tracking-normal transition duration-150 ease-in-out group;
   }

@@ -1,11 +1,7 @@
 <div class="flex flex-col flex-auto justify-center items-center">
   <div class="w-full lg:w-4/5 bg-indigo-800 h-full my-10 p-4">
     <div *ngIf="coursesPage$ | async as coursesPage">
-      <confirmation-dialog
-        [opened]="confirmationDialogOpened"
-        [subject]="confirmationDialog$"
-        [options]="dialogOptions"
-      ></confirmation-dialog>
+      <confirmation-dialog [options]="dialogOptions"></confirmation-dialog>
       <course-form-dialog
         [opened]="courseFormDialogOpened"
         [state]="courseFormDialogState"
@@ -96,40 +92,40 @@
         <form #f="ngForm">
           <table class="w-full table-fixed text-center font-semibold">
             <tbody>
-            <tr class="bg-red-300 text-white shadow-md">
-              <td>
-                <input
-                  [ngModel]="coursesPage.queryParams.name"
-                  (keyup)="onSearchOptionsChange(f.value)"
-                  name="name"
-                  placeholder="Course name"
-                  class="input-underlined text-center mt-0"
-                />
-              </td>
-              <td class="w-16"></td>
-              <td class="w-16">
-                <button
-                  title="Clear search"
-                  class="btn-sm-red"
-                  (click)="f.resetForm(); onSearchOptionsChange(f.value)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+              <tr class="bg-red-300 text-white shadow-md">
+                <td>
+                  <input
+                    [ngModel]="coursesPage.queryParams.name"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="name"
+                    placeholder="Course name"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+                <td class="w-16"></td>
+                <td class="w-16">
+                  <button
+                    title="Clear search"
+                    class="btn-sm-red"
+                    (click)="f.resetForm(); onSearchOptionsChange(f.value)"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
-              </td>
-            </tr>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </form>
@@ -145,113 +141,126 @@
         "
       >
         <thead>
-        <tr class="bg-red-300 text-indigo-800 shadow-md">
-          <th
-            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-            (click)="
+          <tr class="bg-red-300 text-indigo-800 shadow-md">
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
                 onSortOptionsChange(coursesPage.queryParams.sort, 'name')
               "
-          >
-            <div class="flex justify-center">
-              Course name
-              <svg
-                *ngIf="sortParamUtils.isSortedByPropertyASC(coursesPage.queryParams.sort, 'name')"
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7l4-4m0 0l4 4m-4-4v18"
-                />
-              </svg>
-              <svg
-                *ngIf="sortParamUtils.isSortedByPropertyDESC(coursesPage.queryParams.sort, 'name')"
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
-                />
-              </svg>
-            </div>
-          </th>
+            >
+              <div class="flex justify-center">
+                Course name
+                <svg
+                  *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      coursesPage.queryParams.sort,
+                      'name'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
+                <svg
+                  *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      coursesPage.queryParams.sort,
+                      'name'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
+          </tr>
         </thead>
+
         <tbody>
-        <tr
-          *ngFor="let course of coursesPage.content"
-          class="hover:bg-indigo-600 text-white shadow-md"
-          [class.cursor-pointer]="selectable"
-          [ngClass]="
+          <tr
+            *ngFor="let course of coursesPage.content"
+            class="hover:bg-indigo-600 text-white shadow-md"
+            [class.cursor-pointer]="selectable"
+            [ngClass]="
               selectable && selectedCourse === course
                 ? 'bg-indigo-700'
                 : 'bg-indigo-900'
             "
-          (click)="selectable && onCourseSelect(course)"
-        >
-          <td>
-            <a
-              [routerLink]="'/courses/' + course.id"
-              class="hover:text-orange-500"
-            >{{ course.name }}</a
-            >
-          </td>
+            (click)="selectable && onCourseSelect(course)"
+          >
+            <td>
+              <a
+                [routerLink]="'/courses/' + course.id"
+                class="hover:text-orange-500"
+                >{{ course.name }}</a
+              >
+            </td>
 
-          <td class="w-16">
-            <button
-              class="btn-sm-yellow"
-              (click)="
+            <td class="w-16">
+              <button
+                class="btn-sm-yellow"
+                (click)="
                   courseForEdit = course; openCourseFormDialog(FORM_STATE.EDIT)
                 "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                />
-              </svg>
-            </button>
-          </td>
-          <td class="w-16">
-            <button
-              title="Delete course"
-              class="btn-sm-red"
-              (click)="onCourseDelete(course)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </button>
+            </td>
+            <td class="w-16">
+              <button
+                title="Delete course"
+                class="btn-sm-red"
+                (click)="onCourseDelete(course)"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
-          </td>
-        </tr>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
       <div

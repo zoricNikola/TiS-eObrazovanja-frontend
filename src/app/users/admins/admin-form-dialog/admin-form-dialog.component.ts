@@ -1,17 +1,21 @@
 import {
-  ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnChanges,
   OnInit,
-  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { User } from './../../../model/user/user';
 import { NgForm, NgModel } from '@angular/forms';
+
+export interface AdminFormDialogOptions {
+  state: FORM_STATE;
+  adminForEdit: User | undefined;
+  cancel: () => void;
+  save: (admin: User) => void;
+}
 
 @Component({
   selector: 'admin-form-dialog',
@@ -20,10 +24,7 @@ import { NgForm, NgModel } from '@angular/forms';
 })
 export class AdminFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened: boolean = false;
-  @Input('state') state!: FORM_STATE;
-  @Input('admin') inputAdmin: User | undefined;
-  @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
-  @Output('formSubmit') formSubmit: EventEmitter<User> = new EventEmitter();
+  @Input('options') options!: AdminFormDialogOptions;
 
   @ViewChild('f') form!: NgForm;
 
@@ -37,16 +38,16 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
     phoneNumber: '',
   };
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes.inputAdmin &&
-      this.inputAdmin &&
-      this.state === FORM_STATE.EDIT
+      changes.options &&
+      this.options.adminForEdit &&
+      this.options.state === FORM_STATE.EDIT
     ) {
-      this.admin = { ...this.inputAdmin };
-      this.originalAdminUsername = this.inputAdmin?.username;
+      this.admin = { ...this.options.adminForEdit };
+      this.originalAdminUsername = this.options.adminForEdit.username;
     }
 
     if (
@@ -74,16 +75,12 @@ export class AdminFormDialogComponent implements OnInit, OnChanges {
     return FORM_STATE;
   }
 
-  onDialogCancel(): void {
-    this.dialogCancel.emit();
-  }
-
   submit() {
     this.form.form.markAllAsTouched();
 
     if (this.form.valid) {
       (document.activeElement as HTMLElement).blur();
-      this.formSubmit.emit(this.admin);
+      this.options.save(this.admin);
     }
   }
 

@@ -1,7 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { ExamPeriod } from 'src/app/model/exam-period/exam-period';
+
+export interface ExamPeriodFormDialogOptions{
+  state: FORM_STATE;
+  examPeriodForEdit: ExamPeriod | undefined;
+  cancel: () => void;
+  save: (examPeriod: ExamPeriod) => void;
+}
 
 @Component({
   selector: 'app-exam-period-form-dialog',
@@ -10,11 +17,9 @@ import { ExamPeriod } from 'src/app/model/exam-period/exam-period';
 })
 export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened: boolean = false;
-  @Input('state') state!: FORM_STATE;
-  @Input('examPeriod') inputExamPeriod: ExamPeriod | undefined;
-  @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
-  @Output('formSubmit') formSubmit: EventEmitter<ExamPeriod> = new EventEmitter();
+  @Input('options') options!: ExamPeriodFormDialogOptions;
 
+  @ViewChild('f') form!: NgForm;
 
   examPeriod: ExamPeriod = {
     startDate: new Date(''),
@@ -25,13 +30,23 @@ export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void{
-    if (
-      changes.inputExamPeriod &&
-      this.inputExamPeriod &&
-      this.state === FORM_STATE.EDIT
-    ) {
-      this.examPeriod = {...this.inputExamPeriod};
-    }
+    if(changes.options &&
+      this.options.examPeriodForEdit &&
+      this.options.state === FORM_STATE.EDIT){
+        this.examPeriod = {...this.options.examPeriodForEdit};
+      }
+
+    if(changes.opened &&
+        !changes.opened.firstChange &&
+        !changes.opened.currentValue) {
+        setTimeout(() => {
+          this.form.resetForm();
+          this.examPeriod = {
+            startDate: new Date(''),
+            endDate: new Date(''),
+            name: '' };
+        }, 300);
+      } 
   }
 
   ngOnInit(): void {
@@ -41,15 +56,13 @@ export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
     return FORM_STATE;
   }
 
-  onDialogCancel(f: NgForm): void {
-    this.dialogCancel.emit();
-    setTimeout(() => {
-      f.reset();
-    }, 300);
-  }
+  submit() {
+    this.form.form.markAllAsTouched();
 
-  submit(f: NgForm) {
-    this.formSubmit.emit(this.examPeriod);
+    if (this.form.valid) {
+      (document.activeElement as HTMLElement).blur();
+      this.options.save(this.examPeriod);
+    }
   }
 
 }

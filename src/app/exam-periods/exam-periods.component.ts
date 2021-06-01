@@ -3,11 +3,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+import { ConfirmationDialogOptions } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { FORM_STATE } from '../model/common/form-state';
 import { ExamPeriod } from '../model/exam-period/exam-period';
 import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
 import { PageParams } from '../model/http/page-params';
 import { ExamPeriodService } from '../services/exam-period.service';
+import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-period-form-dialog.component';
 
 @Component({
   selector: 'app-exam-periods',
@@ -20,8 +22,6 @@ export class ExamPeriodsComponent implements OnInit {
   @Input('selectable') selectable: boolean = false;
 
   showSearchBox: boolean = false;
-  examperiodFormDialogOpened: boolean = false;
-  examPeriodFormDialogState: FORM_STATE = FORM_STATE.ADD;
 
   examPeriodForEdit: ExamPeriod | undefined = undefined;
   selectedEXamPeriod: ExamPeriod | undefined = undefined;
@@ -70,36 +70,82 @@ export class ExamPeriodsComponent implements OnInit {
       })
     );
   }
-  
-  openExamPeriodFormDialog(state: FORM_STATE){
-    this.examPeriodFormDialogState = state;
+
+  examperiodFormDialogOpened: boolean = false;
+  examperiodFormDialogOptions: ExamPeriodFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    examPeriodForEdit: undefined,
+    cancel: () => {},
+    save: (examPeriod: ExamPeriod) => {},
+  };
+
+  onNewExamPeriodClick(): void {
     this.examperiodFormDialogOpened = true;
-  }
 
-  onExamPeriodDialogCancel(): void{
-    this.examperiodFormDialogOpened = false;
-    this.examPeriodForEdit = undefined;
-  }
-
-  onExamPeriodSave(examPeriod: ExamPeriod): void{
-    if(!examPeriod.id)
-        this.examPeriodService.
-        createExamPeriod(examPeriod).
-        pipe(take(1)).
-        subscribe((id) => {
-          console.log(id);
+    this.examperiodFormDialogOptions = {
+        state: FORM_STATE.ADD,
+        examPeriodForEdit: undefined,
+        cancel: () => { this.examperiodFormDialogOpened = false;},
+        save: (examPeriod: ExamPeriod) => {
+          this.examPeriodService.
+          createExamPeriod(examPeriod).
+          pipe(take(1)).
+          subscribe((id) => {
+          console.log('Exam period with id ' + id + ' is created!');
           this.examperiodFormDialogOpened = false;
           this.refreshExamPeriodsPage();
         });
-    else
+        }
+    };
+  }
+
+  onEditExamPeriodClick(examPeriod: ExamPeriod): void{
+    this.examperiodFormDialogOpened = true;
+
+    this.examperiodFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      examPeriodForEdit: examPeriod,
+      cancel: () => { this.examperiodFormDialogOpened = false;},
+      save: (examPeriod: ExamPeriod) => {
         this.examPeriodService.
-        updateExamPeriod(examPeriod.id, examPeriod).
+        updateExamPeriod(examPeriod.id!, examPeriod).
         pipe(take(1)).
         subscribe(() => {
           console.log('Exam period updated: ' + examPeriod.id);
           this.examperiodFormDialogOpened = false;
           this.refreshExamPeriodsPage();
         });
+      }
+    }
+  }
+
+  confirmationDialogOpened: boolean = false;
+  confirmationDialogOptions: ConfirmationDialogOptions = {
+    title: '',
+    message: '',
+    decline: () => {},
+    confirm: () => {},
+  };
+
+  onExamPeriodDelete(examPeriod: ExamPeriod): void{
+    this.confirmationDialogOpened = true;
+
+    this.confirmationDialogOptions = {
+      title: `Delete ${examPeriod.name}`,
+      message: `Are you sure?`,
+      decline: () => {
+        this.confirmationDialogOpened = false;
+      },
+      confirm: ()=> {
+        this.examPeriodService.
+        deleteExamPeriod(examPeriod.id!).
+        pipe(take(1)).
+        subscribe(() => {
+          this.confirmationDialogOpened = false;
+          this.refreshExamPeriodsPage();
+        });
+      }
+    };
   }
 
   onPageChange(selectedPage: number): void {

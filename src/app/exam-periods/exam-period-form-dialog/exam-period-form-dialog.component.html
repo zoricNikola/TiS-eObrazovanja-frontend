@@ -1,12 +1,12 @@
 <app-dialog [opened]="opened" [modal]="true">
     <ng-container class="heading">{{
-        state === FORM_STATE.ADD
+        options.state === FORM_STATE.ADD
           ? "Create a new exam period"
           : "Edit a selected " + examPeriod?.name
       }}</ng-container>
 
     <ng-container class="content">
-        <form #f="ngForm" (ngSubmit)="f.valid && submit(f)">
+        <form #f="ngForm" (ngSubmit)="submit()">
           <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
               <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
                 <input
@@ -49,11 +49,11 @@
 
     <ng-container class="footer">
         <div class="inline-flex w-full justify-end space-x-2">
-          <button class="btn-sm-red" (click)="onDialogCancel(f)">Cancel</button>
+          <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
           <button
             [disabled]="f.invalid"
             class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
-            (click)="submit(f)">Save</button>
+            (click)="f.onSubmit($event)">Save</button>
         </div>
     </ng-container>
 </app-dialog>

@@ -15,7 +15,7 @@ import { SortParamsUtils } from './../../services/utils/sort-params-utils.servic
   styleUrls: ['./admins.component.css'],
 })
 export class AdminsComponent implements OnInit {
-  @Input('selectable') selectable: boolean = true;
+  @Input('selectable') selectable: boolean = false;
   @Output('itemTake') adminTake: EventEmitter<User> = new EventEmitter();
 
   selectedAdmin: User | undefined = undefined;
@@ -53,7 +53,7 @@ export class AdminsComponent implements OnInit {
           sort: paramMap.getAll('sort'),
         };
 
-        return this.adminsService.getAdmins(pageParams, queryParams);
+        return this.adminsService.filterAdmins(pageParams, queryParams);
       })
     );
   }

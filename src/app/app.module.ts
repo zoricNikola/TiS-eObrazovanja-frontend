@@ -28,11 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ExamPeriodSearchFormComponent } from './search-forms/exam-period-search-form/exam-period-search-form.component';
-import { ExamPeriodDialogComponent } from './dialogs/input-dialogs/exam-period-dialog/exam-period-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DeleteConfirmDialogComponent } from './dialogs/confirmation-dialogs/delete-confirm-dialog/delete-confirm-dialog.component';
 import { AppErrorHandler } from './common/app-error-handler';
 import { AccordionComponent } from './common/accordion/accordion.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
@@ -59,9 +55,6 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
     LogoutComponent,
     DocumentsComponent,
     FinancialCardComponent,
-    ExamPeriodSearchFormComponent,
-    ExamPeriodDialogComponent,
-    DeleteConfirmDialogComponent,
     AccordionComponent,
     PaginationComponent,
     AdminsComponent,
@@ -83,7 +76,6 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule,
     BrowserModule, 
     AppRoutingModule, 
     HttpClientModule, 

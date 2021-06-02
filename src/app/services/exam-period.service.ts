@@ -25,7 +25,7 @@ export class ExamPeriodService extends BaseService {
       size: pageParams.size
     };
 
-    //if(queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+    if(queryParams.sort?.length > 0) params['sort'] = queryParams.sort;
     if(queryParams.name) params['name'] = queryParams?.name;
     if(queryParams.startDate) params['startDate'] = queryParams?.startDate;
     if(queryParams.endDate) params['endDate'] = queryParams?.endDate;

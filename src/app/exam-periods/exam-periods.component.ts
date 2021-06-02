@@ -9,6 +9,7 @@ import { ExamPeriod } from '../model/exam-period/exam-period';
 import { ExamPeriodPage } from '../model/exam-period/exam-period-page';
 import { PageParams } from '../model/http/page-params';
 import { ExamPeriodService } from '../services/exam-period.service';
+import { SortParamsUtils } from '../services/utils/sort-params-utils.service';
 import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-period-form-dialog.component';
 
 @Component({
@@ -32,7 +33,8 @@ export class ExamPeriodsComponent implements OnInit {
   constructor(private examPeriodService: ExamPeriodService, 
               private router: Router, 
               private route: ActivatedRoute, 
-              public datePipe: DatePipe) { }
+              public datePipe: DatePipe,
+              public sortParamsUtils: SortParamsUtils) { }
 
   get FORM_STATE() {
     return FORM_STATE;
@@ -63,7 +65,8 @@ export class ExamPeriodsComponent implements OnInit {
         let queryParams = {
           name: paramMap.get('name'),
           startDate: this.datePipe.transform(paramMap.get('startDate'), 'yyyy-MM-dd'),
-          endDate: this.datePipe.transform(paramMap.get('endDate'), 'yyyy-MM-dd')
+          endDate: this.datePipe.transform(paramMap.get('endDate'), 'yyyy-MM-dd'),
+          sort: paramMap.getAll('sort')
         };
 
         return this.examPeriodService.filterExamPeriods(pageParams, queryParams);
@@ -173,6 +176,19 @@ export class ExamPeriodsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  onSortOptionsChange(sortParams: string[], triggeredProperty: string): void{
+    this.selectable? (this.selectedEXamPeriod = undefined) : {};
+    let newSortParams = this.sortParamsUtils.updateSortParams(
+      sortParams,
+      triggeredProperty
+    );
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { sort: newSortParams },
       queryParamsHandling: 'merge',
     });
   }

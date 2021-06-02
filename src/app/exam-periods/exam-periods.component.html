@@ -125,23 +125,108 @@
               <thead>
                 <tr class="bg-red-300 text-indigo-800 shadow-md">
                   <th
-                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                    (click)="onSortOptionsChange(examPeriodPage.queryParams.sort, 'name')">
                     <div class="flex justify-center">
                       Exam period name
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyASC(examPeriodPage.queryParams.sort, 'name')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                      </svg>
+
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyDESC(examPeriodPage.queryParams.sort, 'name')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                      </svg>
                     </div>
                   </th>
 
                   <th
-                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                    (click)="onSortOptionsChange(examPeriodPage.queryParams.sort, 'startDate')">
                     <div class="flex justify-center">
                       Start date
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyASC(examPeriodPage.queryParams.sort, 'startDate')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                      </svg>
+
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyDESC(examPeriodPage.queryParams.sort, 'startDate')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                      </svg>
                     </div>
                   </th>
 
                   <th
-                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                    class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                    (click)="onSortOptionsChange(examPeriodPage.queryParams.sort, 'endDate')">
                     <div class="flex justify-center">
                       End date
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyASC(examPeriodPage.queryParams.sort, 'endDate')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                      </svg>
+
+                      <svg
+                          *ngIf="sortParamsUtils.isSortedByPropertyDESC(examPeriodPage.queryParams.sort, 'endDate')"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                      </svg>
+
                     </div>
                   </th>
                   <td class="w-16"></td>

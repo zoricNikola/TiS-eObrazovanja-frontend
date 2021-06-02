@@ -19,18 +19,22 @@ export class ExamPeriodService extends BaseService {
     super(`${environment.apiUrl}/examPeriods`, http);
   }
 
-  getExamPeriods(pageParams: PageParams, queryParams? : any){
+  filterExamPeriods(pageParams: PageParams, queryParams? : any): Observable<ExamPeriodPage> {
     let params: any = {
       page: pageParams.page,
-      size: pageParams.size,
-      ...queryParams
+      size: pageParams.size
     };
 
-    return this.http
-    .get(`${this.url}`, { params, observe: 'response' })
-    .pipe(
-      map((response: HttpResponse<Object>) => {
-        const body = response.body as ResponsePage<ExamPeriod>;
+    //if(queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+    if(queryParams.name) params['name'] = queryParams?.name;
+    if(queryParams.startDate) params['startDate'] = queryParams?.startDate;
+    if(queryParams.endDate) params['endDate'] = queryParams?.endDate;
+
+    console.log(params);
+
+    return this.filter(params).pipe(
+      map((responseBody) => {
+        const body = responseBody as ResponsePage<ExamPeriod>;
         let page: ExamPeriodPage = {
           content: body.content,
           contentCount: body.numberOfElements,
@@ -42,8 +46,7 @@ export class ExamPeriodService extends BaseService {
         };
         return page;
       })
-    )
-    .pipe(catchError(this.handleError));
+    );
   }
 
   createExamPeriod(examPeriod: ExamPeriod): Observable<number>{

@@ -74,7 +74,7 @@
                       <td>
                         <input
                           [ngModel]="examPeriodPage.queryParams?.startDate"
-                          (keyup)="onSearchOptionsChange(f.value)"
+                          (change)="onSearchOptionsChange(f.value)"
                           name="startDate"
                           type="date"
                           placeholder="Start date"
@@ -83,7 +83,7 @@
                       <td>
                         <input
                           [ngModel]="examPeriodPage.queryParams?.endDate"
-                          (keyup)="onSearchOptionsChange(f.value)"
+                          (change)="onSearchOptionsChange(f.value)"
                           name="endDate"
                           type="date"
                           placeholder="End date"

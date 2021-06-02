@@ -62,11 +62,11 @@ export class ExamPeriodsComponent implements OnInit {
 
         let queryParams = {
           name: paramMap.get('name'),
-          startDate: paramMap.get('startDate'),
-          endDate: paramMap.get('endDate')
+          startDate: this.datePipe.transform(paramMap.get('startDate'), 'yyyy-MM-dd'),
+          endDate: this.datePipe.transform(paramMap.get('endDate'), 'yyyy-MM-dd')
         };
 
-        return this.examPeriodService.getExamPeriods(pageParams, queryParams);
+        return this.examPeriodService.filterExamPeriods(pageParams, queryParams);
       })
     );
   }

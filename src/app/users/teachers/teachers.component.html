@@ -1,0 +1,182 @@
+<div class="page-content-holder">
+    <div class="page-content-card lg:w-full">
+        
+            <div class="w-full">
+                <button title="Create teacher"
+                        class="btn btn-green inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                      New    
+                </button>
+
+                <button title="Filter teachers"
+                        (click)="showSearchBox = !showSearchBox"
+                        class="btn btn-indigo inline-flex items-center ml-2">
+                    <svg *ngIf="!showSearchBox"
+                         xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    <svg
+                        *ngIf="showSearchBox"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 15l7-7 7 7"/>
+                    </svg>
+                      Filter
+                </button>
+            </div>
+
+            <div accordion [opened]="showSearchBox">
+                <form #f="ngForm">
+                    <table class="w-full table-fixed text-center font-semibold">
+                        <tbody>
+                            <tr class="bg-red-300 text-white shadow-md">
+                                <td>
+                                    <input 
+                                    name="firstName"
+                                    placeholder="First name"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input 
+                                    name="lastName"
+                                    placeholder="Last name"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input 
+                                    name="username"
+                                    placeholder="Username"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>    
+
+                                <td>
+                                    <input 
+                                    name="address"
+                                    placeholder="Address"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input name="teacherTitle"
+                                    placeholder="Teacher title"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input 
+                                    name="email"
+                                    placeholder="Email"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input name="phoneNumber"
+                                    placeholder="Phone number"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td class="w-16">
+                                    <button title="Clear search"
+                                    class="btn-sm-red">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="h-6 w-6"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+            <table class="w-full
+                        table-fixed
+                        text-center
+                        border-separate
+                        table-row-spacing-y-4
+                        font-semibold">
+                <thead>
+                    <tr class="bg-red-300 text-indigo-800 shadow-md">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                First name
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Last name
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Username
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Address
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Teacher title
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Email
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
+                                Phone number
+                            </div>
+                        </th>
+                    </tr>
+                </thead>        
+            </table>
+
+       
+    </div>
+</div>

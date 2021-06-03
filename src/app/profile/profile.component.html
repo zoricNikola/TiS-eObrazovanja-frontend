@@ -1,88 +1,299 @@
-<div class="flex flex-col flex-auto justify-center items-center">
-  <div class="w-full lg:w-1/2 bg-indigo-800 h-full">
-    <div class="card-heading p-4 text-4xl font-bold text-center">
+<div class="page-content-holder">
+  <div class="page-content-card h-auto lg:w-1/2">
+    <div class="mb-4 text-4xl font-bold text-center">
       <h1>My Profile</h1>
     </div>
     <form #f="ngForm" (ngSubmit)="submit(f)">
-      <div
-        class="
-          flex flex-row flex-wrap
-          card-body
-          p-4
-          space-y-3
-          justify-items-center
-          text-indigo-800
-        "
-      >
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="firstName">First Name</label>
-          <input
-            ngModel="{{ user.firstName }}"
-            name="firstName"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="firstName"
-            type="text"
-          />
+      <div class="flex flex-col py-4 space-y-4 justify-evenly text-lg">
+        <div class="flex w-full space-x-4">
+          <div class="custom-input-holder w-1/2">
+            <input
+              [disabled]="!editMode"
+              required
+              id="firstName"
+              name="firstName"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.firstName"
+              #firstName="ngModel"
+            />
+            <label for="firstName">First Name</label>
+            <div
+              *ngIf="firstName.touched && firstName.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="firstName.errors?.required">
+                  First Name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="custom-input-holder w-1/2">
+            <input
+              [disabled]="!editMode"
+              required
+              id="lastName"
+              name="lastName"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.lastName"
+              #lastName="ngModel"
+            />
+            <label for="lastName">Last Name</label>
+            <div
+              *ngIf="lastName.touched && lastName.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="lastName.errors?.required">
+                  Last Name is required
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="lastName">Last Name</label>
-          <input
-            ngModel="{{ user.lastName }}"
-            name="lastName"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="lastName"
-            type="text"
-          />
+        <div class="flex w-full space-x-4">
+          <div class="custom-input-holder w-1/2">
+            <input
+              [disabled]="!editMode"
+              required
+              id="username"
+              name="username"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.username"
+              #username="ngModel"
+            />
+            <label for="username">Username</label>
+            <div
+              *ngIf="username.touched && username.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="username.errors?.required">
+                  Username is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="custom-input-holder w-1/2">
+            <input
+              [disabled]="!editMode"
+              required
+              email
+              id="email"
+              name="email"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.email"
+              #email="ngModel"
+            />
+            <label for="email">Email</label>
+            <div
+              *ngIf="email.touched && email.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="email.errors?.required">Email is required</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="username">Username</label>
-          <input
-            ngModel="{{ user.username }}"
-            name="username"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="username"
-            type="text"
-          />
+        <div class="flex w-full space-x-4">
+          <div
+            [class.pr-2]="currentUserType === 'ADMIN'"
+            class="custom-input-holder w-1/2"
+          >
+            <input
+              [disabled]="!editMode"
+              required
+              id="phoneNumber"
+              name="phoneNumber"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.phoneNumber"
+              #phoneNumber="ngModel"
+            />
+            <label for="phoneNumber">Phone</label>
+            <div
+              *ngIf="phoneNumber.touched && phoneNumber.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="phoneNumber.errors?.required">
+                  Phone is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              currentUserType === 'STUDENT' || currentUserType === 'TEACHER'
+            "
+            class="custom-input-holder w-1/2"
+          >
+            <input
+              [disabled]="!editMode"
+              required
+              id="address"
+              name="address"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="formData.address"
+              #address="ngModel"
+            />
+            <label for="address">Address</label>
+            <div
+              *ngIf="address.touched && address.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="address.errors?.required">Address is required</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="email">Email</label>
-          <input
-            ngModel="{{ user.email }}"
-            name="email"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="email"
-            type="text"
-          />
+        <div
+          *ngIf="currentUserType === 'STUDENT' || currentUserType === 'TEACHER'"
+          class="flex w-full space-x-4"
+        >
+          <div class="custom-input-holder w-1/2">
+            <input
+              [disabled]="!editMode"
+              required
+              id="dateOfBirth"
+              name="dateOfBirth"
+              type="date"
+              placeholder=" "
+              class="input-underlined"
+              [ngModel]="formData.dateOfBirth | date: 'yyyy-MM-dd'"
+              (ngModelChange)="formData.dateOfBirth = $event"
+              #dateOfBirth="ngModel"
+            />
+            <label for="dateOfBirth">Date of birth</label>
+            <div
+              *ngIf="dateOfBirth.touched && dateOfBirth.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="dateOfBirth.errors?.required">
+                  Date of birth is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="currentUserType === 'STUDENT'"
+            class="custom-input-holder w-1/2"
+          >
+            <input
+              disabled
+              required
+              id="generation"
+              name="generation"
+              type="number"
+              placeholder=" "
+              class="input-underlined"
+              [ngModel]="formData.generation"
+              #generation="ngModel"
+            />
+            <label for="generation">Generation</label>
+            <div
+              *ngIf="generation.touched && generation.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="generation.errors?.required">
+                  Generation is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="currentUserType === 'TEACHER'"
+            class="custom-input-holder w-1/2"
+          >
+            <select
+              disabled
+              id="teacherTitle"
+              name="teacherTitle"
+              class="input-underlined"
+              [ngModel]="formData.teacherTitle"
+            >
+              <option [ngValue]="formData.teacherTitle">
+                {{ formData.teacherTitle.name }}
+              </option>
+            </select>
+            <label for="teacherTitle">Teacher title</label>
+            <!-- <div
+              *ngIf="teacherTitle.touched && teacherTitle.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="teacherTitle.errors?.required">
+                  Student Card is required
+                </div>
+              </div>
+            </div> -->
+          </div>
         </div>
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="address">Address</label>
-          <input
-            ngModel="{{ user.address }}"
-            name="address"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="address"
-            type="text"
-          />
-        </div>
-        <div class="w-full h-16 bg-red-300 rounded-2xl p-2">
-          <label class="font-semibold" for="phoneNumber">Phone number</label>
-          <input
-            ngModel="{{ user.phoneNumber }}"
-            name="phoneNumber"
-            [disabled]="!editMode"
-            class="input-underlined w-1/2"
-            id="phoneNumber"
-            type="text"
-          />
+        <div
+          *ngIf="currentUserType === 'STUDENT'"
+          class="flex w-full space-x-4"
+        >
+          <div class="custom-input-holder w-1/2 pr-2">
+            <input
+              disabled
+              required
+              id="studentCard"
+              name="studentCard"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [ngModel]="formData.studentCard"
+              #studentCard="ngModel"
+            />
+            <label for="studentCard">Student Card</label>
+            <div
+              *ngIf="studentCard.touched && studentCard.invalid"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="studentCard.errors?.required">
+                  Student Card is required
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <button class="btn btn-indigo">Save</button>
+      <button hidden></button>
     </form>
-    <button (click)="editMode = !editMode" class="btn btn-indigo">Edit</button>
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button
+        *ngIf="!editMode"
+        (click)="editMode = true"
+        class="btn btn-yellow"
+      >
+        Edit
+      </button>
+      <button *ngIf="editMode" (click)="onCancel(f)" class="btn btn-red">
+        Cancel
+      </button>
+      <button
+        *ngIf="editMode"
+        (click)="f.onSubmit($event)"
+        class="btn btn-indigo"
+      >
+        Save
+      </button>
+    </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
-<div class="flex flex-col flex-auto justify-center items-center">
-  <div class="w-full lg:w-4/5 bg-indigo-800 h-full my-10 p-4">
+<div class="page-content-holder">
+  <div class="page-content-card lg:w-4/5">
     <div *ngIf="adminsPage$ | async as adminsPage">
       <confirmation-dialog
         [opened]="confirmationDialogOpened"

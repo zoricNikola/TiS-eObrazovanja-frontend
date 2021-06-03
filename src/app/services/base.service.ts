@@ -56,7 +56,7 @@ export abstract class BaseService {
   }
 
   protected handleError(error: Response) {
-    if (error.status === 404) return throwError(new NotFoundError());
+    if (error.status === 404) return throwError(new NotFoundError(error));
     if (error.status === 422)
       return throwError(new EntityValidationError(error));
     return throwError(new AppError(error));

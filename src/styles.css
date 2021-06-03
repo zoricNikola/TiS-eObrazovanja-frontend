@@ -17,6 +17,20 @@
     @apply bg-green-600 text-white hover:bg-green-700 active:bg-green-500;
   }
 
+  .btn-yellow {
+    @apply bg-yellow-600
+          text-white
+          hover:bg-yellow-700
+          active:bg-yellow-500;
+  }
+
+  .btn-red {
+    @apply bg-red-700
+          text-white
+          hover:bg-red-800
+          active:bg-red-600;
+  }
+
   .btn-sm-red {
     @apply px-2
           py-1
@@ -133,6 +147,14 @@
   .custom-input-holder {
     @apply relative;
   }
+
+  .page-content-holder {
+    @apply flex flex-col flex-auto justify-center items-center;
+  }
+
+  .page-content-card {
+    @apply w-full bg-indigo-800 h-full my-10 p-4;
+  }
 }
 
 @layer base {
@@ -170,6 +192,20 @@
     ease-out
     duration-300
     pointer-events-none;
+  }
+
+  .custom-input-holder select {
+    @apply pt-6 h-14;
+  }
+
+  .custom-input-holder select + label {
+    @apply absolute
+    w-full
+    left-0
+    top-0
+    px-2
+    pointer-events-none
+    text-orange-500;
   }
 
   .custom-input-holder input:focus + label,

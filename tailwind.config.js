@@ -36,6 +36,9 @@ module.exports = {
       },
       margin: {
         '1/12': '8.333333%'
+      },
+      width: {
+        '160': '40rem'
       }
     },
   },

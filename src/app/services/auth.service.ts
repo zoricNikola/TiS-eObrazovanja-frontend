@@ -40,6 +40,25 @@ export class AuthService {
       );
   }
 
+  reloadJwt(): Observable<void> {
+    return this.http
+      .get(`${environment.apiUrl}/users/reloadJwt`, {
+        observe: 'response',
+        responseType: 'text',
+      })
+      .pipe(
+        map((response: HttpResponse<Object>) => {
+          const token = response.body as string;
+          localStorage.setItem('token', token);
+        })
+      )
+      .pipe(
+        catchError((error: Response) => {
+          return throwError(new AppError(error));
+        })
+      );
+  }
+
   logout() {
     localStorage.removeItem('token');
   }

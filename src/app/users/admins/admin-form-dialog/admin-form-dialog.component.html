@@ -6,9 +6,19 @@
   }}</ng-container>
   <ng-container class="content">
     <form #f="ngForm" (ngSubmit)="submit()">
-      <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
-        <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
-          <div class="custom-input-holder">
+      <div
+        class="
+          flex flex-col
+          w-160
+          px-8
+          py-4
+          space-y-4
+          justify-evenly
+          bg-indigo-800
+        "
+      >
+        <div class="flex w-full space-x-4">
+          <div class="custom-input-holder w-1/2">
             <input
               required
               id="firstName"
@@ -31,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="custom-input-holder">
+          <div class="custom-input-holder w-1/2">
             <input
               required
               id="lastName"
@@ -54,7 +64,9 @@
               </div>
             </div>
           </div>
-          <div class="custom-input-holder">
+        </div>
+        <div class="flex w-full space-x-4">
+          <div class="custom-input-holder w-1/2">
             <input
               required
               id="username"
@@ -78,9 +90,7 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
-          <div class="custom-input-holder">
+          <div class="custom-input-holder w-1/2">
             <input
               required
               email
@@ -105,7 +115,9 @@
               </div>
             </div>
           </div>
-          <div class="custom-input-holder">
+        </div>
+        <div class="flex w-full space-x-4">
+          <div class="custom-input-holder w-1/2 pr-2">
             <input
               required
               id="phoneNumber"

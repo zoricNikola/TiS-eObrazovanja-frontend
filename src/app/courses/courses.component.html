@@ -1,8 +1,7 @@
 <div class="flex flex-col flex-auto justify-center items-center">
-  <div class="w-full lg:w-4/5 bg-indigo-800 h-full my-10 p-4">
+  <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
     <div *ngIf="coursesPage$ | async as coursesPage">
-      <confirmation-dialog [options]="dialogOptions">
-      </confirmation-dialog>
+      <confirmation-dialog [options]="dialogOptions"> </confirmation-dialog>
       <course-form-dialog
         [opened]="courseFormDialogOpened"
         [state]="courseFormDialogState"
@@ -193,6 +192,8 @@
                 </svg>
               </div>
             </th>
+            <th class="w-16"></th>
+            <th class="w-16"></th>
           </tr>
         </thead>
 

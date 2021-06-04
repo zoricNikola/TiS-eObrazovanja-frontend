@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
@@ -21,6 +21,7 @@ import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-peri
 export class ExamPeriodsComponent implements OnInit {
 
   @Input('selectable') selectable: boolean = false;
+  @Output('itemTake') examPeriodTake : EventEmitter<ExamPeriod> = new EventEmitter();
 
   showSearchBox: boolean = false;
 
@@ -42,6 +43,14 @@ export class ExamPeriodsComponent implements OnInit {
 
   ngOnInit(): void {
     this.onLoadExamPeriods();
+  }
+
+  onExamPeriodSelect(examPeriod: ExamPeriod): void{
+    this.selectedEXamPeriod = this.selectedEXamPeriod === examPeriod ? undefined : examPeriod;
+  }
+
+  onExamPeriodTake(): void{
+   this.examPeriodTake.emit(this.selectedEXamPeriod);
   }
 
   refreshExamPeriodsPage(){

@@ -1,6 +1,6 @@
 <div class="page-content-holder">
     <div class="page-content-card lg:w-full">
-        
+        <div class="w-full" *ngIf="teacherPage$ | async as teacherPage">
             <div class="w-full">
                 <button title="Create teacher"
                         class="btn btn-green inline-flex items-center">
@@ -84,6 +84,22 @@
                                 </td>
 
                                 <td>
+                                    <input 
+                                    type="date"
+                                    name="dateOfBirthFrom"
+                                    placeholder="Birth date"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
+                                    <input 
+                                    type="date"
+                                    name="dateOfBirthTo"
+                                    placeholder="Birth date"
+                                    class="input-underlined text-center mt-0"/>
+                                </td>
+
+                                <td>
                                     <input name="teacherTitle"
                                     placeholder="Teacher title"
                                     class="input-underlined text-center mt-0"/>
@@ -92,6 +108,7 @@
                                 <td>
                                     <input 
                                     name="email"
+                                    type="email"
                                     placeholder="Email"
                                     class="input-underlined text-center mt-0"/>
                                 </td>
@@ -158,6 +175,12 @@
 
                         <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
                             <div class="flex justify-center">
+                                Birth date
+                            </div>
+                        </th>
+
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                            <div class="flex justify-center">
                                 Teacher title
                             </div>
                         </th>
@@ -173,10 +196,68 @@
                                 Phone number
                             </div>
                         </th>
+                        <td class="w-16"></td>
+                        <td class="w-16"></td>
                     </tr>
-                </thead>        
+                </thead>
+                
+                <tbody>
+                    <tr *ngFor="let teacher of teacherPage.content"
+                        class="hover:bg-indigo-600 text-white shadow-md"
+                        [class.cursor-pointer]="selectable"
+                        [ngClass]="selectable && selectedTeacher === teacher ? 'bg-indigo-700' : 'bg-indigo-900'"
+                        (click)="selectable && onTeacherSelect(teacher)">
+                    <td>{{teacher.firstName}}</td>
+                    <td>{{teacher.lastName}}</td>
+                    <td>{{teacher.user.username}}</td>
+                    <td>{{teacher.address}}</td>
+                    <td>{{teacher.dateOfBirth}}</td>
+                    <td>{{teacher.teacherTitle.name}}</td>
+                    <td>{{teacher.user.email}}</td>
+                    <td>{{teacher.user.phoneNumber}}</td>
+                    <td class="w-16">
+                        <button class="btn-sm-yellow">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                    </td>
+                    <td class="w-16">
+                        <button class="btn-sm-red">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </td>
+                    </tr>
+                </tbody>
             </table>
 
-       
+            <div
+              class="flex justify-end"
+              pagination
+              [itemsCount]="teacherPage.totalItemsCount"
+              [pagesCount]="teacherPage.totalPagesCount"
+              [pageSize]="teacherPage.pageSize"
+              [currentPage]="teacherPage.currentPage"
+              (pageChange)="onPageChange($event)"
+              (pageSizeChange)="onPageSizeChange($event)"></div> 
+        </div>
     </div>
 </div>

@@ -47,9 +47,6 @@ export class UsersComponent implements OnInit {
       this.userType = 'admins';
     } else if (url.includes('teachers')) {
       this.userType = 'teachers';
-      this.teacherService
-        .getTeachers()
-        .subscribe((teachers) => (this.teachers = teachers));
     } else if (url.includes('students')) {
       this.userType = 'students';
       this.studentService

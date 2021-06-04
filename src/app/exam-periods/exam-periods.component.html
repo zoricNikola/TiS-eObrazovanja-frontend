@@ -56,7 +56,23 @@
                   stroke-width="2"
                   d="M5 15l7-7 7 7"/>
               </svg>Filter</button>
-          
+
+              <button *ngIf="selectable && selectedEXamPeriod"
+                      (click)="onExamPeriodTake()"
+                      class="btn btn-green float-right inline-flex items-center">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/>
+                  </svg>
+                Take</button>
 
           <div accordion [opened]="showSearchBox">
               <form  #f="ngForm">
@@ -237,7 +253,11 @@
               <tbody>
                 <tr *ngFor="let examPeriod of examPeriodPage.content"
                     class="hover:bg-indigo-600 text-white shadow-md"
-                    [class.cursor-pointer]="selectable">
+                    [class.cursor-pointer]="selectable"
+                    [ngClass]="selectable && selectedEXamPeriod === examPeriod
+                    ? 'bg-indigo-700'
+                    : 'bg-indigo-900'"
+                    (click)="selectable && onExamPeriodSelect(examPeriod)">
                   <td>{{examPeriod.name}}</td>
                   <td>{{examPeriod.startDate}}</td>
                   <td>{{examPeriod.endDate}}</td>

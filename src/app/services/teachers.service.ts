@@ -33,6 +33,16 @@ export class TeachersService extends BaseService {
       size: pageParams.size
     };
 
+    if(queryParams.firstName) params['firstName'] = queryParams?.firstName;
+    if(queryParams.lastName) params['lastName'] = queryParams?.lastName;
+    if(queryParams.username) params['username'] = queryParams?.username;
+    if(queryParams.address) params['address'] = queryParams?.address;
+    if(queryParams.teacherTitleName) params['teacherTitleName'] = queryParams?.teacherTitleName;
+    if(queryParams.dateofBirthFrom) params['dateOfBirthFrom'] = queryParams?.dateOfBirthFrom;
+    if(queryParams.dateofBirthTo) params['dateOfBirthTo'] = queryParams?.dateOfBirthTo;
+    if(queryParams.email) params['email'] = queryParams?.email;
+    if(queryParams.phoneNumber) params['phoneNumber'] = queryParams?.phoneNumber;
+
     return this.filter(params).pipe(
       map((responseBody) => {
         const body = responseBody as ResponsePage<Teacher>;

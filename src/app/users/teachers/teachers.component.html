@@ -57,6 +57,8 @@
                             <tr class="bg-red-300 text-white shadow-md">
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.firstName"
+                                    (keyup)="onSearchOptionsChange(f.value)"
                                     name="firstName"
                                     placeholder="First name"
                                     class="input-underlined text-center mt-0"/>
@@ -64,6 +66,8 @@
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.lastName"
+                                    (keyup)="onSearchOptionsChange(f.value)"
                                     name="lastName"
                                     placeholder="Last name"
                                     class="input-underlined text-center mt-0"/>
@@ -71,6 +75,8 @@
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.username"
+                                    (keyup)="onSearchOptionsChange(f.value)"
                                     name="username"
                                     placeholder="Username"
                                     class="input-underlined text-center mt-0"/>
@@ -78,6 +84,8 @@
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.address"
+                                    (keyup)="onSearchOptionsChange(f.value)"
                                     name="address"
                                     placeholder="Address"
                                     class="input-underlined text-center mt-0"/>
@@ -85,6 +93,8 @@
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.dateOfBirthFrom"
+                                    (change)="onSearchOptionsChange(f.value)"
                                     type="date"
                                     name="dateOfBirthFrom"
                                     placeholder="Birth date"
@@ -93,6 +103,8 @@
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.dateOfBirthTo"
+                                    (change)="onSearchOptionsChange(f.value)"
                                     type="date"
                                     name="dateOfBirthTo"
                                     placeholder="Birth date"
@@ -100,13 +112,18 @@
                                 </td>
 
                                 <td>
-                                    <input name="teacherTitle"
+                                    <input 
+                                    [ngModel]="teacherPage.queryParams?.teacherTitleName"
+                                    (keyup)="onSearchOptionsChange(f.value)"
+                                    name="teacherTitle"
                                     placeholder="Teacher title"
                                     class="input-underlined text-center mt-0"/>
                                 </td>
 
                                 <td>
                                     <input 
+                                    [ngModel]="teacherPage.queryParams?.email"
+                                    (keyup)="onSearchOptionsChange(f.value)"
                                     name="email"
                                     type="email"
                                     placeholder="Email"
@@ -114,14 +131,19 @@
                                 </td>
 
                                 <td>
-                                    <input name="phoneNumber"
+                                    <input 
+                                    [ngModel]="teacherPage.queryParams?.phoneNumber"
+                                    (keyup)="onSearchOptionsChange(f.value)"
+                                    name="phoneNumber"
                                     placeholder="Phone number"
                                     class="input-underlined text-center mt-0"/>
                                 </td>
 
                                 <td class="w-16">
-                                    <button title="Clear search"
-                                    class="btn-sm-red">
+                                    <button 
+                                    title="Clear search"
+                                    class="btn-sm-red"
+                                    (click)="f.resetForm(); onSearchOptionsChange(f.value)">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="h-6 w-6"
                                             fill="none"

@@ -47,7 +47,16 @@ export class TeachersComponent implements OnInit {
           paramMap.get('page'),
           paramMap.get('size')
         );
-        let queryParams = {};
+        let queryParams = {
+          firstName: paramMap.get('firstName'),
+          lastName: paramMap.get('lastName'),
+          username: paramMap.get('username'),
+          address: paramMap.get('address'),
+          teacherTitleName: paramMap.get('teacherTitle'),
+          dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
+          dateOfBirthTo: paramMap.get('dateOfBirthTo'),
+          email: paramMap.get('email'),
+          phoneNumber: paramMap.get('phoneNumber')};
 
         return this.teachersService.filterTeachers(pageParams, queryParams);
       })
@@ -66,6 +75,19 @@ export class TeachersComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { size: selectedPageSize },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  onSearchOptionsChange(queryParams: any): void {
+    this.selectable ? (this.selectedTeacher = undefined) : {};
+    for (let key of Object.keys(queryParams)) {
+      if (!queryParams[key]) queryParams[key] = null;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
       queryParamsHandling: 'merge',
     });
   }

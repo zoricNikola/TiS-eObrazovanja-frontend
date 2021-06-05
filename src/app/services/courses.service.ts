@@ -49,6 +49,38 @@ export class CoursesService extends BaseService{
         .pipe(catchError(this.handleError));
     }
 
+    getCourse(id: number): Observable<Course> {
+      return this.getOne(id).pipe(map((responseBody) => responseBody as Course));
+    }
+
+    filterCourses( pageParams: PageParams,
+                   queryParams?: any
+    ): Observable<CoursePage> {
+      let params: any = {
+        page: pageParams.page,
+        size: pageParams.size,
+      };
+
+      if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+      if (queryParams.name) params['name'] = queryParams.name;
+
+      return this.filter(params).pipe(
+        map((responseBody) => {
+          const body = responseBody as ResponsePage<Course>;
+          let page: CoursePage = {
+            content: body.content,
+            contentCount: body.numberOfElements,
+            totalItemsCount: body.totalElements,
+            totalPagesCount: body.totalPages,
+            pageSize: pageParams.size,
+            currentPage: pageParams.page,
+            queryParams: queryParams,
+          };
+          return page;
+        })
+      );
+    }
+
     createCourse(course: Course): Observable<Course> {
       const newCourse = {
         ...course,

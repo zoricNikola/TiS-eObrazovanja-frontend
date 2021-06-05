@@ -1,7 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Course} from '../../model/course/course';
 import {FORM_STATE} from '../../model/common/form-state';
+
+export interface CourseFormDialogOptions {
+  state: FORM_STATE;
+  courseForEdit: Course | undefined;
+  cancel: () => void;
+  save: (course: Course) => void;
+}
 
 @Component({
   selector: 'course-form-dialog',
@@ -10,10 +17,9 @@ import {FORM_STATE} from '../../model/common/form-state';
 })
 export class CourseFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened = false;
-  @Input('state') state!: FORM_STATE;
-  @Input('course') inputCourse: Course | undefined;
-  @Output('dialogCancel') dialogCancel: EventEmitter<void> = new EventEmitter();
-  @Output('formSubmit') formSubmit: EventEmitter<Course> = new EventEmitter();
+  @Input('options') options!: CourseFormDialogOptions;
+
+  @ViewChild('f') form!: NgForm;
 
   originalCourseName: string | undefined;
 
@@ -25,32 +31,41 @@ export class CourseFormDialogComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes.inputCourse &&
-      this.inputCourse &&
-      this.state === FORM_STATE.EDIT
+      changes.options &&
+      this.options.courseForEdit &&
+      this.options.state === FORM_STATE.EDIT
     ) {
-      this.course = { ...this.inputCourse };
-      this.originalCourseName = this.inputCourse?.name;
+      this.course = { ...this.options.courseForEdit };
+      this.originalCourseName = this.options.courseForEdit.name;
+    }
+
+    if (
+      changes.opened &&
+      !changes.opened.firstChange &&
+      !changes.opened.currentValue
+    ) {
+      setTimeout(() => {
+        this.form.resetForm();
+        this.course = {
+          name: '',
+        };
+        this.originalCourseName = undefined;
+      }, 300);
     }
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   get FORM_STATE() {
     return FORM_STATE;
   }
 
-  onDialogCancel(f: NgForm): void {
-    this.dialogCancel.emit();
-    setTimeout(() => {
-      f.reset();
-      this.originalCourseName = undefined;
-    }, 300);
-  }
+  submit() {
+    this.form.form.markAllAsTouched();
 
-  submit(f: NgForm) {
-    this.formSubmit.emit(this.course);
+    if (this.form.valid) {
+      (document.activeElement as HTMLElement).blur();
+      this.options.save(this.course);
+    }
   }
 }

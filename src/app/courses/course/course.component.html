@@ -1,0 +1,201 @@
+<div class="flex flex-col flex-auto justify-center items-center">
+  <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
+    <div *ngIf="teachingsPage$ | async as teachings">
+    <div class="w-full">
+      <button
+        class="btn btn-indigo inline-flex items-center"
+        (click)="goBack()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
+          />
+        </svg>
+        Back
+      </button>
+      <button
+        (click)="showTeachings = !showTeachings"
+        class="btn btn-indigo inline-flex items-center ml-2"
+      >
+        <svg
+          *ngIf="!showTeachings"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+        <svg
+          *ngIf="showTeachings"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 15l7-7 7 7"
+          />
+        </svg>
+        Course teachers
+      </button>
+
+    </div>
+
+    <div *ngIf="course$ | async as course" class="w-full p-2 border-b-2 border-red-400">
+      <h1 class="font-semibold">{{course.name}}</h1>
+    </div>
+
+    <div accordion [opened]="showTeachings">
+      <button
+        class="btn btn-green inline-flex items-center"
+        (click)="onNewTeacherTeachingCourseClick()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        Assign
+      </button>
+      <table
+        class="
+            w-full
+            table-fixed
+            text-center
+            border-separate
+            table-row-spacing-y-4
+            font-semibold
+          "
+      >
+        <thead>
+        <tr class="bg-red-300 text-indigo-800 shadow-md">
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+          >
+            <div class="flex justify-center">
+              First name
+            </div>
+          </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+          >
+            <div class="flex justify-center">
+              Last name
+            </div>
+          </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+          >
+            <div class="flex justify-center">
+              Teaching since
+            </div>
+          </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+          >
+            <div class="flex justify-center">
+              Role
+            </div>
+          </th>
+          <th class="w-16"></th>
+          <th class="w-16"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let teaching of teachings.content"
+          class="hover:bg-indigo-600 text-white shadow-md min-h"
+        >
+          <td>
+            {{teaching.teacher.firstName}}
+          </td>
+          <td>
+            {{teaching.teacher.lastName}}
+          </td>
+          <td>
+            {{teaching.startDate}}
+          </td>
+          <td>
+            {{teaching.teacherRole.name}}
+          </td>
+
+          <td class="w-16">
+            <button
+              class="btn-sm-yellow"
+              (click)="onEditTeacherTeachingCourseClick()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+            </button>
+          </td>
+          <td class="w-16">
+            <button
+              class="btn-sm-red"
+              (click)="onRemoveTeacherTeachingCourseClick()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    </div>
+  </div>
+</div>
+

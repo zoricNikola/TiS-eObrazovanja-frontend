@@ -15,11 +15,13 @@ import { AuthGuard } from './services/auth-guards/auth-guard.service';
 import { StudentAuthGuardService } from './services/auth-guards/student-auth-guard.service';
 import { AdminsComponent } from './users/admins/admins.component';
 import { UsersComponent } from './users/users.component';
+import {CourseComponent} from './courses/course/course.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'courses', component: CoursesComponent, canActivate: [AuthGuard] },
+  { path: 'courses/:id', component: CourseComponent, canActivate: [AuthGuard] },
   {
     path: 'examPeriods',
     component: ExamPeriodsComponent,

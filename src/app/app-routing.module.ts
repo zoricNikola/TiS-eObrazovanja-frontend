@@ -14,6 +14,7 @@ import { AdminAuthGuard } from './services/auth-guards/admin-auth-guard.service'
 import { AuthGuard } from './services/auth-guards/auth-guard.service';
 import { StudentAuthGuardService } from './services/auth-guards/student-auth-guard.service';
 import { AdminsComponent } from './users/admins/admins.component';
+import { StudentsComponent } from './users/students/students.component';
 import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
@@ -37,7 +38,7 @@ const routes: Routes = [
   },
   {
     path: 'students',
-    component: UsersComponent,
+    component: StudentsComponent,
     canActivate: [AuthGuard, AdminAuthGuard],
   },
   {

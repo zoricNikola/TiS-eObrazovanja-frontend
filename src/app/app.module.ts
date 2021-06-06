@@ -39,6 +39,8 @@ import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin
 import { ExamPeriodFormDialogComponent } from './exam-periods/exam-period-form-dialog/exam-period-form-dialog.component';
 import { CourseFormDialogComponent } from './courses/course-form-dialog/course-form-dialog.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
+import { StudentsComponent } from './users/students/students.component';
+import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
     ExamPeriodFormDialogComponent,
     CourseFormDialogComponent,
     ConfirmationDialogComponent,
+    StudentsComponent,
+    StudentFormDialogComponent,
   ],
   imports: [
     BrowserModule,

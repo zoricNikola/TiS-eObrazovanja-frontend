@@ -27,8 +27,7 @@ export class UsersComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private teacherService: TeachersService,
-    private studentService: StudentsService
+    private teacherService: TeachersService
   ) {}
 
   ngOnInit(): void {
@@ -52,9 +51,6 @@ export class UsersComponent implements OnInit {
         .subscribe((teachers) => (this.teachers = teachers));
     } else if (url.includes('students')) {
       this.userType = 'students';
-      this.studentService
-        .getStudents()
-        .subscribe((students) => (this.students = students));
     }
     console.log(this.userType);
   }

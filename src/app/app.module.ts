@@ -39,8 +39,8 @@ import { AdminFormDialogComponent } from './users/admins/admin-form-dialog/admin
 import { ExamPeriodFormDialogComponent } from './exam-periods/exam-period-form-dialog/exam-period-form-dialog.component';
 import { CourseFormDialogComponent } from './courses/course-form-dialog/course-form-dialog.component';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
-import { CourseComponent } from './courses/course/course.component';
-import {RouterModule} from '@angular/router';
+import { StudentsComponent } from './users/students/students.component';
+import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +65,8 @@ import {RouterModule} from '@angular/router';
     ExamPeriodFormDialogComponent,
     CourseFormDialogComponent,
     ConfirmationDialogComponent,
-    CourseComponent,
+    StudentsComponent,
+    StudentFormDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,9 +80,9 @@ import {RouterModule} from '@angular/router';
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
+    BrowserModule, 
+    AppRoutingModule, 
+    HttpClientModule, 
     FormsModule],
   providers: [
     AuthService,

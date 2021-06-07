@@ -170,16 +170,17 @@
                           </div>
                         </div>
                     </div>
-                    <div class="custom-input-holder w-1/2">
-                        <input
+                    <div class="custom-input-holder w-1/2" *ngIf="teacherTitlePage$ | async as titlePage">
+                        <select
                           [disabled]="options.state === FORM_STATE.EDIT"
                           required
                           id="teacherTitle"
                           name="teacherTitle"
-                          type="checkbox"
-                          class="input-underlined"
+                          class="input-underlined form-select block"
                           [(ngModel)]="teacher.teacherTitle"
-                          #teacherTitle="ngModel"/>
+                          #teacherTitle="ngModel">
+                          <option *ngFor="let title of titlePage.content" [ngValue]="title">{{title.name}}</option>
+                        </select>
                         <label for="teacherTitle">Teacher title</label>
                         <div
                           *ngIf="teacherTitle.touched && teacherTitle.invalid"

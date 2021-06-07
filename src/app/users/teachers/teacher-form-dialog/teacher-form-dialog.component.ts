@@ -1,7 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { FORM_STATE } from 'src/app/model/common/form-state';
+import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
+import { TeacherTitle } from 'src/app/model/teacher/teacher-title';
+import { TeacherTitlePage } from 'src/app/model/teacher/teacher-title-page';
+import { TeacherTitleService } from 'src/app/services/teacher-title.service';
 
 export interface TeacherFormDialogOptions{
   state: FORM_STATE;
@@ -23,6 +30,8 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
   @ViewChild('f') form!: NgForm;
 
   originalTeacherUsername: string | undefined;
+
+  teacherTitlePage$: Observable<TeacherTitlePage> = of();
 
   teacher: Teacher = {
     firstName: '',
@@ -79,13 +88,29 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
       }  
   }
 
-  constructor() { }
+  constructor(private teacherTitleService: TeacherTitleService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.onLoadTeacherTitles();
   }
 
   get FORM_STATE() {
     return FORM_STATE;
+  }
+
+  onLoadTeacherTitles(): void {
+    this.teacherTitlePage$ = this.route.queryParamMap.pipe(
+      switchMap((paramMap) => {
+        let pageParams: PageParams = new PageParams(
+          paramMap.get('page'),
+          paramMap.get('size')
+        );
+        let queryParams = {};
+
+        return this.teacherTitleService.getTeacherTitles(pageParams, queryParams);
+      })
+    )
   }
 
   submit() {

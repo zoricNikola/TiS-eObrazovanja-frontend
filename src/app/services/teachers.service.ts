@@ -27,6 +27,10 @@ export class TeachersService extends BaseService {
     return this.update(id, teacher);
   }
 
+  createTeacher(teacher: Teacher): Observable<number> {
+    return this.create(teacher);
+  }
+
   filterTeachers(pageParams: PageParams, queryParams?: any): Observable<TeacherPage> {
     let params: any = {
       page: pageParams.page,
@@ -59,6 +63,4 @@ export class TeachersService extends BaseService {
       })
     );
   }
-
-  
 }

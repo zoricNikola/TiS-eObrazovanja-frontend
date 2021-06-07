@@ -1,9 +1,14 @@
 <div class="page-content-holder">
     <div class="page-content-card lg:w-full">
         <div class="w-full" *ngIf="teacherPage$ | async as teacherPage">
+            <app-teacher-form-dialog
+            [opened]="teacherFormDialogOpened"
+            [options]="teacherFormDialogOptions">
+            </app-teacher-form-dialog>
             <div class="w-full">
                 <button title="Create teacher"
-                        class="btn btn-green inline-flex items-center">
+                        class="btn btn-green inline-flex items-center"
+                        (click)="onNewTeacherClick()">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          class="h-6 w-6"
                          fill="none"

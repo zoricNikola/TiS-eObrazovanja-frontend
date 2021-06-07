@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { FORM_STATE } from 'src/app/model/common/form-state';
 import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
 import { TeacherPage } from 'src/app/model/teacher/teacher-page';
 import { TeachersService } from 'src/app/services/teachers.service';
+import { TeacherFormDialogOptions } from './teacher-form-dialog/teacher-form-dialog.component';
 
 @Component({
   selector: '[teachers]',
@@ -90,6 +92,26 @@ export class TeachersComponent implements OnInit {
       queryParams,
       queryParamsHandling: 'merge',
     });
+  }
+
+  teacherFormDialogOpened: boolean = false;
+  teacherFormDialogOptions: TeacherFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    teacherForEdit: undefined,
+    cancel: () => {},
+    save: (teacher: Teacher) => {},
+  };
+
+  onNewTeacherClick(): void{
+    this.teacherFormDialogOpened = true;
+    this.teacherFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      teacherForEdit: undefined,
+      cancel: () => this.teacherFormDialogOpened = false,
+      save: (teacher: Teacher) => {
+        
+      }
+    };
   }
 
 }

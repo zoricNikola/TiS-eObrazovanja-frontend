@@ -42,6 +42,7 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
 import { TeachersComponent } from './users/teachers/teachers.component';
 import { StudentsComponent } from './users/students/students.component';
 import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
+import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog/teacher-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { StudentFormDialogComponent } from './users/students/student-form-dialog
     TeachersComponent,
     StudentsComponent,
     StudentFormDialogComponent,
+    TeacherFormDialogComponent,
   ],
   imports: [
     BrowserModule,

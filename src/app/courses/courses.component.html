@@ -1,18 +1,18 @@
 <div class="flex flex-col flex-auto justify-center items-center">
   <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
     <div *ngIf="coursesPage$ | async as coursesPage">
-      <confirmation-dialog [options]="dialogOptions"> </confirmation-dialog>
+      <confirmation-dialog
+        [opened]="confirmationDialogOpened"
+        [options]="confirmationDialogOptions"
+      ></confirmation-dialog>
       <course-form-dialog
         [opened]="courseFormDialogOpened"
-        [state]="courseFormDialogState"
-        [course]="courseForEdit"
-        (dialogCancel)="onCourseFormDialogCancel()"
-        (formSubmit)="onCourseSave($event)"
+        [options]="courseFormDialogOptions"
       ></course-form-dialog>
       <div class="w-full">
         <button
           class="btn btn-green inline-flex items-center"
-          (click)="openCourseFormDialog(FORM_STATE.ADD)"
+          (click)="onNewCourseClick()"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -220,9 +220,7 @@
             <td class="w-16">
               <button
                 class="btn-sm-yellow"
-                (click)="
-                  courseForEdit = course; openCourseFormDialog(FORM_STATE.EDIT)
-                "
+                (click)="onEditCourseClick(course)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

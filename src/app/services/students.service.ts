@@ -6,6 +6,9 @@ import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
 import { Student } from '../model/student/student';
 import { map } from 'rxjs/operators';
+import { PageParams } from '../model/http/page-params';
+import { StudentPage } from '../model/student/student-page';
+import { ResponsePage } from './../model/http/response-page';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +22,62 @@ export class StudentsService extends BaseService {
     return this.getOne(id).pipe(map((responseBody) => responseBody as Student));
   }
 
+  createStudent(student: Student): Observable<number> {
+    return this.create(student);
+  }
+
   updateStudent(id: number, student: Student): Observable<void> {
     return this.update(id, student);
   }
 
-  getStudents() {
-    console.log('calling');
-    return this.backend.getStudents();
+  deleteStudent(id: number): Observable<void> {
+    return this.delete(id);
+  }
+
+  filterStudents(
+    pageParams: PageParams,
+    queryParams?: any
+  ): Observable<StudentPage> {
+    let params: any = {
+      page: pageParams.page,
+      size: pageParams.size,
+    };
+
+    if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+    if (queryParams.firstName) params['firstName'] = queryParams.firstName;
+    if (queryParams.lastName) params['lastName'] = queryParams.lastName;
+    if (queryParams.studentCard)
+      params['studentCard'] = queryParams.studentCard;
+    if (queryParams.address) params['address'] = queryParams.address;
+    if (queryParams.generationFrom)
+      params['generationFrom'] = queryParams.generationFrom;
+    if (queryParams.generationTo)
+      params['generationTo'] = queryParams.generationTo;
+    if (queryParams.dateOfBirthFrom)
+      params['dateOfBirthFrom'] = queryParams.dateOfBirthFrom;
+    if (queryParams.dateOfBirthTo)
+      params['dateOfBirthTo'] = queryParams.dateOfBirthTo;
+    if (queryParams.username) params['username'] = queryParams.username;
+    if (queryParams.email) params['email'] = queryParams.email;
+    if (queryParams.phoneNumber)
+      params['phoneNumber'] = queryParams.phoneNumber;
+
+    console.log(params);
+
+    return this.filter(params).pipe(
+      map((responseBody) => {
+        const body = responseBody as ResponsePage<Student>;
+        let page: StudentPage = {
+          content: body.content,
+          contentCount: body.numberOfElements,
+          totalItemsCount: body.totalElements,
+          totalPagesCount: body.totalPages,
+          pageSize: pageParams.size,
+          currentPage: pageParams.page,
+          queryParams: queryParams,
+        };
+        return page;
+      })
+    );
   }
 }

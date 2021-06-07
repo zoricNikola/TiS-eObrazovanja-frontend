@@ -1,13 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CoursesService } from '../services/courses.service';
-import { Course } from '../model/course/course';
-import { AsyncSubject, Observable, of } from 'rxjs';
-import { CoursePage } from '../model/course/course-page';
-import { FORM_STATE } from '../model/common/form-state';
-import { switchMap, take } from 'rxjs/operators';
-import { PageParams } from '../model/http/page-params';
-import { SortParamsUtils } from '../services/utils/sort-params-utils.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CoursesService} from '../services/courses.service';
+import {Course} from '../model/course/course';
+import {Observable, of} from 'rxjs';
+import {CoursePage} from '../model/course/course-page';
+import {FORM_STATE} from '../model/common/form-state';
+import {switchMap, take} from 'rxjs/operators';
+import {PageParams} from '../model/http/page-params';
+import {SortParamsUtils} from '../services/utils/sort-params-utils.service';
+import {CourseFormDialogOptions} from './course-form-dialog/course-form-dialog.component';
+import {ConfirmationDialogOptions} from '../common/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: '[courses]',
@@ -16,8 +18,7 @@ import { SortParamsUtils } from '../services/utils/sort-params-utils.service';
 })
 export class CoursesComponent implements OnInit {
   @Input('selectable') selectable = false;
-  @Output('itemTake') courseTake: EventEmitter<Course> =
-    new EventEmitter<Course>();
+  @Output('itemTake') courseTake: EventEmitter<Course> = new EventEmitter<Course>();
 
   selectedCourse: Course | undefined = undefined;
 
@@ -25,10 +26,21 @@ export class CoursesComponent implements OnInit {
 
   showSearchBox = false;
 
-  courseFormDialogOpened = false;
-  courseFormDialogState: FORM_STATE = FORM_STATE.ADD;
+  courseFormDialogOpened: boolean = false;
+  courseFormDialogOptions: CourseFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    courseForEdit: undefined,
+    cancel: () => {},
+    save: (course: Course) => {},
+  };
 
-  courseForEdit: Course | undefined = undefined;
+  confirmationDialogOpened: boolean = false;
+  confirmationDialogOptions: ConfirmationDialogOptions = {
+    title: '',
+    message: '',
+    decline: () => {},
+    confirm: () => {},
+  };
 
   constructor(
     private router: Router,
@@ -49,13 +61,9 @@ export class CoursesComponent implements OnInit {
           name: paramMap.get('name'),
           sort: paramMap.getAll('sort'),
         };
-        return this.courseService.getCourses(pageParams, queryParams);
+        return this.courseService.filterCourses(pageParams, queryParams);
       })
     );
-  }
-
-  get FORM_STATE() {
-    return FORM_STATE;
   }
 
   onPageChange(selectedPage: number): void {
@@ -110,20 +118,6 @@ export class CoursesComponent implements OnInit {
     this.courseTake.emit(this.selectedCourse);
   }
 
-  openCourseFormDialog(state: FORM_STATE): void {
-    this.courseFormDialogState = state;
-    this.courseFormDialogOpened = true;
-  }
-
-  closeCourseFormDialog(): void {
-    this.courseFormDialogOpened = false;
-    this.courseForEdit = undefined;
-  }
-
-  onCourseFormDialogCancel(): void {
-    this.closeCourseFormDialog();
-  }
-
   refreshCoursesPage(): void {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -134,67 +128,64 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  onCourseSave(course: Course): void {
-    if (!course.id)
-      this.courseService
-        .createCourse(course)
-        .pipe(take(1))
-        .subscribe((id) => {
-          console.log(id);
-          this.closeCourseFormDialog();
-          this.refreshCoursesPage();
-        });
-    else
-      this.courseService
-        .updateCourse(course.id, course)
-        .pipe(take(1))
-        .subscribe(() => {
-          console.log('Updated ', course.id);
-          this.closeCourseFormDialog();
-          this.refreshCoursesPage();
-        });
+  onNewCourseClick(): void {
+    this.courseFormDialogOpened = true;
+
+    this.courseFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      courseForEdit: undefined,
+      cancel: () => {
+        this.courseFormDialogOpened = false;
+      },
+      save: (course: Course) => {
+        this.courseService.createCourse(course)
+          .pipe(take(1))
+          .subscribe((id) => {
+            this.courseFormDialogOpened = false;
+            this.refreshCoursesPage();
+          });
+      }
+    };
   }
 
-  confirmationDialogOpened: boolean = false;
-  confirmationDialog$!: AsyncSubject<boolean>;
+  onEditCourseClick(course: Course): void {
+    this.courseFormDialogOpened = true;
 
-  dialogOptions = {
-    opened: false,
-    title: '',
-    message: '',
-    decline: () => {},
-    confirm: () => {},
-  };
-
-  onCourseDelete(course: Course): void {
-    this.confirmationDialog$ = new AsyncSubject();
-
-    this.dialogOptions = {
-      opened: true,
-      title: '',
-      message: '',
-      decline: () => {
-        this.dialogOptions.opened = false;
+    this.courseFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      courseForEdit: course,
+      cancel: () => {
+        this.courseFormDialogOpened = false;
       },
-      confirm: () => {
-        // console.log('Confirmed deleting ', course.id);
-        this.dialogOptions.opened = false;
-      },
-    };
-
-    this.confirmationDialog$.subscribe((result) => {
-      if (result && course.id)
-        this.courseService
-          .deleteCourse(course.id)
+      save: (course: Course) => {
+        this.courseService.updateCourse(course.id!, course)
           .pipe(take(1))
           .subscribe(() => {
-            setTimeout(() => {
-              // console.log('Deleted ', course.id);
-              this.confirmationDialogOpened = false;
-              this.refreshCoursesPage();
-            }, 1000);
+            this.courseFormDialogOpened = false;
+            this.refreshCoursesPage();
           });
-      else this.confirmationDialogOpened = false;
-    });
+      }
+    };
   }
+
+  onCourseDelete(course: Course): void {
+    this.confirmationDialogOpened = true;
+
+    this.confirmationDialogOptions = {
+      title: `Delete ${course.name}`,
+      message: `Are you sure?`,
+      decline: () => {
+        this.confirmationDialogOpened = false;
+      },
+      confirm: () => {
+        this.courseService.deleteCourse(course.id!)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.confirmationDialogOpened = false;
+            this.refreshCoursesPage();
+          });
+      }
+    };
+  }
+
 }

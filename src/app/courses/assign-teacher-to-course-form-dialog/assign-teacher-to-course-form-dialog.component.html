@@ -1,0 +1,62 @@
+<app-dialog [opened]="opened" [modal]="true" xmlns="http://www.w3.org/1999/html">
+  <ng-container class="heading">{{
+    options.state === FORM_STATE.ADD
+      ? "Assign teacher to course"
+      : "Edit teacher role: " + teaching.teacherRole.name
+    }}</ng-container>
+  <ng-container class="content">
+    <form #f="ngForm" (ngSubmit)="f.valid && submit()">
+      <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
+        <div class="flex flex-col w-80 space-y-4 bg-indigo-800">
+          <div class="custom-input-holder">
+            <select class="input-underlined">
+              <option
+                required
+                id="teacher"
+                name="teacher"
+                type="text"
+                class="input-underlined"
+                *ngFor="let teacher of teachers$ | async"
+                [ngValue]="teacher"
+              >{{teacher.firstName + ' ' + teacher.lastName}}
+              </option>
+            </select>
+            <label for="teacher">Teachers</label>
+          </div>
+
+          <div class="custom-input-holder">
+            <select class="input-underlined">
+              <option
+                required
+                id="teacherRole"
+                name="teacherRole"
+                type="text"
+                class="input-underlined"
+                *ngFor="let teacherRole of teacherRoles$ | async"
+                [ngValue]="teacherRole"
+              >{{teacherRole.name}}
+              </option>
+            </select>
+            <label for="teacher">Teacher role</label>
+
+          </div>
+        </div>
+      </div>
+      <button hidden></button>
+    </form>
+  </ng-container>
+  <ng-container class="footer">
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
+      <button
+        [disabled]="f.invalid"
+        class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+        (click)="f.onSubmit($event)"
+      >
+        Save
+      </button>
+    </div>
+  </ng-container>
+</app-dialog>
+
+

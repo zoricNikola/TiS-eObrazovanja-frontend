@@ -4,6 +4,9 @@ import {CourseService} from '../../services/course.service';
 import {Course} from '../../model/course/course';
 import {Observable, of} from 'rxjs';
 import {TeachingsPage} from '../../model/teacher/teachings-page';
+import {FORM_STATE} from '../../model/common/form-state';
+import {Teachings} from '../../model/teacher/teachings';
+import {TeacherTeachingCourseFormDialogOptions} from '../assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 
 
 @Component({
@@ -21,6 +24,14 @@ export class CourseComponent implements OnInit {
 
   showTeachings = false;
 
+  teacherTeachingCourseFormDialogOpened: boolean = false;
+  teacherTeachingCourseFormDialogOptions: TeacherTeachingCourseFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    teacherTeachingCourseForEdit: undefined,
+    cancel: () => {},
+    save: (teaching: Teachings) => {},
+  };
+
   constructor(private route: ActivatedRoute,
               private courseService: CourseService) { }
 
@@ -35,15 +46,37 @@ export class CourseComponent implements OnInit {
   }
 
   onNewTeacherTeachingCourseClick(): void {
+    this.teacherTeachingCourseFormDialogOpened = true;
 
+    this.teacherTeachingCourseFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      teacherTeachingCourseForEdit: undefined,
+      cancel: () => {
+        this.teacherTeachingCourseFormDialogOpened = false;
+      },
+      save: (teaching: Teachings) => {
+        console.log('Saved');
+        this.teacherTeachingCourseFormDialogOpened = false;
+      }
+      };
+    }
+
+  onEditTeacherTeachingCourseClick(teaching: Teachings): void {
+    this.teacherTeachingCourseFormDialogOpened = true;
+
+    this.teacherTeachingCourseFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      teacherTeachingCourseForEdit: teaching,
+      cancel: () => {
+        this.teacherTeachingCourseFormDialogOpened = false;
+      },
+      save: (teaching: Teachings) => {
+        console.log('Edited');
+        this.teacherTeachingCourseFormDialogOpened = false;
+      }
+    };
   }
 
-  onEditTeacherTeachingCourseClick(): void {
-      console.log('Edit');
-  }
 
-  onRemoveTeacherTeachingCourseClick(): void {
-      console.log('Remove');
-  }
 
 }

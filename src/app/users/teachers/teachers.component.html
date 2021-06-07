@@ -236,14 +236,17 @@
                         (click)="selectable && onTeacherSelect(teacher)">
                     <td>{{teacher.firstName}}</td>
                     <td>{{teacher.lastName}}</td>
-                    <td>{{teacher.user.username}}</td>
+                    <td>
+                        <a [routerLink]="'/teachers/' + teacher.id"
+                        class="hover:text-orange-500">{{teacher.user.username}}</a></td>
                     <td>{{teacher.address}}</td>
                     <td>{{teacher.dateOfBirth}}</td>
                     <td>{{teacher.teacherTitle.name}}</td>
                     <td>{{teacher.user.email}}</td>
                     <td>{{teacher.user.phoneNumber}}</td>
                     <td class="w-16">
-                        <button class="btn-sm-yellow">
+                        <button class="btn-sm-yellow"
+                                (click)="onEditTeacherClick(teacher)">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"
                                 fill="none"

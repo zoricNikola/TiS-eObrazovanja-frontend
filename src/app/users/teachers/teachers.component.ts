@@ -127,15 +127,25 @@ export class TeachersComponent implements OnInit {
             this.teacherFormDialogOpened = false;
             this.refreshTeachersPage();
         });
-        // console.log('TEACHER ' + teacher.firstName);
-        // console.log('TEACHER ' + teacher.lastName);
-        // console.log('TEACHER ' + teacher.address);
-        // console.log('TEACHER ' + teacher.dateOfBirth);
-        // console.log('TEACHER ' + teacher.teacherTitle);
-        // console.log('TEACHER ' + teacher.teacherTitle.name);
-        // console.log('TEACHER ' + teacher.user.email);
-        // console.log('TEACHER ' + teacher.user.phoneNumber);
-        // console.log('TEACHER ' + teacher.user.username);
+      }
+    };
+  }
+
+  onEditTeacherClick(teacher: Teacher): void{
+    this.teacherFormDialogOpened = true;
+    this.teacherFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      teacherForEdit: teacher,
+      cancel: () => this.teacherFormDialogOpened = false,
+      save: (teacher: Teacher) => {
+        this.teachersService.
+        updateTeacher(teacher.id!, teacher).
+        pipe(take(1)).
+        subscribe(() => {
+          console.log('Updated ', teacher.id);
+            this.teacherFormDialogOpened = false;
+            this.refreshTeachersPage();
+        });
       }
     };
   }

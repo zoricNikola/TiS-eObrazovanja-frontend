@@ -7,6 +7,7 @@ import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
 import { TeacherPage } from 'src/app/model/teacher/teacher-page';
 import { TeachersService } from 'src/app/services/teachers.service';
+import { SortParamsUtils } from 'src/app/services/utils/sort-params-utils.service';
 import { TeacherFormDialogOptions } from './teacher-form-dialog/teacher-form-dialog.component';
 
 @Component({
@@ -28,7 +29,8 @@ export class TeachersComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute, 
-              private teachersService: TeachersService) { }
+              private teachersService: TeachersService,
+              public sortParamsUtils: SortParamsUtils) { }
 
   ngOnInit(): void {
     this.onLoadTeachers();
@@ -58,11 +60,25 @@ export class TeachersComponent implements OnInit {
           dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
           dateOfBirthTo: paramMap.get('dateOfBirthTo'),
           email: paramMap.get('email'),
-          phoneNumber: paramMap.get('phoneNumber')};
-
+          phoneNumber: paramMap.get('phoneNumber'),
+          sort: paramMap.getAll('sort')
+        };
         return this.teachersService.filterTeachers(pageParams, queryParams);
       })
     )
+  }
+
+  onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
+    this.selectable ? (this.selectedTeacher = undefined) : {};
+    let newSortParams = this.sortParamsUtils.updateSortParams(
+      sortParams,
+      triggeredProperty
+    );
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { sort: newSortParams },
+      queryParamsHandling: 'merge',
+    });
   }
 
   onPageChange(selectedPage: number): void{

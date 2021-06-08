@@ -37,6 +37,7 @@ export class TeachersService extends BaseService {
       size: pageParams.size
     };
 
+    if(queryParams.sort.length > 0) params['sort'] = queryParams.sort;
     if(queryParams.firstName) params['firstName'] = queryParams?.firstName;
     if(queryParams.lastName) params['lastName'] = queryParams?.lastName;
     if(queryParams.username) params['username'] = queryParams?.username;
@@ -46,6 +47,8 @@ export class TeachersService extends BaseService {
     if(queryParams.dateofBirthTo) params['dateOfBirthTo'] = queryParams?.dateOfBirthTo;
     if(queryParams.email) params['email'] = queryParams?.email;
     if(queryParams.phoneNumber) params['phoneNumber'] = queryParams?.phoneNumber;
+
+    console.log(params);
 
     return this.filter(params).pipe(
       map((responseBody) => {

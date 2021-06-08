@@ -53,6 +53,25 @@
                     </svg>
                       Filter
                 </button>
+
+                <button
+                    *ngIf="selectable && selectedTeacher"
+                    (click)="onTeacherTake()"
+                    class="btn btn-green float-right inline-flex items-center">
+                     <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/>
+                    </svg>
+                    Take
+                </button>
             </div>
 
             <div accordion [opened]="showSearchBox">
@@ -176,51 +195,260 @@
                         font-semibold">
                 <thead>
                     <tr class="bg-red-300 text-indigo-800 shadow-md">
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'firstName')">
                             <div class="flex justify-center">
                                 First name
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'firstName')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'firstName')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'lastName')">
                             <div class="flex justify-center">
                                 Last name
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'lastName')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'lastName')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.username')">
                             <div class="flex justify-center">
                                 Username
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.username')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.username')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
+
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'address')">
                             <div class="flex justify-center">
                                 Address
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'address')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'address')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'dateOfBirth')">
                             <div class="flex justify-center">
                                 Birth date
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'dateOfBirth')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'dateOfBirth')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'teacherTitle')">
                             <div class="flex justify-center">
                                 Teacher title
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'teacherTitle')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'teacherTitle')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.email')">
                             <div class="flex justify-center">
                                 Email
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.email')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.email')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
+                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.phoneNumber')">
                             <div class="flex justify-center">
                                 Phone number
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.phoneNumber')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
+                                </svg>
+
+                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.phoneNumber')"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
+                                </svg>
                             </div>
                         </th>
                         <td class="w-16"></td>

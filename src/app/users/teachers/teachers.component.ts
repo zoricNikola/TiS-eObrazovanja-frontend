@@ -1,7 +1,9 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+import { ConfirmationDialogOptions } from 'src/app/common/confirmation-dialog/confirmation-dialog.component';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
@@ -13,7 +15,8 @@ import { TeacherFormDialogOptions } from './teacher-form-dialog/teacher-form-dia
 @Component({
   selector: '[teachers]',
   templateUrl: './teachers.component.html',
-  styleUrls: ['./teachers.component.css']
+  styleUrls: ['./teachers.component.css'],
+  providers: [DatePipe]
 })
 export class TeachersComponent implements OnInit {
 
@@ -30,6 +33,7 @@ export class TeachersComponent implements OnInit {
   constructor(private router: Router,
               private route: ActivatedRoute, 
               private teachersService: TeachersService,
+              public datePipe: DatePipe,
               public sortParamsUtils: SortParamsUtils) { }
 
   ngOnInit(): void {
@@ -57,8 +61,8 @@ export class TeachersComponent implements OnInit {
           username: paramMap.get('username'),
           address: paramMap.get('address'),
           teacherTitleName: paramMap.get('teacherTitle'),
-          dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
-          dateOfBirthTo: paramMap.get('dateOfBirthTo'),
+          dateOfBirthFrom: this.datePipe.transform(paramMap.get('dateOfBirthFrom'), 'yyyy-MM-dd'),
+          dateOfBirthTo: this.datePipe.transform(paramMap.get('dateOfBirthTo'), 'yyyy-MM-dd'),
           email: paramMap.get('email'),
           phoneNumber: paramMap.get('phoneNumber'),
           sort: paramMap.getAll('sort')
@@ -162,6 +166,35 @@ export class TeachersComponent implements OnInit {
             this.teacherFormDialogOpened = false;
             this.refreshTeachersPage();
         });
+      }
+    };
+  }
+
+  confirmationDialogOpened: boolean = false;
+  confirmationDialogOptions: ConfirmationDialogOptions = {
+    title: '',
+    message: '',
+    decline: () => {},
+    confirm: () => {},
+  };
+
+  onTeacherDelete(teacher: Teacher): void{
+    this.confirmationDialogOpened = true;
+
+    this.confirmationDialogOptions = {
+      title: `Delete ${teacher.user.username}`,
+      message: 'Are you sure?',
+      decline: () => {
+        this.confirmationDialogOpened = false;
+      },
+      confirm: () => {
+        this.teachersService
+          .deleteTeacher(teacher.id!)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.confirmationDialogOpened = false;
+            this.refreshTeachersPage();
+          });
       }
     };
   }

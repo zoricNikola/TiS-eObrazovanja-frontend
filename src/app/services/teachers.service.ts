@@ -31,6 +31,10 @@ export class TeachersService extends BaseService {
     return this.create(teacher);
   }
 
+  deleteTeacher(id: number): Observable<void>{
+    return this.delete(id);
+  }
+
   filterTeachers(pageParams: PageParams, queryParams?: any): Observable<TeacherPage> {
     let params: any = {
       page: pageParams.page,

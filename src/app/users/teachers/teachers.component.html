@@ -5,6 +5,12 @@
             [opened]="teacherFormDialogOpened"
             [options]="teacherFormDialogOptions">
             </app-teacher-form-dialog>
+
+            <confirmation-dialog
+            [opened]="confirmationDialogOpened"
+            [options]="confirmationDialogOptions">
+            </confirmation-dialog>
+            
             <div class="w-full">
                 <button title="Create teacher"
                         class="btn btn-green inline-flex items-center"
@@ -489,7 +495,8 @@
                         </button>
                     </td>
                     <td class="w-16">
-                        <button class="btn-sm-red">
+                        <button class="btn-sm-red"
+                                (click)="onTeacherDelete(teacher)">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"
                                 fill="none"

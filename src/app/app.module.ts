@@ -1,7 +1,7 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -43,6 +43,9 @@ import { TeachersComponent } from './users/teachers/teachers.component';
 import { StudentsComponent } from './users/students/students.component';
 import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
 import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog/teacher-form-dialog.component';
+import { CourseComponent } from './courses/course/course.component';
+import { AssignTeacherToCourseFormDialogComponent } from './courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -71,6 +74,8 @@ import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog
     StudentsComponent,
     StudentFormDialogComponent,
     TeacherFormDialogComponent,
+    CourseComponent,
+    AssignTeacherToCourseFormDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,10 +89,12 @@ import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    BrowserModule, 
-    AppRoutingModule, 
-    HttpClientModule, 
-    FormsModule],
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    MatRadioModule
+  ],
   providers: [
     AuthService,
     AuthGuard,

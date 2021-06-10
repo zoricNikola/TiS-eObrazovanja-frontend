@@ -1,10 +1,14 @@
 <div class="flex flex-col flex-auto justify-center items-center">
   <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
-    <div *ngIf="teachingsPage$ | async as teachings">
+    <div *ngIf="teachersTeachingCoursePage$ | async as teachings">
       <assign-teacher-to-course-form-dialog
         [opened]="teacherTeachingCourseFormDialogOpened"
         [options]="teacherTeachingCourseFormDialogOptions"
       ></assign-teacher-to-course-form-dialog>
+      <confirmation-dialog
+        [opened]="confirmationDialogOpened"
+        [options]="confirmationDialogOptions">
+      </confirmation-dialog>
     <div class="w-full">
       <button
         class="btn btn-indigo inline-flex items-center"
@@ -69,7 +73,7 @@
       <h1 class="font-semibold">{{course.name}}</h1>
     </div>
 
-    <div accordion >
+    <div accordion [opened]="showTeachings">
       <button
         class="btn btn-green inline-flex items-center"
         (click)="onNewTeacherTeachingCourseClick()"
@@ -176,6 +180,7 @@
           <td class="w-16">
             <button
               class="btn-sm-red"
+              (click)="onDeleteTeacherTeacnihgCourseClick(teaching)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

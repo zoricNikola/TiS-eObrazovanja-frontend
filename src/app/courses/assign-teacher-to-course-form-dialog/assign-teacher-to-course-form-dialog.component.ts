@@ -7,13 +7,14 @@ import {Teaching} from '../../model/teacher/teaching';
 import {TeachersService} from '../../services/teachers.service';
 import {Observable, of} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, take} from 'rxjs/operators';
 import {PageParams} from '../../model/http/page-params';
 import {TeachingService} from '../../services/teaching.service';
 import {TeacherPage} from '../../model/teacher/teacher-page';
 import {SortParamsUtils} from '../../services/utils/sort-params-utils.service';
 import {TeacherRoleService} from '../../services/teacher-role.service';
 import {TeacherRolePage} from '../../model/teacher/teacher-role-page';
+import {TeacherRoleFormDialogOptions} from '../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 
 export interface TeacherTeachingCourseFormDialogOptions {
   state: FORM_STATE;
@@ -43,6 +44,14 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
   teacherNameAndSurname: string | undefined;
 
   showSearchBox = false;
+
+  teacherRoleFormDialogOpened: boolean = false;
+  teacherRoleFormDialogOptions: TeacherRoleFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    teacherRoleForEdit: undefined,
+    cancel: () => {},
+    save: (teacherRole: TeacherRole) => {},
+  };
 
   teaching: Teaching = {
     startDate: new Date(''),
@@ -195,6 +204,27 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
     if (this.selectedTeacher) {
       this.teaching.teacher = this.selectedTeacher;
     }
+  }
+
+  onNewTeacherRoleClick(): void {
+    this.teacherRoleFormDialogOpened = true;
+
+    this.teacherRoleFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      teacherRoleForEdit: undefined,
+      cancel: () => {
+        this.teacherRoleFormDialogOpened = false;
+      },
+      save: (teacherRole: TeacherRole) => {
+        this.teacherRoleService
+          .createTeacherRole(teacherRole)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.teacherRoleFormDialogOpened = false;
+            this.teacherRoles$ = this.teacherRoleService.getTeacherRoles();
+          });
+      },
+    };
   }
 
 

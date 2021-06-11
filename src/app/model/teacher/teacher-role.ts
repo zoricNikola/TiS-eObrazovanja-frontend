@@ -1,4 +1,4 @@
 export interface TeacherRole {
-  id: number;
+  id?: number;
   name: string;
 }

@@ -17,7 +17,7 @@ export class TeachingService extends BaseService{
   });
 
   constructor(http: HttpClient, private authService: AuthService) {
-    super(`${environment.apiUrl}/courses`, http);
+    super(``, http);
   }
 
   getTeachersTeachingCourse(courseId: number): Observable<TeachingPage>{

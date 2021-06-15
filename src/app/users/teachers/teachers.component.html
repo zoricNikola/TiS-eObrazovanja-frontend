@@ -1,528 +1,748 @@
 <div class="page-content-holder">
-    <div class="page-content-card lg:w-full">
-        <div class="w-full" *ngIf="teacherPage$ | async as teacherPage">
-            <app-teacher-form-dialog
-            [opened]="teacherFormDialogOpened"
-            [options]="teacherFormDialogOptions">
-            </app-teacher-form-dialog>
+  <div class="page-content-card lg:w-full">
+    <div class="w-full" *ngIf="teacherPage$ | async as teacherPage">
+      <app-teacher-form-dialog
+        [opened]="teacherFormDialogOpened"
+        [options]="teacherFormDialogOptions"
+      >
+      </app-teacher-form-dialog>
 
-            <confirmation-dialog
-            [opened]="confirmationDialogOpened"
-            [options]="confirmationDialogOptions">
-            </confirmation-dialog>
-            
-            <div class="w-full">
-                <button title="Create teacher"
-                        class="btn btn-green inline-flex items-center"
-                        (click)="onNewTeacherClick()">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-6 w-6"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                      New    
-                </button>
+      <confirmation-dialog
+        [opened]="confirmationDialogOpened"
+        [options]="confirmationDialogOptions"
+      >
+      </confirmation-dialog>
 
-                <button title="Filter teachers"
-                        (click)="showSearchBox = !showSearchBox"
-                        class="btn btn-indigo inline-flex items-center ml-2">
-                    <svg *ngIf="!showSearchBox"
-                         xmlns="http://www.w3.org/2000/svg"
-                         class="h-6 w-6"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"/>
-                    </svg>
+      <div class="w-full">
+        <button
+          title="Create teacher"
+          class="btn btn-green inline-flex items-center"
+          (click)="onNewTeacherClick()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          New
+        </button>
+
+        <button
+          title="Filter teachers"
+          (click)="showSearchBox = !showSearchBox"
+          class="btn btn-indigo inline-flex items-center ml-2"
+        >
+          <svg
+            *ngIf="!showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            *ngIf="showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 15l7-7 7 7"
+            />
+          </svg>
+          Filter
+        </button>
+
+        <button
+          *ngIf="selectable && selectedTeacher"
+          (click)="onTeacherTake()"
+          class="btn btn-green float-right inline-flex items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+            />
+          </svg>
+          Take
+        </button>
+      </div>
+
+      <div accordion [opened]="showSearchBox">
+        <form #f="ngForm">
+          <table class="w-full table-fixed text-center font-semibold">
+            <tbody>
+              <tr class="bg-red-300 text-white shadow-md">
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.firstName"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="firstName"
+                    placeholder="First name"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.lastName"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="lastName"
+                    placeholder="Last name"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.username"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="username"
+                    placeholder="Username"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.address"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="address"
+                    placeholder="Address"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.dateOfBirthFrom"
+                    (change)="onSearchOptionsChange(f.value)"
+                    type="date"
+                    name="dateOfBirthFrom"
+                    placeholder="Birth date"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.dateOfBirthTo"
+                    (change)="onSearchOptionsChange(f.value)"
+                    type="date"
+                    name="dateOfBirthTo"
+                    placeholder="Birth date"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.teacherTitleName"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="teacherTitle"
+                    placeholder="Teacher title"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.email"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    [ngModel]="teacherPage.queryParams?.phoneNumber"
+                    (keyup)="onSearchOptionsChange(f.value)"
+                    name="phoneNumber"
+                    placeholder="Phone number"
+                    class="input-underlined text-center mt-0"
+                  />
+                </td>
+
+                <td class="w-16">
+                  <button
+                    title="Clear search"
+                    class="btn-sm-red"
+                    (click)="f.resetForm(); onSearchOptionsChange(f.value)"
+                  >
                     <svg
-                        *ngIf="showSearchBox"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 15l7-7 7 7"/>
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                      Filter
-                </button>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
 
-                <button
-                    *ngIf="selectable && selectedTeacher"
-                    (click)="onTeacherTake()"
-                    class="btn btn-green float-right inline-flex items-center">
-                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/>
-                    </svg>
-                    Take
-                </button>
-            </div>
+      <table
+        class="
+          w-full
+          table-auto
+          text-center
+          border-separate
+          table-row-spacing-y-4
+          font-semibold
+        "
+      >
+        <thead>
+          <tr class="bg-red-300 text-indigo-800 shadow-md">
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(teacherPage.queryParams.sort, 'firstName')
+              "
+            >
+              <div class="flex justify-center">
+                First name
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'firstName'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-            <div accordion [opened]="showSearchBox">
-                <form #f="ngForm">
-                    <table class="w-full table-fixed text-center font-semibold">
-                        <tbody>
-                            <tr class="bg-red-300 text-white shadow-md">
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.firstName"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="firstName"
-                                    placeholder="First name"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'firstName'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.lastName"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="lastName"
-                                    placeholder="Last name"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(teacherPage.queryParams.sort, 'lastName')
+              "
+            >
+              <div class="flex justify-center">
+                Last name
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'lastName'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.username"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="username"
-                                    placeholder="Username"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>    
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'lastName'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.address"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="address"
-                                    placeholder="Address"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(
+                  teacherPage.queryParams.sort,
+                  'user.username'
+                )
+              "
+            >
+              <div class="flex justify-center">
+                Username
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'user.username'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.dateOfBirthFrom"
-                                    (change)="onSearchOptionsChange(f.value)"
-                                    type="date"
-                                    name="dateOfBirthFrom"
-                                    placeholder="Birth date"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'user.username'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.dateOfBirthTo"
-                                    (change)="onSearchOptionsChange(f.value)"
-                                    type="date"
-                                    name="dateOfBirthTo"
-                                    placeholder="Birth date"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(teacherPage.queryParams.sort, 'address')
+              "
+            >
+              <div class="flex justify-center">
+                Address
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'address'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.teacherTitleName"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="teacherTitle"
-                                    placeholder="Teacher title"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'address'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.email"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="email"
-                                    type="email"
-                                    placeholder="Email"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(teacherPage.queryParams.sort, 'dateOfBirth')
+              "
+            >
+              <div class="flex justify-center">
+                Birth date
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'dateOfBirth'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                                <td>
-                                    <input 
-                                    [ngModel]="teacherPage.queryParams?.phoneNumber"
-                                    (keyup)="onSearchOptionsChange(f.value)"
-                                    name="phoneNumber"
-                                    placeholder="Phone number"
-                                    class="input-underlined text-center mt-0"/>
-                                </td>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'dateOfBirth'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <td class="w-16">
-                                    <button 
-                                    title="Clear search"
-                                    class="btn-sm-red"
-                                    (click)="f.resetForm(); onSearchOptionsChange(f.value)">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-6 w-6"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(
+                  teacherPage.queryParams.sort,
+                  'teacherTitle'
+                )
+              "
+            >
+              <div class="flex justify-center">
+                Teacher title
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'teacherTitle'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-            <table class="w-full
-                        table-fixed
-                        text-center
-                        border-separate
-                        table-row-spacing-y-4
-                        font-semibold">
-                <thead>
-                    <tr class="bg-red-300 text-indigo-800 shadow-md">
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'firstName')">
-                            <div class="flex justify-center">
-                                First name
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'firstName')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'teacherTitle'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'firstName')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(teacherPage.queryParams.sort, 'user.email')
+              "
+            >
+              <div class="flex justify-center">
+                Email
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'user.email'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'lastName')">
-                            <div class="flex justify-center">
-                                Last name
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'lastName')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'user.email'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
 
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'lastName')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
+            <th
+              class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+              (click)="
+                onSortOptionsChange(
+                  teacherPage.queryParams.sort,
+                  'user.phoneNumber'
+                )
+              "
+            >
+              <div class="flex justify-center">
+                Phone number
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyASC(
+                      teacherPage.queryParams.sort,
+                      'user.phoneNumber'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7l4-4m0 0l4 4m-4-4v18"
+                  />
+                </svg>
 
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.username')">
-                            <div class="flex justify-center">
-                                Username
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.username')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
+                <svg
+                  *ngIf="
+                    sortParamsUtils.isSortedByPropertyDESC(
+                      teacherPage.queryParams.sort,
+                      'user.phoneNumber'
+                    )
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                  />
+                </svg>
+              </div>
+            </th>
+            <td class="w-16"></td>
+            <td class="w-16"></td>
+          </tr>
+        </thead>
 
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.username')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
+        <tbody>
+          <tr
+            *ngFor="let teacher of teacherPage.content"
+            class="hover:bg-indigo-600 text-white shadow-md"
+            [class.cursor-pointer]="selectable"
+            [ngClass]="
+              selectable && selectedTeacher === teacher
+                ? 'bg-indigo-700'
+                : 'bg-indigo-900'
+            "
+            (click)="selectable && onTeacherSelect(teacher)"
+          >
+            <td>{{ teacher.firstName }}</td>
+            <td>{{ teacher.lastName }}</td>
+            <td>
+              <a
+                [routerLink]="'/teachers/' + teacher.id"
+                class="hover:text-orange-500"
+                >{{ teacher.user.username }}</a
+              >
+            </td>
+            <td>{{ teacher.address }}</td>
+            <td>{{ teacher.dateOfBirth }}</td>
+            <td>{{ teacher.teacherTitle.name }}</td>
+            <td>{{ teacher.user.email }}</td>
+            <td>{{ teacher.user.phoneNumber }}</td>
+            <td class="w-16">
+              <button
+                class="btn-sm-yellow"
+                (click)="onEditTeacherClick(teacher)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </button>
+            </td>
+            <td class="w-16">
+              <button class="btn-sm-red" (click)="onTeacherDelete(teacher)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-                            </div>
-                        </th>
-
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'address')">
-                            <div class="flex justify-center">
-                                Address
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'address')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
-
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'address')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
-
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'dateOfBirth')">
-                            <div class="flex justify-center">
-                                Birth date
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'dateOfBirth')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
-
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'dateOfBirth')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
-
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'teacherTitle')">
-                            <div class="flex justify-center">
-                                Teacher title
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'teacherTitle')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
-
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'teacherTitle')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
-
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.email')">
-                            <div class="flex justify-center">
-                                Email
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.email')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
-
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.email')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
-
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                        (click)="onSortOptionsChange(teacherPage.queryParams.sort, 'user.phoneNumber')">
-                            <div class="flex justify-center">
-                                Phone number
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyASC(teacherPage.queryParams.sort, 'user.phoneNumber')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                </svg>
-
-                                <svg *ngIf="sortParamsUtils.isSortedByPropertyDESC(teacherPage.queryParams.sort, 'user.phoneNumber')"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <td class="w-16"></td>
-                        <td class="w-16"></td>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    <tr *ngFor="let teacher of teacherPage.content"
-                        class="hover:bg-indigo-600 text-white shadow-md"
-                        [class.cursor-pointer]="selectable"
-                        [ngClass]="selectable && selectedTeacher === teacher ? 'bg-indigo-700' : 'bg-indigo-900'"
-                        (click)="selectable && onTeacherSelect(teacher)">
-                    <td>{{teacher.firstName}}</td>
-                    <td>{{teacher.lastName}}</td>
-                    <td>
-                        <a [routerLink]="'/teachers/' + teacher.id"
-                        class="hover:text-orange-500">{{teacher.user.username}}</a></td>
-                    <td>{{teacher.address}}</td>
-                    <td>{{teacher.dateOfBirth}}</td>
-                    <td>{{teacher.teacherTitle.name}}</td>
-                    <td>{{teacher.user.email}}</td>
-                    <td>{{teacher.user.phoneNumber}}</td>
-                    <td class="w-16">
-                        <button class="btn-sm-yellow"
-                                (click)="onEditTeacherClick(teacher)">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                            </svg>
-                        </button>
-                    </td>
-                    <td class="w-16">
-                        <button class="btn-sm-red"
-                                (click)="onTeacherDelete(teacher)">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                        </button>
-                    </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div
-              class="flex justify-end"
-              pagination
-              [itemsCount]="teacherPage.totalItemsCount"
-              [pagesCount]="teacherPage.totalPagesCount"
-              [pageSize]="teacherPage.pageSize"
-              [currentPage]="teacherPage.currentPage"
-              (pageChange)="onPageChange($event)"
-              (pageSizeChange)="onPageSizeChange($event)"></div> 
-        </div>
+      <div
+        class="flex justify-end"
+        pagination
+        [itemsCount]="teacherPage.totalItemsCount"
+        [pagesCount]="teacherPage.totalPagesCount"
+        [pageSize]="teacherPage.pageSize"
+        [currentPage]="teacherPage.currentPage"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+      ></div>
     </div>
+  </div>
 </div>

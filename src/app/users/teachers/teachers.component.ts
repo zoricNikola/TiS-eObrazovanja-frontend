@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -16,35 +15,34 @@ import { TeacherFormDialogOptions } from './teacher-form-dialog/teacher-form-dia
   selector: '[teachers]',
   templateUrl: './teachers.component.html',
   styleUrls: ['./teachers.component.css'],
-  providers: [DatePipe]
 })
 export class TeachersComponent implements OnInit {
-
   @Input('selectable') selectable: boolean = false;
   @Output('itemTake') teacherTake: EventEmitter<Teacher> = new EventEmitter();
 
   teacherPage$: Observable<TeacherPage> = of();
 
   selectedTeacher: Teacher | undefined = undefined;
-  teacherForEdit: Teacher | undefined = undefined;
 
   showSearchBox: boolean = false;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute, 
-              private teachersService: TeachersService,
-              public datePipe: DatePipe,
-              public sortParamsUtils: SortParamsUtils) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private teachersService: TeachersService,
+    public sortParamsUtils: SortParamsUtils
+  ) {}
 
   ngOnInit(): void {
     this.onLoadTeachers();
   }
 
-  onTeacherSelect(teacher: Teacher): void{
-    this.selectedTeacher = this.selectedTeacher === teacher ? undefined : teacher;
+  onTeacherSelect(teacher: Teacher): void {
+    this.selectedTeacher =
+      this.selectedTeacher === teacher ? undefined : teacher;
   }
 
-  onTeacherTake(): void{
+  onTeacherTake(): void {
     this.teacherTake.emit(this.selectedTeacher);
   }
 
@@ -61,15 +59,15 @@ export class TeachersComponent implements OnInit {
           username: paramMap.get('username'),
           address: paramMap.get('address'),
           teacherTitleName: paramMap.get('teacherTitle'),
-          dateOfBirthFrom: this.datePipe.transform(paramMap.get('dateOfBirthFrom'), 'yyyy-MM-dd'),
-          dateOfBirthTo: this.datePipe.transform(paramMap.get('dateOfBirthTo'), 'yyyy-MM-dd'),
+          dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
+          dateOfBirthTo: paramMap.get('dateOfBirthTo'),
           email: paramMap.get('email'),
           phoneNumber: paramMap.get('phoneNumber'),
-          sort: paramMap.getAll('sort')
+          sort: paramMap.getAll('sort'),
         };
         return this.teachersService.filterTeachers(pageParams, queryParams);
       })
-    )
+    );
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -85,7 +83,7 @@ export class TeachersComponent implements OnInit {
     });
   }
 
-  onPageChange(selectedPage: number): void{
+  onPageChange(selectedPage: number): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: selectedPage === 1 ? null : selectedPage },
@@ -93,7 +91,7 @@ export class TeachersComponent implements OnInit {
     });
   }
 
-  onPageSizeChange(selectedPageSize: number): void{
+  onPageSizeChange(selectedPageSize: number): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { size: selectedPageSize },
@@ -132,41 +130,41 @@ export class TeachersComponent implements OnInit {
     save: (teacher: Teacher) => {},
   };
 
-  onNewTeacherClick(): void{
+  onNewTeacherClick(): void {
     this.teacherFormDialogOpened = true;
     this.teacherFormDialogOptions = {
       state: FORM_STATE.ADD,
       teacherForEdit: undefined,
-      cancel: () => this.teacherFormDialogOpened = false,
+      cancel: () => (this.teacherFormDialogOpened = false),
       save: (teacher: Teacher) => {
-        this.teachersService.
-        createTeacher(teacher).
-        pipe(take(1)).
-        subscribe((id) => {
-          console.log('Created ', id);
+        this.teachersService
+          .createTeacher(teacher)
+          .pipe(take(1))
+          .subscribe((id) => {
+            console.log('Created ', id);
             this.teacherFormDialogOpened = false;
             this.refreshTeachersPage();
-        });
-      }
+          });
+      },
     };
   }
 
-  onEditTeacherClick(teacher: Teacher): void{
+  onEditTeacherClick(teacher: Teacher): void {
     this.teacherFormDialogOpened = true;
     this.teacherFormDialogOptions = {
       state: FORM_STATE.EDIT,
       teacherForEdit: teacher,
-      cancel: () => this.teacherFormDialogOpened = false,
+      cancel: () => (this.teacherFormDialogOpened = false),
       save: (teacher: Teacher) => {
-        this.teachersService.
-        updateTeacher(teacher.id!, teacher).
-        pipe(take(1)).
-        subscribe(() => {
-          console.log('Updated ', teacher.id);
+        this.teachersService
+          .updateTeacher(teacher.id!, teacher)
+          .pipe(take(1))
+          .subscribe(() => {
+            console.log('Updated ', teacher.id);
             this.teacherFormDialogOpened = false;
             this.refreshTeachersPage();
-        });
-      }
+          });
+      },
     };
   }
 
@@ -178,7 +176,7 @@ export class TeachersComponent implements OnInit {
     confirm: () => {},
   };
 
-  onTeacherDelete(teacher: Teacher): void{
+  onTeacherDelete(teacher: Teacher): void {
     this.confirmationDialogOpened = true;
 
     this.confirmationDialogOptions = {
@@ -195,8 +193,7 @@ export class TeachersComponent implements OnInit {
             this.confirmationDialogOpened = false;
             this.refreshTeachersPage();
           });
-      }
+      },
     };
   }
-
 }

@@ -1,8 +1,15 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
@@ -10,7 +17,7 @@ import { TeacherTitle } from 'src/app/model/teacher/teacher-title';
 import { TeacherTitlePage } from 'src/app/model/teacher/teacher-title-page';
 import { TeacherTitleService } from 'src/app/services/teacher-title.service';
 
-export interface TeacherFormDialogOptions{
+export interface TeacherFormDialogOptions {
   state: FORM_STATE;
   teacherForEdit: Teacher | undefined;
   cancel: () => void;
@@ -20,10 +27,9 @@ export interface TeacherFormDialogOptions{
 @Component({
   selector: 'app-teacher-form-dialog',
   templateUrl: './teacher-form-dialog.component.html',
-  styleUrls: ['./teacher-form-dialog.component.css']
+  styleUrls: ['./teacher-form-dialog.component.css'],
 })
 export class TeacherFormDialogComponent implements OnInit, OnChanges {
-
   @Input('opened') opened: boolean = false;
   @Input('options') options!: TeacherFormDialogOptions;
 
@@ -38,23 +44,26 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
     lastName: '',
     address: '',
     dateOfBirth: new Date(''),
-    teacherTitle: {name: ''},
+    teacherTitle: { name: '' },
     user: {
       username: '',
       firstName: '',
       lastName: '',
       email: '',
       phoneNumber: '',
-    }
+    },
   };
 
-  ngOnChanges(changes: SimpleChanges): void{
-    if (changes.options &&
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.options &&
       this.options.teacherForEdit &&
-      this.options.state === FORM_STATE.EDIT){
+      this.options.state === FORM_STATE.EDIT
+    ) {
       this.teacher = {
         ...this.options.teacherForEdit,
         user: { ...this.options.teacherForEdit.user },
+        teacherTitle: { ...this.options.teacherForEdit.teacherTitle },
       };
       this.originalTeacherUsername = this.options.teacherForEdit.user.username;
     }
@@ -64,32 +73,34 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
         this.form.resetForm();
       }, 10);
 
-    if (changes.opened &&
-        !changes.opened.firstChange &&
-        !changes.opened.currentValue){
-        setTimeout(() => {
-          this.teacher = {
+    if (
+      changes.opened &&
+      !changes.opened.firstChange &&
+      !changes.opened.currentValue
+    ) {
+      setTimeout(() => {
+        this.form.resetForm();
+        this.teacher = {
+          firstName: '',
+          lastName: '',
+          address: '',
+          dateOfBirth: new Date(''),
+          teacherTitle: { name: '' },
+          user: {
+            username: '',
             firstName: '',
             lastName: '',
-            address: '',
-            dateOfBirth: new Date(''),
-            teacherTitle: {name: ''},
-            user: {
-              username: '',
-              firstName: '',
-              lastName: '',
-              email: '',
-              phoneNumber: '',
-            },
-          };
-          this.form.resetForm();
-          this.originalTeacherUsername = undefined;
-        }, 300);
-      }  
+            email: '',
+            phoneNumber: '',
+          },
+        };
+
+        this.originalTeacherUsername = undefined;
+      }, 300);
+    }
   }
 
-  constructor(private teacherTitleService: TeacherTitleService,
-              private route: ActivatedRoute) { }
+  constructor(private teacherTitleService: TeacherTitleService) {}
 
   ngOnInit(): void {
     this.onLoadTeacherTitles();
@@ -100,17 +111,9 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
   }
 
   onLoadTeacherTitles(): void {
-    this.teacherTitlePage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
-        );
-        let queryParams = {};
-
-        return this.teacherTitleService.getTeacherTitles(pageParams, queryParams);
-      })
-    )
+    this.teacherTitlePage$ = this.teacherTitleService
+      .getTeacherTitles()
+      .pipe(take(1));
   }
 
   submit() {
@@ -122,6 +125,5 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
     }
   }
 
-  validateUsername(username: NgModel): void{}
-
+  validateUsername(username: NgModel): void {}
 }

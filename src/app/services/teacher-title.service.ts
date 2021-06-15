@@ -10,36 +10,28 @@ import { TeacherTitlePage } from '../model/teacher/teacher-title-page';
 import { BaseService } from './base.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class TeacherTitleService extends BaseService{
-
+export class TeacherTitleService extends BaseService {
   constructor(http: HttpClient) {
     super(`${environment.apiUrl}/teacherTitles`, http);
-   }
+  }
 
-   getTeacherTitles(pageParams: PageParams, queryParams?: any): Observable<TeacherTitlePage>{
-    let params: any = {
-      page: pageParams.page,
-      size: pageParams.size
-    };
-
-    return this.filter(params).pipe(
+  getTeacherTitles(): Observable<TeacherTitlePage> {
+    return this.filter(null).pipe(
       map((responseBody) => {
         const body = responseBody as ResponsePage<TeacherTitle>;
-        let page : TeacherTitlePage = {
+        let page: TeacherTitlePage = {
           content: body.content,
           contentCount: body.numberOfElements,
           totalItemsCount: body.totalElements,
           totalPagesCount: body.totalPages,
-          pageSize: pageParams.size,
-          currentPage: pageParams.page,
-          queryParams: queryParams,
-        }
+          pageSize: 0,
+          currentPage: 0,
+          queryParams: null,
+        };
         return page;
       })
     );
-   }
-
-   
+  }
 }

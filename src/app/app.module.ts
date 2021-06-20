@@ -48,6 +48,7 @@ import { AssignTeacherToCourseFormDialogComponent } from './courses/assign-teach
 import { MatRadioModule } from '@angular/material/radio';
 import { TeacherRoleFormDialogComponent } from './users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 import { TeacherComponent } from './users/teachers/teacher/teacher.component';
+import { AssignCourseToTeacherFormDialogComponent } from './users/teachers/assign-course-to-teacher-form-dialog/assign-course-to-teacher-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { TeacherComponent } from './users/teachers/teacher/teacher.component';
     AssignTeacherToCourseFormDialogComponent,
     TeacherRoleFormDialogComponent,
     TeacherComponent,
+    AssignCourseToTeacherFormDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -19,38 +19,6 @@
                     </svg>
                     Back
                 </button>
-
-                <button
-                    (click)="showCourses = !showCourses"
-                    class="btn btn-indigo inline-flex items-center ml-2">
-                    <svg
-                        *ngIf="!showCourses"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 9l-7 7-7-7"/>
-                    </svg>
-                    <svg
-                        *ngIf="showCourses"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M5 15l7-7 7 7"/>
-                    </svg>
-                    Teacher courses
-                </button>
             </div>
 
             <div *ngIf="teacher$ | async as teacher">
@@ -97,9 +65,43 @@
                 </div>
             </div>
 
+            <div class="w-full my-3 mr-3">
+                <button
+                    (click)="showCourses = !showCourses"
+                    class="w-full btn btn-indigo inline-flex items-center">
+                    <svg
+                        *ngIf="!showCourses"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    <svg
+                        *ngIf="showCourses"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M5 15l7-7 7 7"/>
+                    </svg>
+                    Teacher courses
+                </button>
+            </div>
+
             <div accordion [opened]="showCourses">
                 <button
-                    class="btn btn-green inline-flex items-center">
+                    class="btn btn-green inline-flex items-center my-3">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-6 w-6"

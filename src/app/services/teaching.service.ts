@@ -25,6 +25,11 @@ export class TeachingService extends BaseService{
     return this.http.get<TeachingPage>(url, {headers: this.headers});
   }
 
+  getTeachersTeachings(teacherId: number): Observable<TeachingPage> {
+    const url = `${environment.apiUrl}/teachers/${teacherId}/teachings`;
+    return this.http.get<TeachingPage>(url, {headers: this.headers});
+  }
+
   saveTeaching(teaching: Teaching): Observable<number> {
     const url = `${environment.apiUrl}/teachings`;
     return this.http.post(url, JSON.stringify(teaching), {observe: 'response', headers: this.headers})

@@ -7,13 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { FORM_STATE } from 'src/app/model/common/form-state';
-import { PageParams } from 'src/app/model/http/page-params';
 import { Teacher } from 'src/app/model/teacher/teacher';
-import { TeacherTitle } from 'src/app/model/teacher/teacher-title';
 import { TeacherTitlePage } from 'src/app/model/teacher/teacher-title-page';
 import { TeacherTitleService } from 'src/app/services/teacher-title.service';
 

@@ -4,14 +4,9 @@ import {Teacher} from '../../model/teacher/teacher';
 import {TeacherRole} from '../../model/teacher/teacher-role';
 import {FORM_STATE} from '../../model/common/form-state';
 import {Teaching} from '../../model/teacher/teaching';
-import {TeachersService} from '../../services/teachers.service';
 import {Observable, of} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {switchMap, take} from 'rxjs/operators';
-import {PageParams} from '../../model/http/page-params';
+import {take} from 'rxjs/operators';
 import {TeachingService} from '../../services/teaching.service';
-import {TeacherPage} from '../../model/teacher/teacher-page';
-import {SortParamsUtils} from '../../services/utils/sort-params-utils.service';
 import {TeacherRoleService} from '../../services/teacher-role.service';
 import {TeacherRolePage} from '../../model/teacher/teacher-role-page';
 import {TeacherRoleFormDialogOptions} from '../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
@@ -32,13 +27,9 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
   @Input('opened') opened = false;
   @Input('options') options!: TeacherTeachingCourseFormDialogOptions;
   @Input('selectable') selectable = true;
-
-  selectedTeacher: Teacher | undefined = undefined;
+  @Input('selectedTeacher') selectedTeacher: Teacher | undefined = undefined;
 
   @ViewChild('f') form!: NgForm;
-
-  teachersPage$: Observable<TeacherPage> = of();
-  teachersPageTable$!: Observable<TeacherPage>;
 
   originalTeachingRole: TeacherRole | undefined;
   teacherNameAndSurname: string | undefined;
@@ -73,12 +64,12 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
       },
     },
     teacherRole: {
-      id: 0,
       name: '',
     },
   };
 
-  teacherRoles$!: Observable<TeacherRolePage>;
+  teacherRoles$: Observable<TeacherRolePage> = of();
+  selectedTeacherRole: TeacherRole | undefined;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -119,46 +110,38 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
             },
           },
           teacherRole: {
-            id: 0,
             name: '',
           },
         };
         this.originalTeachingRole = undefined;
         this.selectedTeacher = undefined;
+        this.selectedTeacherRole = undefined;
       }, 3000);
     }
   }
 
-  constructor(private teacherService: TeachersService,
-              private teachingsService: TeachingService,
-              private route: ActivatedRoute,
-              private router: Router,
-              public sortParamUtils: SortParamsUtils,
+  constructor(private teachingsService: TeachingService,
               private teacherRoleService: TeacherRoleService) { }
 
   ngOnInit(): void {
-    this.teachersPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
-        );
-        let queryParams = {
-          firstName: paramMap.get('firstName'),
-          lastName: paramMap.get('lastName'),
-          teacherTitleName: paramMap.get('teacherTitle'),
-          email: paramMap.get('email'),
-          sort: paramMap.getAll('sort')
-        };
-        return this.teacherService.filterTeachers(pageParams, queryParams);
-      })
-    );
-    this.teachersPageTable$ = this.teachersPage$;
-    this.teacherRoles$ = this.teacherRoleService.getTeacherRoles();
+    this.onLoadTeacherRoles();
+  }
+
+  onLoadTeacherRoles(): void {
+    this.teacherRoles$ = this.teacherRoleService
+      .getTeacherRoles()
+      .pipe(take(1));
   }
 
   get FORM_STATE() {
     return FORM_STATE;
+  }
+
+  onTeacherTaken(teacher: Teacher | undefined) {
+    this.selectedTeacher = teacher;
+    if (this.selectedTeacher) {
+      this.teaching.teacher = this.selectedTeacher;
+    }
   }
 
   submit() {
@@ -167,42 +150,10 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
     if (this.form.valid) {
       (document.activeElement as HTMLElement).blur();
       this.teaching.startDate = new Date();
-      this.options.save(this.teaching);
-    }
-  }
-
-  onSearchOptionsChange(queryParams: any): void {
-    for (const key of Object.keys(queryParams)) {
-      if (!queryParams[key]) {
-        queryParams[key] = null;
+      if (this.selectedTeacherRole ) {
+        this.teaching.teacherRole = this.selectedTeacherRole;
       }
-    }
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
-    this.selectable ? (this.selectedTeacher = undefined) : {};
-    let newSortParams = this.sortParamUtils.updateSortParams(
-      sortParams,
-      triggeredProperty
-    );
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  onTeacherSelect(teacher: Teacher): void{
-    this.selectedTeacher = this.selectedTeacher === teacher ? undefined : teacher;
-    if (this.selectedTeacher) {
-      this.teaching.teacher = this.selectedTeacher;
+      this.options.save(this.teaching);
     }
   }
 
@@ -226,6 +177,4 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
       },
     };
   }
-
-
 }

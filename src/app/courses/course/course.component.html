@@ -70,6 +70,7 @@
         </svg>
         Course teachers
       </button>
+
     <div accordion [opened]="showTeachings">
       <button
         class="btn btn-green inline-flex items-center"
@@ -199,6 +200,45 @@
         </tbody>
       </table>
     </div>
+      <button
+        (click)="showExams = !showExams"
+        class="btn btn-indigo inline-flex items-center mt-2 w-full"
+      >
+        <svg
+          *ngIf="!showExams"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+        <svg
+          *ngIf="showExams"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 15l7-7 7 7"
+          />
+        </svg>
+        Course exams
+      </button>
+      <div accordion [opened]="showExams">
+        <div exams [courseId]="selectedCourseId"></div>
+      </div>
 
     </div>
   </div>

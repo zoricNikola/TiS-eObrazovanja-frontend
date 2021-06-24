@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {Course} from '../../model/course/course';
@@ -27,6 +27,7 @@ export class CourseComponent implements OnInit {
   teachersTeachingCoursePage$: Observable<TeachingPage> = of ();
 
   showTeachings = false;
+  showExams = false;
 
   teacherTeachingCourseFormDialogOpened: boolean = false;
   teacherTeachingCourseFormDialogOptions: TeacherTeachingCourseFormDialogOptions = {
@@ -132,7 +133,5 @@ export class CourseComponent implements OnInit {
       }
     };
   }
-
-
 
 }

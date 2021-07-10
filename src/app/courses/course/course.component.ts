@@ -116,7 +116,7 @@ export class CourseComponent implements OnInit {
     this.confirmationDialogOpened = true;
 
     this.confirmationDialogOptions = {
-      title: `Unassign ${teaching.teacher.firstName} ${teaching.teacher.lastName} from ${this.course.name} course`,
+      title: `Unassign ${teaching.teacher?.firstName} ${teaching.teacher?.lastName} from ${this.course.name} course`,
       message: `Are you sure?`,
       decline: () => {
         this.confirmationDialogOpened = false;

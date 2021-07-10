@@ -1,29 +1,29 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { TeacherTeachingCourseFormDialogOptions } from 'src/app/courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { Course } from 'src/app/model/course/course';
 import { CoursePage } from 'src/app/model/course/course-page';
-import { PageParams } from 'src/app/model/http/page-params';
 import { TeacherRole } from 'src/app/model/teacher/teacher-role';
+import { TeacherRolePage } from 'src/app/model/teacher/teacher-role-page';
 import { Teaching } from 'src/app/model/teacher/teaching';
-import { CoursesService } from 'src/app/services/courses.service';
+import { TeacherRoleService } from 'src/app/services/teacher-role.service';
 import { SortParamsUtils } from 'src/app/services/utils/sort-params-utils.service';
+import { TeacherRoleFormDialogOptions } from '../teacher-role-form-dialog/teacher-role-form-dialog.component';
 
 @Component({
   selector: 'assign-course-to-teacher-form-dialog',
   templateUrl: './assign-course-to-teacher-form-dialog.component.html',
   styleUrls: ['./assign-course-to-teacher-form-dialog.component.css']
 })
-export class AssignCourseToTeacherFormDialogComponent implements OnInit {
+export class AssignCourseToTeacherFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened = false;
   @Input('options') options!: TeacherTeachingCourseFormDialogOptions;
   @Input('selectable') selectable = true;
-
-  selectedCourse: Course | undefined = undefined;
+  @Input('selectedCourse') selectedCourse : Course | undefined = undefined;
 
   coursesPage$: Observable<CoursePage> = of();
   
@@ -33,6 +33,18 @@ export class AssignCourseToTeacherFormDialogComponent implements OnInit {
   teacherNameAndSurname: string | undefined;
 
   showSearchBox = false;
+
+  teacherRoles$: Observable<TeacherRolePage> = of();
+  selectedTeacherRole: TeacherRole | undefined;
+
+
+  teacherRoleFormDialogOpened: boolean = false;
+  teacherRoleFormDialogOptions: TeacherRoleFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    teacherRoleForEdit: undefined,
+    cancel: () => {},
+    save: (teacherRole: TeacherRole) => {},
+  };
 
   teaching: Teaching = {
     startDate: new Date(''),
@@ -62,65 +74,37 @@ export class AssignCourseToTeacherFormDialogComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               public sortParamUtils: SortParamsUtils,
-              private courseService: CoursesService) { }
+              private teacherRoleService: TeacherRoleService) { }
 
   ngOnInit(): void {
-    this.onLoadCourses();
+    this.onLoadTeacherRoles();
   }
 
-  onLoadCourses(): void {
-    this.coursesPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        const pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
-        );
-
-        const queryParams = {
-          name: paramMap.get('name'),
-          sort: paramMap.getAll('sort'),
-        };
-        return this.courseService.filterCourses(pageParams, queryParams);
-      })
-    );
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.options &&
+      this.options.teacherTeachingCourseForEdit &&
+      this.options.state === FORM_STATE.EDIT
+    ) {
+      this.teaching = { ...this.options.teacherTeachingCourseForEdit };
+      this.originalTeachingRole = this.options.teacherTeachingCourseForEdit.teacherRole;
+      this.teacherNameAndSurname = this.options.teacherTeachingCourseForEdit.teacher?.firstName + ` ` +
+        this.options.teacherTeachingCourseForEdit.teacher?.lastName;
+    }
   }
 
   get FORM_STATE() {
     return FORM_STATE;
   }
 
-  onSearchOptionsChange(queryParamsValue: any): void {
-    // for (const key of Object.keys(queryParams)) {
-    //   if (!queryParams[key]) {
-    //     queryParams[key] = null;
-    //   }
-    // }
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams : {
-        name: queryParamsValue
-      },
-      queryParamsHandling: 'merge',
-    });
+  onLoadTeacherRoles(): void {
+    this.teacherRoles$ = this.teacherRoleService
+      .getTeacherRoles()
+      .pipe(take(1));
   }
 
-  onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
-    this.selectable ? (this.selectedCourse = undefined) : {};
-    let newSortParams = this.sortParamUtils.updateSortParams(
-      sortParams,
-      triggeredProperty
-    );
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  onCourseSelect(course: Course): void{
-    this.selectedCourse = this.selectedCourse === course ? undefined : course;
+  onCourseTaken(course: Course): void{
+    this.selectedCourse = course;
     if (this.selectedCourse) {
       this.teaching.course = this.selectedCourse;
     }
@@ -128,12 +112,40 @@ export class AssignCourseToTeacherFormDialogComponent implements OnInit {
 
   submit() {
     this.form.form.markAllAsTouched();
+    console.log('POSTTT assign course to teacher.');
 
     if (this.form.valid) {
       (document.activeElement as HTMLElement).blur();
+      console.log('POSTTT assign course to teache 1111.');
+
       this.teaching.startDate = new Date();
+      if (this.selectedTeacherRole ) {
+        console.log('POSTTT assign course to teacher 2222');
+
+        this.teaching.teacherRole = this.selectedTeacherRole;
+      }
       this.options.save(this.teaching);
     }
   }
 
+  onNewTeacherRoleClick(): void {
+    this.teacherRoleFormDialogOpened = true;
+
+    this.teacherRoleFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      teacherRoleForEdit: undefined,
+      cancel: () => {
+        this.teacherRoleFormDialogOpened = false;
+      },
+      save: (teacherRole: TeacherRole) => {
+        this.teacherRoleService
+          .createTeacherRole(teacherRole)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.teacherRoleFormDialogOpened = false;
+            this.teacherRoles$ = this.teacherRoleService.getTeacherRoles();
+          });
+      },
+    }
+  }
 }

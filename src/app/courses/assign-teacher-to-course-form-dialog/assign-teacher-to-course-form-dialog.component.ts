@@ -79,8 +79,8 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
     ) {
       this.teaching = { ...this.options.teacherTeachingCourseForEdit };
       this.originalTeachingRole = this.options.teacherTeachingCourseForEdit.teacherRole;
-      this.teacherNameAndSurname = this.options.teacherTeachingCourseForEdit.teacher.firstName + ` ` +
-        this.options.teacherTeachingCourseForEdit.teacher.lastName;
+      this.teacherNameAndSurname = this.options.teacherTeachingCourseForEdit.teacher?.firstName + ` ` +
+        this.options.teacherTeachingCourseForEdit.teacher?.lastName;
     }
 
     if (

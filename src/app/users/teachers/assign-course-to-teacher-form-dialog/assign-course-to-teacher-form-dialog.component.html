@@ -6,137 +6,69 @@
         }}</ng-container>
 
     <ng-container class="content">
-        <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
-            <div class="flex flex-col w-165 space-y-4 bg-indigo-800">
-                <button title="Filter courses"
-                (click)="showSearchBox = !showSearchBox"
-                class="btn btn-indigo inline-flex items-center ml-2"
-                *ngIf="options.state === FORM_STATE.ADD">
-                    <svg *ngIf="!showSearchBox"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 9l-7 7-7-7"/>
-                    </svg>
-                    <svg
-                        *ngIf="showSearchBox"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M5 15l7-7 7 7"/>
-                    </svg>
-                    Filter
-                </button>
-                <div accordion [opened]="showSearchBox" *ngIf="coursesPage$ | async as coursePage">
-                    
-                        <table class="w-full table-fixed text-center font-semibold">
-                            <tbody>
-                                <tr class="bg-red-300 text-white shadow-md">
-                                    <td>
-                                        <input
-                                          [ngModel]="coursePage.queryParams.name"
-                                          (keyUp)="onSearchOptionsChange(coursePage.queryParams.name)"
-                                          name="name"
-                                          placeholder="Course name"
-                                          class="input-underlined text-center mt-0"/>
-                                    </td>
+        <teacher-role-form-dialog
+            [opened]="teacherRoleFormDialogOpened"
+            [options]="teacherRoleFormDialogOptions">
+        </teacher-role-form-dialog>
 
-                                    <td class="w-16">
-                                        <button
-                                          title="Clear search"
-                                          class="btn-sm-red"
-                                          (click)="onSearchOptionsChange('')">
-                                          <svg xmlns="http://www.w3.org/2000/svg"
-                                               class="h-6 w-6"
-                                               fill="none"
-                                               viewBox="0 0 24 24"
-                                               stroke="currentColor">
-                                            <path
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="2"
-                                              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                          </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    
+        <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800">
+            <div class="flex flex-col w-200 space-y-4 bg-indigo-800">
+                <div class="w-full">
+                    <div *ngIf="options.state === FORM_STATE.ADD" courses (itemTake)="onCourseTaken($event)"></div>
+                    <div *ngIf="selectedCourse === undefined && options.state === FORM_STATE.ADD"
+                            class="input-error-holder -mt-10 w-3/4">
+                        <div class="flex-col space-y-2">
+                            <div>You need to select a course and press the take button</div>
+                        </div>
+                    </div>
                 </div>
 
-                <form #f="ngForm" (ngSubmit)="submit()" >
-                    <div *ngIf="coursesPage$ | async as coursePage">
-                        <table *ngIf="options.state === FORM_STATE.ADD"
-                                class="w-full
-                                table-fixed
-                                text-center
-                                border-separate
-                                table-row-spacing-y-4
-                                font-semibold">
-                            <thead>
-                                <tr class="bg-red-300 text-indigo-800 shadow-md">
-                                    <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
-                                        (click)="onSortOptionsChange(coursePage.queryParams.sort, 'name')">
-                                        <div class="flex justify-center">
-                                        First name
-                                            <svg *ngIf="sortParamUtils.isSortedByPropertyASC(coursePage.queryParams.sort, 'name')"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-6 w-6"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M8 7l4-4m0 0l4 4m-4-4v18"/>
-                                            </svg>
-                                            <svg *ngIf="sortParamUtils.isSortedByPropertyDESC(coursePage.queryParams.sort, 'name')"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="h-6 w-6"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M16 17l-4 4m0 0l-4-4m4 4V3"/>
-                                            </svg>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let course of coursePage.content"
-                                class="hover:bg-indigo-600 text-white shadow-md"
-                                [class.cursor-pointer]="selectable"
-                                [ngClass]="selectable && selectedCourse === course
-                                        ? 'bg-indigo-700'
-                                        : 'bg-indigo-900'"
-                                (click)="selectable && onCourseSelect(course)">
-                                <td>
-                                    <a [routerLink]="'/courses/' + course.id"
-                                       class="hover:text-orange-500">{{ course.name }}</a>
-                                  </td>
-                                </tr>
-                            </tbody>    
-                        </table>
-                    </div>
-                </form>
+                <form #f="ngForm" (ngSubmit)="submit()">
+                    <div class="flex space-x-4 custom-input-holder" *ngIf="teacherRoles$ | async as teacherRoles">
+                        <div class="flex-1">
+                            <select
+                              required
+                              id="teacherRole"
+                              name="teacherRole"
+                              class="input-underlined"
+                              [(ngModel)]="selectedTeacherRole"
+                              #teacherRole="ngModel">
+                                <option
+                                  *ngFor="let teacherRole of teacherRoles.content"
+                                  [ngValue]="teacherRole">{{teacherRole.name}}</option>
+                            </select>
+                            <label for="teacherRole">Teacher role</label>
+                            <div *ngIf="teacherRole.touched && teacherRole.invalid"
+                                  class="input-error-holder">
+                                <div class="flex-col space-y-2">
+                                    <div *ngIf="teacherRole.errors?.required">
+                                        Teacher role is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="flex-1 w-1/5">
+                            <button
+                              class="btn btn-green inline-flex items-center ml-2 mt-1"
+                              (click)="onNewTeacherRoleClick()">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor">
+                                  <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            Add a new teacher role
+                          </button>
+                        </div>
+                  </div>
+              </form>
             </div>
         </div>
     </ng-container>
@@ -145,13 +77,12 @@
         <div class="inline-flex w-full justify-end space-x-2">
           <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
           <button
-           [disabled]="f.invalid"
+            [disabled]="f.invalid"
             class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
-            (click)="f.onSubmit($event)"
-          >
+            (click)="f.onSubmit($event)">
             Save
           </button>
         </div>
-      </ng-container>
+    </ng-container>
 
 </app-dialog>

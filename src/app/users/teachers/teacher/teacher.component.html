@@ -5,6 +5,10 @@
             [opened]="teacherTeachingCourseFormDialogOpened"
             [options]="teacherTeachingCourseFormDialogOptions">
             </assign-course-to-teacher-form-dialog>
+            <confirmation-dialog
+            [opened]="confirmationDialogOpened"
+            [options]="confirmationDialogOptions">
+            </confirmation-dialog>
             <div class="w-full my-3">
                 <button
                     class="btn btn-indigo inline-flex items-center ml-2"
@@ -159,7 +163,8 @@
                         <td>{{ teaching.teacherRole.name }}</td>
                         <td class="w-16">
                             <button
-                              class="btn-sm-yellow">
+                              class="btn-sm-yellow"
+                              (click)="onEditTeacherTeachingCourseClick(teaching)">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"
@@ -176,7 +181,8 @@
                         </td>
                         <td class="w-16">
                             <button
-                              class="btn-sm-red">
+                              class="btn-sm-red"
+                              (click)="onDeleteTeacherTeachingCourseClick(teaching)">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"

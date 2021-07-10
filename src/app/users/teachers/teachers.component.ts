@@ -17,7 +17,7 @@ import { TeacherFormDialogOptions } from './teacher-form-dialog/teacher-form-dia
   styleUrls: ['./teachers.component.css'],
 })
 export class TeachersComponent implements OnInit {
-  @Input('selectable') selectable: boolean = false;
+  @Input('selectable') selectable: boolean = true;
   @Output('itemTake') teacherTake: EventEmitter<Teacher> = new EventEmitter();
 
   teacherPage$: Observable<TeacherPage> = of();

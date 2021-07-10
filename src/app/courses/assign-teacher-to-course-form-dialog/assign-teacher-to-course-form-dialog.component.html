@@ -78,7 +78,7 @@
     <div class="inline-flex w-full justify-end space-x-2">
       <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
       <button
-        [disabled]="f.invalid || teaching.teacher.lastName === ''"
+        [disabled]="f.invalid || teaching.teacher?.lastName === ''"
         class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
         (click)="f.onSubmit($event)"
       >

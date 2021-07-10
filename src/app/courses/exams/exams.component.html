@@ -1,0 +1,529 @@
+<!--<div class="flex flex-col flex-auto justify-center items-center">-->
+<!--  <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">-->
+    <div *ngIf="examsPage$ | async as examsPage">
+      <confirmation-dialog
+        [opened]="confirmationDialogOpened"
+        [options]="confirmationDialogOptions"
+      ></confirmation-dialog>
+<!--      <exam-form-dialog-->
+<!--        [opened]="courseFormDialogOpened"-->
+<!--        [options]="courseFormDialogOptions"-->
+<!--      ></exam-form-dialog>-->
+      <div class="w-full">
+        <button
+          class="btn btn-green inline-flex items-center">
+<!--          (click)="onNewExamClick()"-->
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          New
+        </button>
+        <button
+          (click)="showSearchBox = !showSearchBox"
+          class="btn btn-indigo inline-flex items-center ml-2"
+        >
+          <svg
+            *ngIf="!showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            *ngIf="showSearchBox"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 15l7-7 7 7"
+            />
+          </svg>
+          Filter
+        </button>
+        <button
+          *ngIf="selectable && selectedExam"
+          (click)="onExamTake()"
+          class="btn btn-green float-right inline-flex items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+            />
+          </svg>
+          Take
+        </button>
+      </div>
+      <div accordion [opened]="showSearchBox">
+        <form #f="ngForm">
+          <table class="w-full table-fixed text-center font-semibold">
+            <tbody>
+            <tr class="bg-red-300 text-white shadow-md">
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.dateFrom"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="dateFrom"
+                  placeholder="Date from"
+                  class="input-underlined text-center mt-0"
+                  type="datetime-local"
+                />
+              </td>
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.dateTo"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="dateTo"
+                  placeholder="Date to"
+                  class="input-underlined text-center mt-0"
+                  type="datetime-local"
+                />
+              </td>
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.description"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="description"
+                  placeholder="Description"
+                  class="input-underlined text-center mt-0"
+                />
+              </td>
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.classroom"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="classroom"
+                  placeholder="Classroom"
+                  class="input-underlined text-center mt-0"
+                />
+              </td>
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.points"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="points"
+                  placeholder="Points"
+                  class="input-underlined text-center mt-0"
+                />
+              </td>
+              <td>
+                <input
+                  [ngModel]="examsPage.queryParams?.examPeriodName"
+                  (keyup)="onSearchOptionsChange(f.value)"
+                  name="examPeriod"
+                  placeholder="Exam period"
+                  class="input-underlined text-center mt-0"
+                />
+              </td>
+              <td class="w-16"></td>
+              <td class="w-16">
+                <button
+                  title="Clear search"
+                  class="btn-sm-red"
+                  (click)="f.resetForm(); onSearchOptionsChange(f.value)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+      <table
+        class="
+          w-full
+          table-fixed
+          text-center
+          border-separate
+          table-row-spacing-y-4
+          font-semibold
+        "
+      >
+        <thead>
+        <tr class="bg-red-300 text-indigo-800 shadow-md">
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+                onSortOptionsChange(examsPage.queryParams.sort, 'dateTime')
+              "
+          >
+            <div class="flex justify-center">
+              Date time
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      examsPage.queryParams.sort,
+                      'dateTime'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+              </svg>
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      examsPage.queryParams.sort,
+                      'dateTime'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+              </svg>
+            </div>
+          </th><th
+          class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+          (click)="
+                onSortOptionsChange(examsPage.queryParams.sort, 'description')
+              "
+        >
+          <div class="flex justify-center">
+            Description
+            <svg
+              *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      examsPage.queryParams.sort,
+                      'description'
+                    )
+                  "
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+              />
+            </svg>
+            <svg
+              *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      examsPage.queryParams.sort,
+                      'description'
+                    )
+                  "
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+              />
+            </svg>
+          </div>
+        </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+                onSortOptionsChange(examsPage.queryParams.sort, 'classroom')
+              "
+          >
+            <div class="flex justify-center">
+              Classroom
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      examsPage.queryParams.sort,
+                      'classroom'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+              </svg>
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      examsPage.queryParams.sort,
+                      'classroom'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+              </svg>
+            </div>
+          </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+                onSortOptionsChange(examsPage.queryParams.sort, 'points')
+              "
+          >
+            <div class="flex justify-center">
+              Points
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      examsPage.queryParams.sort,
+                      'points'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+              </svg>
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      examsPage.queryParams.sort,
+                      'points'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+              </svg>
+            </div>
+          </th>
+          <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+                onSortOptionsChange(examsPage.queryParams.sort, 'examPeriod')
+              "
+          >
+            <div class="flex justify-center">
+              Exam period
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyASC(
+                      examsPage.queryParams.sort,
+                      'examPeriod'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+              </svg>
+              <svg
+                *ngIf="
+                    sortParamUtils.isSortedByPropertyDESC(
+                      examsPage.queryParams.sort,
+                      'examPeriod'
+                    )
+                  "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+              </svg>
+            </div>
+          </th>
+          <th class="w-16"></th>
+          <th class="w-16"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr
+          *ngFor="let exam of examsPage.content"
+          class="hover:bg-indigo-600 text-white shadow-md"
+          [class.cursor-pointer]="selectable"
+          [ngClass]="
+              selectable && selectedExam === exam
+                ? 'bg-indigo-700'
+                : 'bg-indigo-900'
+            "
+          (click)="selectable && onExamSelect(exam)"
+        >
+          <td>
+            <a
+              [routerLink]="'/courses/' + exam.id"
+              class="hover:text-orange-500"
+            >{{ exam.dateTime }}</a
+            >
+          </td>
+          <td>{{ exam.description }}</td>
+          <td>{{ exam.classroom }}</td>
+          <td>{{ exam.points }}</td>
+          <td>{{ exam.examPeriod.name }}</td>
+
+          <td class="w-16">
+            <button
+              class="btn-sm-yellow">
+<!--              (click)="onEditCourseClick(course)"-->
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+            </button>
+          </td>
+          <td class="w-16">
+            <button
+              title="Delete course"
+              class="btn-sm-red">
+<!--              (click)="onCourseDelete(course)"-->
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div
+        class="flex justify-end"
+        pagination
+        [itemsCount]="examsPage.totalItemsCount"
+        [pagesCount]="examsPage.totalPagesCount"
+        [pageSize]="examsPage.pageSize"
+        [currentPage]="examsPage.currentPage"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+      ></div>
+    </div>
+<!--  </div>-->
+<!--</div>-->
+

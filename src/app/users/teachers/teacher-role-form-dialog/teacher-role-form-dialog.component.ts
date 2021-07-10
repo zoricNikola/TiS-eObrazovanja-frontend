@@ -68,6 +68,4 @@ export class TeacherRoleFormDialogComponent implements OnInit {
       this.options.save(this.teacherRole);
     }
   }
-
-
 }

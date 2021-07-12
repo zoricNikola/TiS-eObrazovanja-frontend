@@ -1,0 +1,120 @@
+<app-dialog [opened]="opened" [modal]="true">
+    <ng-container class="heading">{{
+        options.state === FORM_STATE.ADD
+          ? "Create a new exam"
+          : "Edit the exam from the course " + courseName + " in " + examPeriodName 
+        }}</ng-container>
+    <ng-container class="content">
+        <form #f="ngForm" (ngSubmit)="f.valid && submit()">
+            <div class="flex flex-col
+                        w-160
+                        px-8
+                        py-4
+                        space-y-4
+                        justify-evenly
+                      bg-indigo-800">
+
+                <div class="custom-input-holder">
+                    <div *ngIf="options.state === FORM_STATE.ADD" courses (itemTake)="onCourseTaken($event)"></div>
+                </div>
+
+                <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                        <input required
+                            id="dateTime"
+                            name="dateTime"
+                            type="datetime"
+                            placeholder=" "
+                            class="input-underlined"
+                            [(ngModel)]="exam.dateTime"
+                            #dateTime="ngModel"/>
+                        <label for="dateTime"></label>
+                        <div *ngIf="dateTime.touched && dateTime.invalid"
+                                class="input-error-holder">
+                            <div class="flex-col space-y-2">
+                                <div *ngIf="dateTime.errors?.required">
+                                    Exam date and time is required
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+
+                    <div class="custom-input-holder w-1/2">
+                        <input
+                            required
+                            id="description"
+                            name="description"
+                            type="text"
+                            placeholder=" "
+                            class="input-underlined"
+                            [(ngModel)]="exam.description"
+                            #description="ngModel"/>
+                        <label for="description">Description</label>
+                        <div *ngIf="description.touched && description.invalid"
+                                class="input-error-holder">
+                            <div class="flex-col space-y-2">
+                                <div *ngIf="description.errors?.required">
+                                    Exam description is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                        <input
+                            required
+                            id="points"
+                            name="points"
+                            type="number"
+                            placeholder=" "
+                            class="input-underlined"
+                            [(ngModel)]="exam.points"
+                            #points="ngModel"/>
+                        <label for="points">Points</label>
+                        <div *ngIf="points.touched && points.invalid"
+                                class="input-error-holder">
+                            <div class="flex-col space-y-2">
+                                <div *ngIf="points.errors?.required">
+                                    Number of points is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <input
+                            required
+                            id="classroom"
+                            name="classroom"
+                            type="text"
+                            placeholder=" "
+                            class="input-underlined"
+                            [(ngModel)]="exam.classroom"
+                            #classroom="ngModel"/>
+                        <label for="classroom">Classroom</label>
+                        <div *ngIf="classroom.touched && classroom.invalid"
+                                class="input-error-holder">
+                            <div class="flex-col space-y-2">
+                                <div *ngIf="classroom.errors?.required">
+                                    Classroom is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>   
+    <ng-container class="footer">
+        <div class="inline-flex w-full justify-end space-x-2">
+          <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
+          <button
+            [disabled]="f.invalid"
+            class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+            (click)="f.onSubmit($event)"
+          >
+            Save
+          </button>
+        </div>
+    </ng-container> 
+</app-dialog>

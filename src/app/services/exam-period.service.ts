@@ -19,6 +19,10 @@ export class ExamPeriodService extends BaseService {
     super(`${environment.apiUrl}/examPeriods`, http);
   }
 
+  getExamPeriod(id: number): Observable<ExamPeriod> {
+    return this.getOne(id).pipe(map((responseBody) => responseBody as ExamPeriod));
+  }
+
   filterExamPeriods(pageParams: PageParams, queryParams? : any): Observable<ExamPeriodPage> {
     let params: any = {
       page: pageParams.page,

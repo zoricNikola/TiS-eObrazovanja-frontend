@@ -75,6 +75,12 @@ export class ExamsService extends BaseService{
     }
   }
 
+  getExamPeriodExams(examPeriodId?: number): Observable<ExamPage> {
+    return this.http.get<ExamPage>(
+      `${environment.apiUrl}/examPeriods/${examPeriodId}/examPeriodExams`,
+      {headers: this.headers});
+  }
+
   saveExam(exam: Exam): Observable<number> {
     return this.http.post(
       `${environment.apiUrl}/exams`,

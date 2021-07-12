@@ -258,7 +258,10 @@
                     ? 'bg-indigo-700'
                     : 'bg-indigo-900'"
                     (click)="selectable && onExamPeriodSelect(examPeriod)">
-                  <td>{{examPeriod.name}}</td>
+                  <td><a
+                      [routerLink]="'/examPeriods/' + examPeriod.id"
+                      class="hover:text-orange-500">
+                      {{examPeriod.name}}</a></td>
                   <td>{{examPeriod.startDate}}</td>
                   <td>{{examPeriod.endDate}}</td>
                   <td class="w-16">

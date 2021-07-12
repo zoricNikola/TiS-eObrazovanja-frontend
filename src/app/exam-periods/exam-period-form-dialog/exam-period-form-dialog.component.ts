@@ -24,7 +24,11 @@ export class ExamPeriodFormDialogComponent implements OnInit, OnChanges {
   examPeriod: ExamPeriod = {
     startDate: new Date(''),
     endDate: new Date(''),
-    name: ''
+    name: '',
+    institution: {id: 0,
+                  name: '',
+                  address: '',
+                  phoneNumber: ''}
   };
 
   constructor() { }

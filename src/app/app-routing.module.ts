@@ -18,6 +18,7 @@ import { TeachersComponent } from './users/teachers/teachers.component';
 import { StudentsComponent } from './users/students/students.component';
 import {CourseComponent} from './courses/course/course.component';
 import { TeacherComponent } from './users/teachers/teacher/teacher.component';
+import { ExamPeriodComponent } from './exam-periods/exam-period/exam-period.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -28,6 +29,11 @@ const routes: Routes = [
     path: 'examPeriods',
     component: ExamPeriodsComponent,
     canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'examPeriods/:id',
+    component: ExamPeriodComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admins',

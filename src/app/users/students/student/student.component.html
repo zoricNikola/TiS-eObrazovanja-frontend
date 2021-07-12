@@ -1,0 +1,405 @@
+<div class="page-content-holder">
+    <div class="page-content-card lg:w-3/5">
+        <div class="px-4" *ngIf="student">
+            <div class="mb-4 text-4xl font-bold text-center">
+                <h1>{{student.firstName}} {{student.lastName}} {{student.studentCard}}</h1>
+            </div>
+            <form #f="ngForm" (ngSubmit)="submit()">
+                <div
+                  class="
+                    flex flex-col
+                    py-4
+                    space-y-4
+                    justify-evenly
+                    bg-indigo-800
+                    text-lg
+                  "
+                >
+                  <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.firstName"
+                        #firstName="ngModel"
+                      />
+                      <label for="firstName">First Name</label>
+                      <div
+                        *ngIf="firstName.touched && firstName.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="firstName.errors?.required">
+                            First Name is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.lastName"
+                        #lastName="ngModel"
+                      />
+                      <label for="lastName">Last Name</label>
+                      <div
+                        *ngIf="lastName.touched && lastName.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="lastName.errors?.required">
+                            Last Name is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.user.username"
+                        #username="ngModel"
+                      />
+                      <label for="username">Username</label>
+                      <div
+                        *ngIf="username.touched && username.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="username.errors?.required">
+                            Username is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        email
+                        id="email"
+                        name="email"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.user.email"
+                        #email="ngModel"
+                      />
+                      <label for="email">Email</label>
+                      <div
+                        *ngIf="email.touched && email.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="email.errors?.required">Email is required</div>
+                          <div *ngIf="email.errors?.email">
+                            Email must be a valid email
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.user.phoneNumber"
+                        #phoneNumber="ngModel"
+                      />
+                      <label for="phoneNumber">Phone Number</label>
+                      <div
+                        *ngIf="phoneNumber.touched && phoneNumber.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="phoneNumber.errors?.required">
+                            Phone Number is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="address"
+                        name="address"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.address"
+                        #address="ngModel"
+                      />
+                      <label for="address">Address</label>
+                      <div
+                        *ngIf="address.touched && address.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="address.errors?.required">Address is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        [disabled]="!editMode"
+                        required
+                        id="dateOfBirth"
+                        name="dateOfBirth"
+                        type="date"
+                        placeholder=" "
+                        class="input-underlined"
+                        [ngModel]="student.dateOfBirth | date: 'yyyy-MM-dd'"
+                        (ngModelChange)="student.dateOfBirth = $event"
+                        #dateOfBirth="ngModel"
+                      />
+                      <label for="dateOfBirth">Date of birth</label>
+                      <div
+                        *ngIf="dateOfBirth.touched && dateOfBirth.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="dateOfBirth.errors?.required">
+                            Date of birth is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="custom-input-holder w-1/2">
+                      <input
+                        disabled
+                        required
+                        id="generation"
+                        name="generation"
+                        type="number"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.generation"
+                        #generation="ngModel"
+                      />
+                      <label for="generation">Generation</label>
+                      <div
+                        *ngIf="generation.touched && generation.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="generation.errors?.required">
+                            Generation is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex w-full space-x-4">
+                    <div class="custom-input-holder w-1/2 pr-2">
+                      <input
+                        disabled
+                        required
+                        id="studentCard"
+                        name="studentCard"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        [(ngModel)]="student.studentCard"
+                        #studentCard="ngModel"
+                      />
+                      <label for="studentCard">Student Card</label>
+                      <div
+                        *ngIf="studentCard.touched && studentCard.invalid"
+                        class="input-error-holder"
+                      >
+                        <div class="flex-col space-y-2">
+                          <div *ngIf="studentCard.errors?.required">
+                            Student Card is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button hidden></button>
+              </form>
+              <div class="inline-flex w-full justify-end space-x-2">
+                <button
+                  *ngIf="!editMode"
+                  (click)="editMode = true"
+                  class="btn btn-yellow"
+                >
+                  Edit
+                </button>
+                <button *ngIf="editMode" (click)="onCancel()" class="btn btn-red">
+                  Cancel
+                </button>
+                <button
+                  *ngIf="editMode"
+                  (click)="f.onSubmit($event)"
+                  class="btn btn-indigo"
+                >
+                  Save
+                </button>
+              </div>
+              <div class="mt-2 text-lg">
+                <h1 class="mb-4 text-3xl font-bold">Financial Card</h1>
+                <p>Current ammount: {{student.financialCard?.currentAmmount}}</p>
+                <p>Total deposit: {{student.financialCard?.totalDeposit}}</p>
+                <p>Total spent: {{student.financialCard?.totalSpent}}</p>
+
+                <button
+                  title="Show transactions"
+                  (click)="showTransactions = !showTransactions"
+                  class="btn btn-indigo inline-flex items-center w-full mt-2 rounded-md"
+                >
+                  <svg
+                    *ngIf="!showTransactions"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  <svg
+                    *ngIf="showTransactions"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                  Transactions
+                </button>
+                <div accordion [opened]="showTransactions">
+                  <p>Transactions...</p>
+                  <p>Transactions...</p>
+                  <p>Transactions...</p>
+                  <p>Transactions...</p>
+                </div>
+                <button
+                    title="Show enrollments"
+                    (click)="showEnrollments = !showEnrollments"
+                    class="btn btn-indigo inline-flex items-center w-full mt-2 rounded-md"
+                  >
+                  <svg
+                    *ngIf="!showEnrollments"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  <svg
+                    *ngIf="showEnrollments"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                  Enrollments
+                </button>
+                <div accordion [opened]="showEnrollments">
+                  <p>Enrollments...</p>
+                  <p>Enrollments...</p>
+                  <p>Enrollments...</p>
+                  <p>Enrollments...</p>
+                </div>
+                <button
+                    title="Show documents"
+                    (click)="showDocuments = !showDocuments"
+                    class="btn btn-indigo inline-flex items-center w-full mt-2 rounded-md"
+                  >
+                  <svg
+                    *ngIf="!showDocuments"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  <svg
+                    *ngIf="showDocuments"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                  Documents
+                </button>
+                <div accordion [opened]="showDocuments">
+                  <p>Documents...</p>
+                  <p>Documents...</p>
+                  <p>Documents...</p>
+                  <p>Documents...</p>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

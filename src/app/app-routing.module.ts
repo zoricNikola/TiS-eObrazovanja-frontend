@@ -16,7 +16,8 @@ import { StudentAuthGuardService } from './services/auth-guards/student-auth-gua
 import { AdminsComponent } from './users/admins/admins.component';
 import { TeachersComponent } from './users/teachers/teachers.component';
 import { StudentsComponent } from './users/students/students.component';
-import {CourseComponent} from './courses/course/course.component';
+import { CourseComponent } from './courses/course/course.component';
+import { StudentComponent } from './users/students/student/student.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -41,6 +42,11 @@ const routes: Routes = [
   {
     path: 'students',
     component: StudentsComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'students/:id',
+    component: StudentComponent,
     canActivate: [AuthGuard, AdminAuthGuard],
   },
   {

@@ -1,6 +1,16 @@
 <div class="flex flex-col flex-auto justify-center items-center">
     <div class="w-full lg:w-2/3 bg-indigo-800 h-full my-10 p-4">
         <div *ngIf="examPeriodExamsPage$ | async as exams">
+            <create-exam-form-dialog
+            [opened]="examFormDialogOpened"
+            [options]="examFormDialogOptions">
+            </create-exam-form-dialog>
+
+            <confirmation-dialog
+            [opened]="confirmationDialogOpened"
+            [options]="confirmationDialogOptions">
+            </confirmation-dialog>
+
             <div class="w-full my-3">
                 <button
                     class="btn btn-indigo inline-flex items-center ml-2"

@@ -23,8 +23,7 @@
                         <input required
                             id="dateTime"
                             name="dateTime"
-                            type="datetime"
-                            placeholder=" "
+                            type="datetime-local"
                             class="input-underlined"
                             [(ngModel)]="exam.dateTime"
                             #dateTime="ngModel"/>
@@ -81,7 +80,8 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="custom-input-holder w-1/2"> 
                         <input
                             required
                             id="classroom"
@@ -111,8 +111,7 @@
           <button
             [disabled]="f.invalid"
             class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
-            (click)="f.onSubmit($event)"
-          >
+            (click)="f.onSubmit($event)">
             Save
           </button>
         </div>

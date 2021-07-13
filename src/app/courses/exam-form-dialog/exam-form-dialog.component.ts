@@ -12,7 +12,7 @@ export interface ExamFormDialogOptions{
 }
 
 @Component({
-  selector: 'app-exam-form-dialog',
+  selector: 'create-exam-form-dialog',
   templateUrl: './exam-form-dialog.component.html',
   styleUrls: ['./exam-form-dialog.component.css']
 })
@@ -55,7 +55,11 @@ export class ExamFormDialogComponent implements OnInit, OnChanges {
       this.options.examForEdit &&
       this.options.state === FORM_STATE.EDIT
     ) {
-      this.exam = { ...this.options.examForEdit };
+      this.exam = { 
+        ...this.options.examForEdit,
+        course: {...this.options.examForEdit.course},
+        examPeriod: {...this.options.examForEdit.examPeriod}
+       };
       this.courseName = this.options.examForEdit.course?.name;
       this.examPeriodName = this.options.examForEdit.examPeriod?.name;
     }

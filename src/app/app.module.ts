@@ -50,6 +50,7 @@ import { TeacherRoleFormDialogComponent } from './users/teachers/teacher-role-fo
 import { ExamsComponent } from './courses/exams/exams.component';
 import { StudentComponent } from './users/students/student/student.component';
 import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
+import { TransactionFormDialogComponent } from './users/students/transaction-form-dialog/transaction-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-f
     ExamsComponent,
     StudentComponent,
     ExamFormDialogComponent,
+    TransactionFormDialogComponent,
   ],
   imports: [
     BrowserModule,

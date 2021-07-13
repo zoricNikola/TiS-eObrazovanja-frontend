@@ -5,15 +5,14 @@
         [opened]="confirmationDialogOpened"
         [options]="confirmationDialogOptions"
       ></confirmation-dialog>
-<!--      <exam-form-dialog-->
-<!--        [opened]="courseFormDialogOpened"-->
-<!--        [options]="courseFormDialogOptions"-->
-<!--      ></exam-form-dialog>-->
+      <exam-form-dialog
+        [opened]="examFormDialogOpened"
+        [options]="examFormDialogOptions"
+      ></exam-form-dialog>
       <div class="w-full">
         <button
-          class="btn btn-green inline-flex items-center">
-<!--          (click)="onNewExamClick()"-->
-
+          class="btn btn-green inline-flex items-center"
+          (click)="onNewExamClick()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -95,7 +94,7 @@
             <tr class="bg-red-300 text-white shadow-md">
               <td>
                 <input
-                  [ngModel]="examsPage.queryParams?.dateFrom"
+                  [ngModel]="examsPage.queryParams?.startDate"
                   (keyup)="onSearchOptionsChange(f.value)"
                   name="dateFrom"
                   placeholder="Date from"
@@ -105,7 +104,7 @@
               </td>
               <td>
                 <input
-                  [ngModel]="examsPage.queryParams?.dateTo"
+                  [ngModel]="examsPage.queryParams?.endDate"
                   (keyup)="onSearchOptionsChange(f.value)"
                   name="dateTo"
                   placeholder="Date to"
@@ -140,16 +139,6 @@
                   class="input-underlined text-center mt-0"
                 />
               </td>
-              <td>
-                <input
-                  [ngModel]="examsPage.queryParams?.examPeriodName"
-                  (keyup)="onSearchOptionsChange(f.value)"
-                  name="examPeriod"
-                  placeholder="Exam period"
-                  class="input-underlined text-center mt-0"
-                />
-              </td>
-              <td class="w-16"></td>
               <td class="w-16">
                 <button
                   title="Clear search"
@@ -469,9 +458,9 @@
 
           <td class="w-16">
             <button
-              class="btn-sm-yellow">
-<!--              (click)="onEditCourseClick(course)"-->
-
+              class="btn-sm-yellow"
+              (click)="onEditExamClick(exam)"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -491,9 +480,9 @@
           <td class="w-16">
             <button
               title="Delete course"
-              class="btn-sm-red">
-<!--              (click)="onCourseDelete(course)"-->
-
+              class="btn-sm-red"
+              (click)="onDeleteExamClick(exam)"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"

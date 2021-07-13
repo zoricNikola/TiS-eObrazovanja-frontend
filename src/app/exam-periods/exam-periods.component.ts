@@ -13,14 +13,14 @@ import { SortParamsUtils } from '../services/utils/sort-params-utils.service';
 import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-period-form-dialog.component';
 
 @Component({
-  selector: 'app-exam-periods',
+  selector: '[exam-periods]',
   templateUrl: './exam-periods.component.html',
   styleUrls: ['./exam-periods.component.css'],
   providers: [DatePipe]
 })
 export class ExamPeriodsComponent implements OnInit {
 
-  @Input('selectable') selectable: boolean = false;
+  @Input('selectable') selectable: boolean = true;
   @Output('itemTake') examPeriodTake : EventEmitter<ExamPeriod> = new EventEmitter();
 
   showSearchBox: boolean = false;
@@ -29,11 +29,11 @@ export class ExamPeriodsComponent implements OnInit {
   selectedEXamPeriod: ExamPeriod | undefined = undefined;
 
   examPeriodsPage$ : Observable<ExamPeriodPage> = of();
-  
 
-  constructor(private examPeriodService: ExamPeriodService, 
-              private router: Router, 
-              private route: ActivatedRoute, 
+
+  constructor(private examPeriodService: ExamPeriodService,
+              private router: Router,
+              private route: ActivatedRoute,
               public datePipe: DatePipe,
               public sortParamsUtils: SortParamsUtils) { }
 

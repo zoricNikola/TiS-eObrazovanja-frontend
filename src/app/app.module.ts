@@ -49,6 +49,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { TeacherRoleFormDialogComponent } from './users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 import { ExamsComponent } from './courses/exams/exams.component';
 import { StudentComponent } from './users/students/student/student.component';
+import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { StudentComponent } from './users/students/student/student.component';
     TeacherRoleFormDialogComponent,
     ExamsComponent,
     StudentComponent,
+    ExamFormDialogComponent,
   ],
   imports: [
     BrowserModule,

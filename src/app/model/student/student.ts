@@ -1,5 +1,6 @@
 import { Institution } from './../institution';
 import { User } from './../user/user';
+import { FinancialCard } from './financial-card';
 
 export interface Student {
   id?: number;
@@ -11,5 +12,5 @@ export interface Student {
   dateOfBirth: Date;
   user: User;
   institution?: Institution;
-  financialCard?: any;
+  financialCard?: FinancialCard;
 }

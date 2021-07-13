@@ -34,13 +34,11 @@ export class ExamsService extends BaseService{
     };
 
     if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
-    if (queryParams.courseName) params['courseName'] = queryParams?.courseName;
     if (queryParams.description) params['description'] = queryParams?.description;
     if (queryParams.classroom) params['classroom'] = queryParams?.classroom;
     if (queryParams.points) params['points'] = queryParams?.points;
-    if (queryParams.examPeriodName) params['examPeriodName'] = queryParams?.examPeriodName;
-    if (queryParams.dateFrom) params['dateFrom'] = queryParams?.dateFrom;
-    if (queryParams.dateTo) params['dateTo'] = queryParams?.dateTo;
+    if (queryParams.dateFrom) params['startDate'] = queryParams?.startDate;
+    if (queryParams.dateTo) params['endDate'] = queryParams?.endDate;
 
 
     return this.courseExamFilter(params, courseId)
@@ -82,6 +80,7 @@ export class ExamsService extends BaseService{
   }
 
   saveExam(exam: Exam): Observable<number> {
+    console.dir(exam);
     return this.http.post(
       `${environment.apiUrl}/exams`,
       JSON.stringify(exam),

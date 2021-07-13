@@ -16,7 +16,7 @@ export class CourseService extends BaseService{
     super(`${environment.apiUrl}`, http);
   }
 
-  getCourse(id: number): Observable<Course>{
+  getCourse(id?: number): Observable<Course>{
     const url = `${environment.apiUrl}/courses/${id}`;
     return this.http.get<Course>(url, {headers: this.headers});
   }

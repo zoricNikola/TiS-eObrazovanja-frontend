@@ -16,7 +16,7 @@ export interface ExamFormDialogOptions{
   templateUrl: './exam-form-dialog.component.html',
   styleUrls: ['./exam-form-dialog.component.css']
 })
-export class ExamFormDialogComponent implements OnInit, OnChanges {
+export class CreateExamFormDialogComponent implements OnInit, OnChanges {
 
   @Input('opened') opened = false;
   @Input('options') options!: ExamFormDialogOptions;

@@ -40,7 +40,7 @@ export class TeacherFormDialogComponent implements OnInit, OnChanges {
     firstName: '',
     lastName: '',
     address: '',
-    dateOfBirth: new Date(''),
+    dateOfBirth: new Date(),
     teacherTitle: { name: '' },
     user: {
       username: '',

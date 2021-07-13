@@ -6,9 +6,12 @@ import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confir
 import {ActivatedRoute, Router} from '@angular/router';
 import {ExamsService} from '../../services/exams.service';
 import {SortParamsUtils} from '../../services/utils/sort-params-utils.service';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, take} from 'rxjs/operators';
 import {PageParams} from '../../model/http/page-params';
-import {DatePipe} from '@angular/common';
+import {FORM_STATE} from '../../model/common/form-state';
+import {ExamFormDialogOptions} from './exam-form-dialog/exam-form-dialog.component';
+import {CourseService} from '../../services/course.service';
+import {Course} from '../../model/course/course';
 
 @Component({
   selector: '[exams]',
@@ -21,18 +24,19 @@ export class ExamsComponent implements OnInit {
   @Output('itemTake') examTake: EventEmitter<Exam> = new EventEmitter<Exam>();
 
   selectedExam: Exam | undefined = undefined;
+  course!: Course;
 
   examsPage$: Observable<ExamPage> = of();
 
   showSearchBox = false;
 
-  // examFormDialogOpened: boolean = false;
-  // examFormDialogOptions: ExamFormDialogOptions = {
-  //   state: FORM_STATE.ADD,
-  //   examForEdit: undefined,
-  //   cancel: () => {},
-  //   save: (exam: Exam) => {},
-  // };
+  examFormDialogOpened: boolean = false;
+  examFormDialogOptions: ExamFormDialogOptions = {
+    state: FORM_STATE.ADD,
+    examForEdit: undefined,
+    cancel: () => {},
+    save: (exam: Exam) => {},
+  };
 
   confirmationDialogOpened: boolean = false;
   confirmationDialogOptions: ConfirmationDialogOptions = {
@@ -44,6 +48,7 @@ export class ExamsComponent implements OnInit {
 
   constructor(private router: Router,
               private examService: ExamsService,
+              private courseService: CourseService,
               private route: ActivatedRoute,
               public sortParamUtils: SortParamsUtils) { }
 
@@ -56,18 +61,17 @@ export class ExamsComponent implements OnInit {
         );
 
         const queryParams = {
-          courseName: paramMap.get('courseName'),
           description: paramMap.get('description'),
           classroom: paramMap.get('classroom'),
           points: paramMap.get('points'),
-          examPeriodName: paramMap.get('examPeriod'),
-          dateFrom: paramMap.get('dateFrom'),
-          dateTo: paramMap.get('dateTo'),
+          dateFrom: paramMap.get('startDate'),
+          dateTo: paramMap.get('endDate'),
           sort: paramMap.getAll('sort'),
         };
         return this.examService.filterCourseExams(pageParams, queryParams, this.courseId);
       })
     );
+    this.courseService.getCourse(this.courseId).subscribe((course: Course) => this.course = course);
   }
 
   onPageChange(selectedPage: number): void {
@@ -122,7 +126,7 @@ export class ExamsComponent implements OnInit {
     this.examTake.emit(this.selectedExam);
   }
 
-  refreshCoursesPage(): void {
+  refreshExamsPage(): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -131,5 +135,69 @@ export class ExamsComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+  onNewExamClick(): void {
+    this.examFormDialogOpened = true;
+    this.examFormDialogOptions = {
+      state: FORM_STATE.ADD,
+      examForEdit: undefined,
+      cancel: () => {
+        this.examFormDialogOpened = false;
+      },
+      save: (exam: Exam) => {
+        exam.course = this.course;
+        this.examService
+          .saveExam(exam)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.examFormDialogOpened = false;
+            this.refreshExamsPage();
+          });
+      }
+    };
+  }
+
+  onEditExamClick(exam: Exam): void{
+    this.examFormDialogOpened = true;
+
+    this.examFormDialogOptions = {
+      state: FORM_STATE.EDIT,
+      examForEdit: exam,
+      cancel: () => {
+        this.examFormDialogOpened = false;
+      },
+      save: (exam: Exam) => {
+        exam.course = this.course;
+        this.examService
+          .updateExam(exam.id!, exam)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.examFormDialogOpened = false;
+            this.refreshExamsPage();
+          });
+      }
+    };
+  }
+
+  onDeleteExamClick(exam: Exam): void {
+    this.confirmationDialogOpened = true;
+    this.confirmationDialogOptions = {
+      title: `Delete ${this.course.name} from ${exam.examPeriod.name}`,
+      message: `Are you sure?`,
+      decline: () => {
+        this.confirmationDialogOpened = false;
+      },
+      confirm: () => {
+        this.examService
+          .deleteExam(exam.id!)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.confirmationDialogOpened = false;
+            this.refreshExamsPage();
+          });
+      }
+    };
+  }
+
 
 }

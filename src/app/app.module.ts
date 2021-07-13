@@ -51,7 +51,9 @@ import { TeacherComponent } from './users/teachers/teacher/teacher.component';
 import { AssignCourseToTeacherFormDialogComponent } from './users/teachers/assign-course-to-teacher-form-dialog/assign-course-to-teacher-form-dialog.component';
 import { ExamsComponent } from './courses/exams/exams.component';
 import { ExamPeriodComponent } from './exam-periods/exam-period/exam-period.component';
-import { ExamFormDialogComponent } from './courses/exam-form-dialog/exam-form-dialog.component';
+import { CreateExamFormDialogComponent } from './courses/exam-form-dialog/exam-form-dialog.component';
+import { StudentComponent } from './users/students/student/student.component';
+import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +89,9 @@ import { ExamFormDialogComponent } from './courses/exam-form-dialog/exam-form-di
     AssignCourseToTeacherFormDialogComponent,
     ExamsComponent,
     ExamPeriodComponent,
+    StudentComponent,
     ExamFormDialogComponent,
+    CreateExamFormDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -31,6 +31,8 @@ export class ExamFormDialogComponent implements OnInit {
   originalPoints: number | undefined;
  // originalExamPeriod: ExamPeriod | undefined;
 
+  showExamPeriods = false;
+
   exam: Exam = {
     dateTime: new Date(),
     course: {
@@ -97,6 +99,7 @@ export class ExamFormDialogComponent implements OnInit {
     if (this.selectedExamPeriod) {
       this.exam.examPeriod = this.selectedExamPeriod;
     }
+    this.showExamPeriods = false;
   }
 
   submit() {

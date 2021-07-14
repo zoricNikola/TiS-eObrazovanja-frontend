@@ -67,6 +67,7 @@ export class ExamPeriodComponent implements OnInit {
       cancel: () => {this.examFormDialogOpened = false},
       save: (exam: Exam) => {
         exam.examPeriod = this.examPeriod;
+        exam.course.institution = this.examPeriod.institution;
         this.examService
         .saveExam(exam)
         .pipe(take(1))

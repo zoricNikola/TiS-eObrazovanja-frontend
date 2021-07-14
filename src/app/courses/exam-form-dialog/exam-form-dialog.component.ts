@@ -21,23 +21,23 @@ export class CreateExamFormDialogComponent implements OnInit, OnChanges {
   @Input('opened') opened = false;
   @Input('options') options!: ExamFormDialogOptions;
   @Input('selectedCourse') selectedCourse: Course | undefined = undefined;
+  @Input('selectable') selectable = true;
 
   @ViewChild('f') form!: NgForm;
 
+  showCourses: boolean = false;
   courseName: string | undefined;
   examPeriodName: string | undefined;
 
   exam: Exam = {
-    id: 0,
     dateTime: new Date(''),
     course: {
       name: ''
     },
+    points: 0,
     description: '',
     classroom: '',
-    points: 0,
     examPeriod: {
-      id: 0,
       name: '',
       startDate: new Date(''),
       endDate: new Date('')
@@ -72,14 +72,13 @@ export class CreateExamFormDialogComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.form.resetForm();
         this.exam = {
-          id: 0,
           dateTime: new Date(''),
           course: {
             name: ''
           },
+          points: 0,
           description: '',
           classroom: '',
-          points: 0,
           examPeriod: {
             id: 0,
             name: '',

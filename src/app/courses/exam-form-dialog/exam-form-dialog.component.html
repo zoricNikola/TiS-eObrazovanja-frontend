@@ -13,13 +13,8 @@
                         space-y-4
                         justify-evenly
                       bg-indigo-800">
-
-                <div class="custom-input-holder">
-                    <div *ngIf="options.state === FORM_STATE.ADD" courses (itemTake)="onCourseTaken($event)"></div>
-                </div>
-
-                <div class="flex w-full space-x-4">
-                    <div class="custom-input-holder w-1/2">
+                <div class="flex flex-col space-y-4 bg-indigo-800">
+                    <div class="custom-input-holder w-full">
                         <input required
                             id="dateTime"
                             name="dateTime"
@@ -39,7 +34,7 @@
                         </div>    
                     </div>
 
-                    <div class="custom-input-holder w-1/2">
+                    <div class="custom-input-holder w-full">
                         <input
                             required
                             id="description"
@@ -59,10 +54,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="flex w-full space-x-4">
-                    <div class="custom-input-holder w-1/2">
+                
+                    <div class="custom-input-holder w-full">
                         <input
                             required
                             id="points"
@@ -82,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="custom-input-holder w-1/2"> 
+                    <div class="custom-input-holder w-full"> 
                         <input
                             required
                             id="classroom"
@@ -105,6 +98,56 @@
                 </div>
             </div>
         </form>
+
+        <div class="flex flex-col
+                    w-full
+                    px-8
+                    py-4
+                    space-y-4
+                    justify-evenly
+                    bg-indigo-800
+                    items-center">
+                    <div class="custom-input-holder w-full">
+                        <button class="btn btn-green inline-flex items-center item-underlined w-full"
+                                (click)="showCourses = !showCourses">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                          </svg>
+                          Select a course
+                        </button>
+                        <div
+                          *ngIf="exam.course.name === ''"
+                          class="input-error-holder mt-3 mb-3">
+                          <div class="flex-col space-y-2">
+                            <div *ngIf="exam.course.name === ''">
+                              You need to select a course
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-input-holder w-full" *ngIf="exam.course.name !== ''">
+                        <input
+                          disabled
+                          id="course"
+                          name="course"
+                          type="text"
+                          placeholder=" "
+                          class="input-underlined"
+                          [(ngModel)]="exam.course.name"
+                          #course="ngModel"/>
+                        <label for="course">Course</label>
+                    </div>
+        </div>
     </ng-container>   
     <ng-container class="footer">
         <div class="inline-flex w-full justify-end space-x-2">
@@ -117,4 +160,20 @@
           </button>
         </div>
     </ng-container> 
+</app-dialog>
+
+<app-dialog [opened]="showCourses" [modal]="true" xmlns="http://www.w3.org/1999/html">
+    <ng-container class="heading">Select a course</ng-container>
+    <ng-container class="content">
+      <div
+            courses
+           (itemTake)="onCourseTaken($event)"
+           [selectable]="true">
+      </div>
+    </ng-container>
+    <ng-container class="footer">
+      <div class="inline-flex w-full justify-end space-x-2">
+        <button class="btn-sm-red" (click)="showCourses = !showCourses">Cancel</button>
+      </div>
+    </ng-container>
 </app-dialog>

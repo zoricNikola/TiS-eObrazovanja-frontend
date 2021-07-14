@@ -1,5 +1,9 @@
 <div class="flex flex-col flex-auto justify-center items-center">
-  <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
+  <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4" [ngClass]="
+                selectable
+                ? 'lg:w-full'
+                : ''"
+                [class.-my-1]="selectable">
     <div *ngIf="coursesPage$ | async as coursesPage">
       <confirmation-dialog
         [opened]="confirmationDialogOpened"

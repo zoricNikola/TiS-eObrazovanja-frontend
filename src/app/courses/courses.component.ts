@@ -17,7 +17,7 @@ import {ConfirmationDialogOptions} from '../common/confirmation-dialog/confirmat
   styleUrls: ['./courses.component.css'],
 })
 export class CoursesComponent implements OnInit {
-  @Input('selectable') selectable = true;
+  @Input('selectable') selectable = false;
   @Output('itemTake') courseTake: EventEmitter<Course> = new EventEmitter<Course>();
 
   selectedCourse: Course | undefined = undefined;

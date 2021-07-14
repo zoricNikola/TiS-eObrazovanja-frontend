@@ -1,0 +1,103 @@
+<app-dialog [opened]="opened" [modal]="true">
+    <ng-container class="heading">
+        Create new transaction
+    </ng-container>
+    <ng-container class="content">
+        <form #f="ngForm" (ngSubmit)="submit()">
+            <div
+              class="
+                flex flex-col
+                w-full
+                px-8
+                py-4
+                space-y-4
+                justify-evenly
+                bg-indigo-800
+              "
+            >
+                <div class="custom-input-holder">
+                    <input
+                        required
+                        min="1"
+                        id="ammount"
+                        name="ammount"
+                        type="number"
+                        placeholder=" "
+                        class="input-underlined"
+                        ngModel
+                        #ammount="ngModel"/>
+                    <label for="ammount">Ammount</label>
+                    <div
+                        *ngIf="ammount.touched && ammount.invalid"
+                        class="input-error-holder"
+                    >
+                        <div class="flex-col space-y-2">
+                            <div *ngIf="ammount.errors?.required">
+                                Ammount is required
+                            </div>
+                            <div *ngIf="ammount.errors?.min">
+                                Ammount must be positive value
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-input-holder">
+                    <input
+                        required
+                        id="description"
+                        name="description"
+                        type="text"
+                        placeholder=" "
+                        class="input-underlined"
+                        ngModel
+                        #description="ngModel"/>
+                    <label for="description">Description</label>
+                    <div
+                        *ngIf="description.touched && description.invalid"
+                        class="input-error-holder"
+                    >
+                        <div class="flex-col space-y-2">
+                            <div *ngIf="description.errors?.required">
+                                Description is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Transaction type: </label>
+                    <label class="cursor-pointer">
+                        <input required ngModel #type="ngModel" type="radio" name="type" [value]="TRANSACTION_TYPE.PAYMENT"/>
+                        Payment
+                    </label>
+                    <label class="cursor-pointer">
+                        <input required ngModel #type="ngModel" type="radio" name="type" [value]="TRANSACTION_TYPE.DEPOSIT"/>
+                        Deposit
+                    </label>
+                    <div
+                        *ngIf="type.touched && type.invalid"
+                        class="input-error-holder"
+                    >
+                        <div class="flex-col space-y-2">
+                            <div *ngIf="type.errors?.required">
+                                Transaction type is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button hidden></button>
+        </form>
+    </ng-container>
+    <ng-container class="footer">
+        <div class="inline-flex w-full justify-end space-x-2">
+            <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
+            <button
+              [disabled]="f.invalid"
+              class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+              (click)="f.onSubmit($event)"
+            >
+              Save
+            </button>
+          </div>
+    </ng-container>
+</app-dialog>

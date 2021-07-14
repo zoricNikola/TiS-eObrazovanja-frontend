@@ -54,6 +54,7 @@ import { ExamPeriodComponent } from './exam-periods/exam-period/exam-period.comp
 import { CreateExamFormDialogComponent } from './courses/exam-form-dialog/exam-form-dialog.component';
 import { StudentComponent } from './users/students/student/student.component';
 import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
+import { TransactionFormDialogComponent } from './users/students/transaction-form-dialog/transaction-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-f
     ExamPeriodComponent,
     StudentComponent,
     ExamFormDialogComponent,
-    CreateExamFormDialogComponent
+    CreateExamFormDialogComponent,
+    TransactionFormDialogComponent
   ],
   imports: [
     BrowserModule,

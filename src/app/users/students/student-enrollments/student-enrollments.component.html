@@ -1,8 +1,9 @@
 <enrollment-form-dialog
+    *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
     [opened]="enrollmentFormDialogOpened"
     [options]="enrollmentFormDialogOptions">
 </enrollment-form-dialog>
-<div class="w-full text-base">
+<div *ngIf="authService.currentUser?.authorities!.includes('ADMIN')" class="w-full text-base">
     <button
         title="Create transaction"
         class="btn btn-green inline-flex items-center"
@@ -295,7 +296,11 @@
         *ngFor="let enrollment of enrollmentsPage.content"
         class="bg-indigo-900 hover:bg-indigo-600 text-white shadow-md"
         >
-        <td>{{ enrollment.course!.name }}</td>
+        <td><a
+            [routerLink]="'/enrollments/' + enrollment.id"
+            class="hover:text-orange-500"
+            >{{ enrollment.course!.name }}</a
+          ></td>
         <td>{{ enrollment.startDate }}</td>
         <td>{{ enrollment.passed ? 'Yes' : 'No' }}</td>
         <td>{{ enrollment.score }}</td>

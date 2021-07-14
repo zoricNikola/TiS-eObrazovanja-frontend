@@ -55,9 +55,10 @@ import { TransactionFormDialogComponent } from './financial-card/transactions/tr
 import { StudentEnrollmentsComponent } from './users/students/student-enrollments/student-enrollments.component';
 import { StudentEnrollmentFormDialogComponent } from './users/students/student-enrollments/student-enrollment-form-dialog/student-enrollment-form-dialog.component';
 import { SelectCourseDialogComponent } from './courses/select-course-dialog/select-course-dialog.component';
-import { ExamObligationComponent} from './courses/exam-obligation/exam-obligation.component';
-import { ExamObligationFormDialogComponent} from './courses/exam-obligation/exam-obligation-form-dialog/exam-obligation-form-dialog.component';
-import { ExamObligationTypeComponent} from './courses/exam-obligation-type/exam-obligation-type.component';
+import { ExamObligationComponent } from './courses/exam-obligation/exam-obligation.component';
+import { ExamObligationFormDialogComponent } from './courses/exam-obligation/exam-obligation-form-dialog/exam-obligation-form-dialog.component';
+import { ExamObligationTypeComponent } from './courses/exam-obligation-type/exam-obligation-type.component';
+import { EnrollmentsComponent } from './enrollments/enrollments.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { ExamObligationTypeComponent} from './courses/exam-obligation-type/exam-
     SelectCourseDialogComponent,
     ExamObligationComponent,
     ExamObligationFormDialogComponent,
-    ExamObligationTypeComponent
+    ExamObligationTypeComponent,
+    EnrollmentsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentsService } from '../services/students.service';
+import { Student } from './../model/student/student';
 import { AuthService } from './../services/auth.service';
 import { take } from 'rxjs/operators';
-import { Student } from './../model/student/student';
 
 @Component({
-  selector: 'app-financial-card',
-  templateUrl: './financial-card.component.html',
-  styleUrls: ['./financial-card.component.css'],
+  selector: 'app-enrollments',
+  templateUrl: './enrollments.component.html',
+  styleUrls: ['./enrollments.component.css'],
 })
-export class FinancialCardComponent implements OnInit {
+export class EnrollmentsComponent implements OnInit {
   student!: Student;
 
   constructor(
@@ -17,7 +17,7 @@ export class FinancialCardComponent implements OnInit {
     private studentService: StudentsService
   ) {}
 
-  fetchStudent(): void {
+  ngOnInit(): void {
     const studentId: number = this.authService.currentUser?.studentId!;
 
     this.studentService
@@ -26,9 +26,5 @@ export class FinancialCardComponent implements OnInit {
       .subscribe((student: Student) => {
         this.student = student;
       });
-  }
-
-  ngOnInit(): void {
-    this.fetchStudent();
   }
 }

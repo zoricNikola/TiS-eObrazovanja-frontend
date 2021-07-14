@@ -8,6 +8,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { PageParams } from 'src/app/model/http/page-params';
 import { StudentEnrollmentFormDialogOptions } from './student-enrollment-form-dialog/student-enrollment-form-dialog.component';
 import { Student } from './../../../model/student/student';
+import { AuthService } from './../../../services/auth.service';
 
 @Component({
   selector: '[student-enrollments]',
@@ -25,7 +26,8 @@ export class StudentEnrollmentsComponent implements OnInit {
   enrollmentsPage$: Observable<EnrollmentPage> = of();
 
   constructor(private enrollmentService: EnrollmentService, 
-      private studentService: StudentsService, public sortParamsUtils: SortParamsUtils) { }
+      private studentService: StudentsService, public sortParamsUtils: SortParamsUtils, 
+      public authService: AuthService) { }
 
   ngOnInit(): void {
     this.enrollmentsPage$ = this.enrollmentsQueryMap.pipe(switchMap((paramMap) => {

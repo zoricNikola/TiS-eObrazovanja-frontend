@@ -4,6 +4,7 @@
 </transaction-form-dialog>
 <div class="w-full text-base">
     <button
+    *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
     title="Create transaction"
     class="btn btn-green inline-flex items-center"
     (click)="onNewTransactionClick()"

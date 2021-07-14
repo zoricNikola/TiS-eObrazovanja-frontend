@@ -9,6 +9,7 @@ import { TransactionPage } from './../../model/student/transaction-page';
 import { FinancialCardService } from './../../services/financial-card.service';
 import { SortParamsUtils } from './../../services/utils/sort-params-utils.service';
 import { TransactionFormDialogOptions } from './transaction-form-dialog/transaction-form-dialog.component';
+import { AuthService } from './../../services/auth.service';
 
 @Component({
   selector: '[transactions]',
@@ -27,7 +28,7 @@ export class TransactionsComponent implements OnInit {
   transactionsPage$: Observable<TransactionPage> = of();
 
   constructor(private transactionService: TransactionService, private financialCardService: FinancialCardService, 
-    public sortParamsUtils: SortParamsUtils) { }
+    public sortParamsUtils: SortParamsUtils, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.transactionsPage$ = this.transactionsQueryMap.pipe(switchMap((paramMap) => {

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CoursesComponent } from './courses/courses.component';
 import { DocumentsComponent } from './documents/documents.component';
 import { ExamPeriodsComponent } from './exam-periods/exam-periods.component';
 import { ExamsApplyComponent } from './exams-apply/exams-apply.component';
@@ -18,6 +17,8 @@ import { TeachersComponent } from './users/teachers/teachers.component';
 import { StudentsComponent } from './users/students/students.component';
 import { CourseComponent } from './courses/course/course.component';
 import { StudentComponent } from './users/students/student/student.component';
+import { CoursesComponent } from './courses/courses.component';
+import { EnrollmentsComponent } from './enrollments/enrollments.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -50,6 +51,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, AdminAuthGuard],
   },
   {
+    path: 'enrollments',
+    component: EnrollmentsComponent,
+    canActivate: [AuthGuard, StudentAuthGuardService],
+  },
+  {
     path: 'applyExams',
     component: ExamsApplyComponent,
     canActivate: [AuthGuard, StudentAuthGuardService],
@@ -75,6 +81,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+exports: [RouterModule],
 })
 export class AppRoutingModule {}

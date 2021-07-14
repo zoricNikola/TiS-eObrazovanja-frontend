@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { CurrentUser } from './../model/current-user';
 
 @Component({
   selector: '[navbar]',
@@ -31,10 +32,29 @@ export class NavbarComponent implements OnInit {
         this.router.isActive('/examResults', false)
       );
     }
+    if (route === '/courses') {
+      return (
+        this.router.isActive('/courses', false) ||
+        this.router.isActive('/teachings', false) ||
+        this.router.isActive('/enrollments', false)
+      );
+    }
     return this.router.isActive(route, false);
   }
 
   get user() {
     return this.authService.currentUser;
+  }
+
+  isUserAdmin(): boolean {
+    return (this.user as CurrentUser)?.authorities.includes('ADMIN');
+  }
+
+  isUserStudent(): boolean {
+    return (this.user as CurrentUser)?.authorities.includes('STUDENT');
+  }
+
+  isUserTeacher(): boolean {
+    return (this.user as CurrentUser)?.authorities.includes('TEACHER');
   }
 }

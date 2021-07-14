@@ -1,5 +1,10 @@
 <div class="page-content-holder">
-  <div class="page-content-card lg:w-full">
+  <div class="page-content-card lg:w-full" [ngClass]="
+            selectable
+            ? 'lg:w-full'
+            : ''
+          "
+       [class.-my-1]="selectable">
     <div class="w-full" *ngIf="teacherPage$ | async as teacherPage">
       <app-teacher-form-dialog
         [opened]="teacherFormDialogOpened"

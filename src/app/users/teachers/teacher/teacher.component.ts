@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ConfirmationDialogOptions } from 'src/app/common/confirmation-dialog/confirmation-dialog.component';
-import { TeacherTeachingCourseFormDialogOptions } from 'src/app/courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import { TeacherTeachingCourseFormDialogOptions } from 'src/app/courses/course/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { Teacher } from 'src/app/model/teacher/teacher';
 import { Teaching } from 'src/app/model/teacher/teaching';

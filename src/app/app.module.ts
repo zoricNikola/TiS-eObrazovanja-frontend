@@ -44,7 +44,7 @@ import { StudentsComponent } from './users/students/students.component';
 import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
 import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog/teacher-form-dialog.component';
 import { CourseComponent } from './courses/course/course.component';
-import { AssignTeacherToCourseFormDialogComponent } from './courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import { AssignTeacherToCourseFormDialogComponent } from './courses/course/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TeacherRoleFormDialogComponent } from './users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 import { TeacherComponent } from './users/teachers/teacher/teacher.component';
@@ -54,7 +54,15 @@ import { ExamPeriodComponent } from './exam-periods/exam-period/exam-period.comp
 import { CreateExamFormDialogComponent } from './courses/exam-form-dialog/exam-form-dialog.component';
 import { StudentComponent } from './users/students/student/student.component';
 import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
-import { TransactionFormDialogComponent } from './users/students/transaction-form-dialog/transaction-form-dialog.component';
+import { TransactionsComponent } from './financial-card/transactions/transactions.component';
+import { TransactionFormDialogComponent } from './financial-card/transactions/transaction-form-dialog/transaction-form-dialog.component';
+import { StudentEnrollmentsComponent } from './users/students/student-enrollments/student-enrollments.component';
+import { StudentEnrollmentFormDialogComponent } from './users/students/student-enrollments/student-enrollment-form-dialog/student-enrollment-form-dialog.component';
+import { SelectCourseDialogComponent } from './courses/select-course-dialog/select-course-dialog.component';
+import { ExamObligationComponent } from './courses/exam-obligation/exam-obligation.component';
+import { ExamObligationFormDialogComponent } from './courses/exam-obligation/exam-obligation-form-dialog/exam-obligation-form-dialog.component';
+import { ExamObligationTypeComponent } from './courses/exam-obligation-type/exam-obligation-type.component';
+import { EnrollmentsComponent } from './enrollments/enrollments.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +101,15 @@ import { TransactionFormDialogComponent } from './users/students/transaction-for
     StudentComponent,
     ExamFormDialogComponent,
     CreateExamFormDialogComponent,
-    TransactionFormDialogComponent
+    TransactionFormDialogComponent,
+    TransactionsComponent,
+    StudentEnrollmentsComponent,
+    StudentEnrollmentFormDialogComponent,
+    SelectCourseDialogComponent,
+    ExamObligationComponent,
+    ExamObligationFormDialogComponent,
+    ExamObligationTypeComponent,
+    EnrollmentsComponent,
   ],
   imports: [
     BrowserModule,

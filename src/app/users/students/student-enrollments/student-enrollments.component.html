@@ -1,0 +1,321 @@
+<enrollment-form-dialog
+    *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
+    [opened]="enrollmentFormDialogOpened"
+    [options]="enrollmentFormDialogOptions">
+</enrollment-form-dialog>
+<div *ngIf="authService.currentUser?.authorities!.includes('ADMIN')" class="w-full text-base">
+    <button
+        title="Create transaction"
+        class="btn btn-green inline-flex items-center"
+        (click)="onNewEnrollmentClick()"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+            </svg>
+            Assign
+    </button>
+</div>
+<div *ngIf="enrollmentsPage$ | async as enrollmentsPage" class="text-base">
+    <table
+    class="
+        w-full
+        table-auto
+        text-center
+        border-separate
+        table-row-spacing-y-4
+        font-semibold
+    "
+    >
+    <thead>
+        <tr class="bg-red-300 text-indigo-800 shadow-md">
+        <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+            onSortOptionsChange(enrollmentsPage.queryParams.sort, 'course.name')
+            "
+        >
+            <div class="flex justify-center">
+            Course
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyASC(
+                    enrollmentsPage.queryParams.sort,
+                    'course.name'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+            </svg>
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyDESC(
+                    enrollmentsPage.queryParams.sort,
+                    'course.name'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+            </svg>
+            </div>
+        </th>
+        <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+            onSortOptionsChange(enrollmentsPage.queryParams.sort, 'startDate')
+            "
+        >
+            <div class="flex justify-center">
+            Start date
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyASC(
+                    enrollmentsPage.queryParams.sort,
+                    'startDate'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+            </svg>
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyDESC(
+                    enrollmentsPage.queryParams.sort,
+                    'startDate'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+            </svg>
+            </div>
+        </th>
+        <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+            onSortOptionsChange(enrollmentsPage.queryParams.sort, 'passed')
+            "
+        >
+            <div class="flex justify-center">
+            Passed
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyASC(
+                    enrollmentsPage.queryParams.sort,
+                    'passed'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+            </svg>
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyDESC(
+                    enrollmentsPage.queryParams.sort,
+                    'passed'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+            </svg>
+            </div>
+        </th>
+        <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+            onSortOptionsChange(enrollmentsPage.queryParams.sort, 'score')
+            "
+        >
+            <div class="flex justify-center">
+            Score
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyASC(
+                    enrollmentsPage.queryParams.sort,
+                    'score'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+            </svg>
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyDESC(
+                    enrollmentsPage.queryParams.sort,
+                    'score'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+            </svg>
+            </div>
+        </th>
+        <th
+            class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
+            (click)="
+            onSortOptionsChange(enrollmentsPage.queryParams.sort, 'grade')
+            "
+        >
+            <div class="flex justify-center">
+            Grade
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyASC(
+                    enrollmentsPage.queryParams.sort,
+                    'grade'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7l4-4m0 0l4 4m-4-4v18"
+                />
+            </svg>
+            <svg
+                *ngIf="
+                sortParamsUtils.isSortedByPropertyDESC(
+                    enrollmentsPage.queryParams.sort,
+                    'grade'
+                )
+                "
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                />
+            </svg>
+            </div>
+        </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr
+        *ngFor="let enrollment of enrollmentsPage.content"
+        class="bg-indigo-900 hover:bg-indigo-600 text-white shadow-md"
+        >
+        <td><a
+            [routerLink]="'/enrollments/' + enrollment.id"
+            class="hover:text-orange-500"
+            >{{ enrollment.course!.name }}</a
+          ></td>
+        <td>{{ enrollment.startDate }}</td>
+        <td>{{ enrollment.passed ? 'Yes' : 'No' }}</td>
+        <td>{{ enrollment.score }}</td>
+        <td>{{ enrollment.passed ? enrollment.grade : '' }}</td>
+        </tr>
+    </tbody>
+    </table>
+    <div
+        class="flex justify-end"
+        pagination
+        [itemsCount]="enrollmentsPage.totalItemsCount"
+        [pagesCount]="enrollmentsPage.totalPagesCount"
+        [pageSize]="enrollmentsPage.pageSize"
+        [currentPage]="enrollmentsPage.currentPage"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+    ></div>
+</div>

@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { TeacherTeachingCourseFormDialogOptions } from 'src/app/courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import { TeacherTeachingCourseFormDialogOptions } from 'src/app/courses/course/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import { FORM_STATE } from 'src/app/model/common/form-state';
 import { Course } from 'src/app/model/course/course';
 import { CoursePage } from 'src/app/model/course/course-page';
@@ -33,6 +33,7 @@ export class AssignCourseToTeacherFormDialogComponent implements OnInit, OnChang
   teacherNameAndSurname: string | undefined;
 
   showSearchBox = false;
+  showCourses = false;
 
   teacherRoles$: Observable<TeacherRolePage> = of();
   selectedTeacherRole: TeacherRole | undefined;
@@ -112,16 +113,11 @@ export class AssignCourseToTeacherFormDialogComponent implements OnInit, OnChang
 
   submit() {
     this.form.form.markAllAsTouched();
-    console.log('POSTTT assign course to teacher.');
 
     if (this.form.valid) {
       (document.activeElement as HTMLElement).blur();
-      console.log('POSTTT assign course to teache 1111.');
-
       this.teaching.startDate = new Date();
       if (this.selectedTeacherRole ) {
-        console.log('POSTTT assign course to teacher 2222');
-
         this.teaching.teacherRole = this.selectedTeacherRole;
       }
       this.options.save(this.teaching);

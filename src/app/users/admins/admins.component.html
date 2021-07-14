@@ -1,5 +1,7 @@
 <div class="page-content-holder">
-  <div class="page-content-card lg:w-4/5">
+  <div class="page-content-card"
+      [ngClass]="!selectable ? 'lg:w-4/5' : ''"
+      [class.my-0]="selectable">
     <div *ngIf="adminsPage$ | async as adminsPage">
       <confirmation-dialog
         [opened]="confirmationDialogOpened"

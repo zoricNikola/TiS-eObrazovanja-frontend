@@ -1,15 +1,15 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {Teacher} from '../../model/teacher/teacher';
-import {TeacherRole} from '../../model/teacher/teacher-role';
-import {FORM_STATE} from '../../model/common/form-state';
-import {Teaching} from '../../model/teacher/teaching';
+import {Teacher} from '../../../model/teacher/teacher';
+import {TeacherRole} from '../../../model/teacher/teacher-role';
+import {FORM_STATE} from '../../../model/common/form-state';
+import {Teaching} from '../../../model/teacher/teaching';
 import {Observable, of} from 'rxjs';
 import {take} from 'rxjs/operators';
-import {TeachingService} from '../../services/teaching.service';
-import {TeacherRoleService} from '../../services/teacher-role.service';
-import {TeacherRolePage} from '../../model/teacher/teacher-role-page';
-import {TeacherRoleFormDialogOptions} from '../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
+import {TeachingService} from '../../../services/teaching.service';
+import {TeacherRoleService} from '../../../services/teacher-role.service';
+import {TeacherRolePage} from '../../../model/teacher/teacher-role-page';
+import {TeacherRoleFormDialogOptions} from '../../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 
 export interface TeacherTeachingCourseFormDialogOptions {
   state: FORM_STATE;
@@ -35,6 +35,7 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
   teacherNameAndSurname: string | undefined;
 
   showSearchBox = false;
+  showTeachers = false;
 
   teacherRoleFormDialogOpened: boolean = false;
   teacherRoleFormDialogOptions: TeacherRoleFormDialogOptions = {
@@ -88,35 +89,7 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
       !changes.opened.firstChange &&
       !changes.opened.currentValue
     ) {
-      setTimeout(() => {
-        this.form.resetForm();
-        this.teaching = {
-          startDate: new Date(),
-          teacher: {
-            firstName: '',
-            lastName: '',
-            address: '',
-            dateOfBirth: new Date(''),
-            teacherTitle: {
-              id: 0,
-              name: '',
-            },
-            user: {
-              username: '',
-              firstName: '',
-              lastName: '',
-              email: '',
-              phoneNumber: '',
-            },
-          },
-          teacherRole: {
-            name: '',
-          },
-        };
-        this.originalTeachingRole = undefined;
-        this.selectedTeacher = undefined;
-        this.selectedTeacherRole = undefined;
-      }, 3000);
+
     }
   }
 
@@ -125,6 +98,38 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
 
   ngOnInit(): void {
     this.onLoadTeacherRoles();
+  }
+
+  resetForm(): void {
+    setTimeout(() => {
+      this.form.resetForm();
+      this.teaching = {
+        startDate: new Date(),
+        teacher: {
+          firstName: '',
+          lastName: '',
+          address: '',
+          dateOfBirth: new Date(''),
+          teacherTitle: {
+            id: 0,
+            name: '',
+          },
+          user: {
+            username: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+          },
+        },
+        teacherRole: {
+          name: '',
+        },
+      };
+      this.originalTeachingRole = undefined;
+      this.selectedTeacher = undefined;
+      this.selectedTeacherRole = undefined;
+    }, 3000);
   }
 
   onLoadTeacherRoles(): void {
@@ -142,6 +147,7 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
     if (this.selectedTeacher) {
       this.teaching.teacher = this.selectedTeacher;
     }
+    this.showTeachers = false;
   }
 
   submit() {
@@ -154,6 +160,7 @@ export class AssignTeacherToCourseFormDialogComponent implements OnInit, OnChang
         this.teaching.teacherRole = this.selectedTeacherRole;
       }
       this.options.save(this.teaching);
+      this.resetForm();
     }
   }
 

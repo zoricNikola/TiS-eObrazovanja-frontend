@@ -36,7 +36,15 @@
       </div>
       <ul class="hidden xl:flex items-center h-full">
         <a
-          routerLink="/courses"
+          [routerLink]="
+            isUserAdmin()
+              ? '/courses'
+              : isUserStudent()
+              ? '/enrollments'
+              : isUserTeacher()
+              ? '/teachings'
+              : ''
+          "
           *ngIf="user"
           [ngClass]="{ 'active-router-link': isActive('/courses') }"
           class="router-link"

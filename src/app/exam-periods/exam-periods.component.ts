@@ -50,6 +50,7 @@ export class ExamPeriodsComponent implements OnInit {
 
   onExamPeriodTake(): void{
    this.examPeriodTake.emit(this.selectedEXamPeriod);
+   this.selectable = false;
   }
 
   refreshExamPeriodsPage(){

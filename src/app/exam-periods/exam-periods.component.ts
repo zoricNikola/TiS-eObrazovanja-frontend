@@ -19,8 +19,7 @@ import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-peri
   providers: [DatePipe]
 })
 export class ExamPeriodsComponent implements OnInit {
-
-  @Input('selectable') selectable: boolean = true;
+  @Input('selectable') selectable: boolean = false;
   @Output('itemTake') examPeriodTake : EventEmitter<ExamPeriod> = new EventEmitter();
 
   showSearchBox: boolean = false;

@@ -8,7 +8,7 @@ import { Transaction } from 'src/app/model/student/transaction';
 import { TransactionPage } from './../../model/student/transaction-page';
 import { FinancialCardService } from './../../services/financial-card.service';
 import { SortParamsUtils } from './../../services/utils/sort-params-utils.service';
-import { TransactionFormDialogOptions } from './../../users/students/transaction-form-dialog/transaction-form-dialog.component';
+import { TransactionFormDialogOptions } from './transaction-form-dialog/transaction-form-dialog.component';
 
 @Component({
   selector: '[transactions]',

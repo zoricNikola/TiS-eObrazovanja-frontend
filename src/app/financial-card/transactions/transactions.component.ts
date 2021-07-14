@@ -53,7 +53,7 @@ export class TransactionsComponent implements OnInit {
     return TRANSACTION_TYPE[type] === TRANSACTION_TYPE.PAYMENT as any;
   }
 
-  onTransactionSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
+  onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
     let newSortParams = this.sortParamsUtils.updateSortParams(
       sortParams,
       triggeredProperty
@@ -65,14 +65,14 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
-  onTransactionPageChange(selectedPage: number): void {
+  onPageChange(selectedPage: number): void {
     this.transactionsQueryMap.next({
       ...this.transactionsQueryMap.value,
       page: selectedPage
     });
   }
 
-  onTransactionPageSizeChange(selectedPageSize: number): void {
+  onPageSizeChange(selectedPageSize: number): void {
     this.transactionsQueryMap.next({
       ...this.transactionsQueryMap.value,
       size: selectedPageSize

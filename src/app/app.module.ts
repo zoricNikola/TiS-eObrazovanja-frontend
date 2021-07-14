@@ -52,6 +52,9 @@ import { StudentComponent } from './users/students/student/student.component';
 import { ExamFormDialogComponent } from './courses/exams/exam-form-dialog/exam-form-dialog.component';
 import { TransactionsComponent } from './financial-card/transactions/transactions.component';
 import { TransactionFormDialogComponent } from './financial-card/transactions/transaction-form-dialog/transaction-form-dialog.component';
+import { StudentEnrollmentsComponent } from './users/students/student-enrollments/student-enrollments.component';
+import { StudentEnrollmentFormDialogComponent } from './users/students/student-enrollments/student-enrollment-form-dialog/student-enrollment-form-dialog.component';
+import { SelectCourseDialogComponent } from './courses/select-course-dialog/select-course-dialog.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +91,9 @@ import { TransactionFormDialogComponent } from './financial-card/transactions/tr
     ExamFormDialogComponent,
     TransactionFormDialogComponent,
     TransactionsComponent,
+    StudentEnrollmentsComponent,
+    StudentEnrollmentFormDialogComponent,
+    SelectCourseDialogComponent,
   ],
   imports: [
     BrowserModule,

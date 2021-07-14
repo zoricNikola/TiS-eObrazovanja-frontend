@@ -1,0 +1,11 @@
+<app-dialog [opened]="opened" [modal]="true">
+    <ng-container class="heading">Choose course</ng-container>
+    <ng-container class="content">
+        <div courses [selectable]="true" (itemTake)="taken.emit($event)"></div>
+    </ng-container>
+    <ng-container class="footer">
+        <div class="inline-flex w-full justify-end space-x-2">
+            <button class="btn-sm-red" (click)="canceled.emit()">Cancel</button>
+          </div>
+    </ng-container>
+</app-dialog>

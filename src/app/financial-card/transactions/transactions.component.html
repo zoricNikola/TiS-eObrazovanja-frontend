@@ -41,7 +41,7 @@
         <th
             class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
             (click)="
-            onTransactionSortOptionsChange(transactionsPage.queryParams.sort, 'date')
+            onSortOptionsChange(transactionsPage.queryParams.sort, 'date')
             "
         >
             <div class="flex justify-center">
@@ -91,7 +91,7 @@
         <th
             class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
             (click)="
-            onTransactionSortOptionsChange(transactionsPage.queryParams.sort, 'description')
+            onSortOptionsChange(transactionsPage.queryParams.sort, 'description')
             "
         >
             <div class="flex justify-center">
@@ -141,7 +141,7 @@
         <th
             class="hover:bg-red-400 active:bg-orange-400 cursor-pointer"
             (click)="
-            onTransactionSortOptionsChange(transactionsPage.queryParams.sort, 'ammount')
+            onSortOptionsChange(transactionsPage.queryParams.sort, 'ammount')
             "
         >
             <div class="flex justify-center">
@@ -208,7 +208,7 @@
     [pagesCount]="transactionsPage.totalPagesCount"
     [pageSize]="transactionsPage.pageSize"
     [currentPage]="transactionsPage.currentPage"
-    (pageChange)="onTransactionPageChange($event)"
-    (pageSizeChange)="onTransactionPageSizeChange($event)"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
     ></div>
 </div>

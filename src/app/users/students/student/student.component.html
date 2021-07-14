@@ -349,10 +349,7 @@
                   Enrollments
                 </button>
                 <div accordion [opened]="showEnrollments">
-                  <p>Enrollments...</p>
-                  <p>Enrollments...</p>
-                  <p>Enrollments...</p>
-                  <p>Enrollments...</p>
+                  <div student-enrollments [studentX]="originalStudent"></div>
                 </div>
                 <button
                     title="Show documents"

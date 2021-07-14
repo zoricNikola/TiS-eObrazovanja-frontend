@@ -1,7 +1,7 @@
 <app-dialog [opened]="opened" [modal]="true" xmlns="http://www.w3.org/1999/html">
   <ng-container class="heading">{{
     options.state === FORM_STATE.ADD
-      ? "Assign teacher to course"
+      ? "Create an exam"
       : "Edit " + originalDescription
     }}</ng-container>
   <ng-container class="content">
@@ -10,18 +10,16 @@
         <form #f="ngForm" (ngSubmit)="submit()">
           <div
             class="
-          flex flex-col
-          w-full
-          px-8
-          py-4
-          space-y-4
-          justify-evenly
-          bg-indigo-800
-          items-center
-        "
+            flex flex-col
+            w-full
+            px-4
+            py-4
+            space-y-4
+            justify-evenly
+            bg-indigo-800
+            items-center"
           >
-            <div class="flex w-full space-x-4 pl-1/3">
-              <div class="custom-input-holder w-1/2">
+              <div class="custom-input-holder w-full">
                 <input
                   required
                   id="dateTime"
@@ -44,7 +42,7 @@
                   </div>
                 </div>
               </div>
-              <div class="custom-input-holder w-1/2">
+              <div class="custom-input-holder w-full">
                 <input
                   required
                   id="description"
@@ -67,9 +65,7 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="flex w-full space-x-4">
-              <div class="custom-input-holder w-1/2">
+              <div class="custom-input-holder w-full">
                 <input
                   required
                   id="classroom"
@@ -92,10 +88,63 @@
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </form>
-      <div exam-periods (itemTake)="onExamPeriodTaken($event)"></div>
+        <div
+            class="
+            flex flex-col
+            w-full
+            px-4
+            space-y-4
+            justify-evenly
+            bg-indigo-800
+            items-center"
+        >
+        <div class="custom-input-holder w-full">
+          <button class="btn btn-green inline-flex items-center item-underlined w-full"
+                  (click)="showExamPeriods = !showExamPeriods"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Select exam period
+          </button>
+          <div
+            *ngIf="exam.examPeriod.name === ''"
+            class="input-error-holder"
+          >
+            <div class="flex-col space-y-2">
+              <div *ngIf="exam.examPeriod.name === ''">
+                You need to select exam period
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="custom-input-holder w-full" *ngIf="exam.examPeriod.name !== ''">
+            <input
+              disabled
+              id="examPeriod"
+              name="examPeriod"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [(ngModel)]="exam.examPeriod.name"
+              #examPeriod="ngModel"
+            />
+            <label for="examPeriod">Exam period</label>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -113,4 +162,21 @@
     </div>
   </ng-container>
 
+</app-dialog>
+
+<app-dialog [opened]="showExamPeriods" [modal]="true" xmlns="http://www.w3.org/1999/html">
+  <ng-container class="heading">Select an exam period</ng-container>
+  <ng-container class="content">
+    <div
+         exam-periods
+         (itemTake)="onExamPeriodTaken($event)"
+         [selectable]="true"
+    >
+    </div>
+  </ng-container>
+  <ng-container class="footer">
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button class="btn-sm-red" (click)="showExamPeriods = !showExamPeriods">Cancel</button>
+    </div>
+  </ng-container>
 </app-dialog>

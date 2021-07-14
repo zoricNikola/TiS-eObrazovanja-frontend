@@ -11,20 +11,21 @@
     </teacher-role-form-dialog>
     <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800" >
       <div class="flex flex-col w-200 space-y-4 bg-indigo-800" >
-        <div class="custom-input-holder">
-          <div *ngIf="options.state === FORM_STATE.ADD" teachers (itemTake)="onTeacherTaken($event)"></div>
-          <div *ngIf="selectedTeacher === undefined && options.state === FORM_STATE.ADD"
-               class="input-error-holder -mt-10">
-            <div class="flex-col space-y-2">
-              <div>
-                You need to select and take take teacher
-              </div>
-            </div>
-          </div>
-        </div>
+        <div
+          class="
+            flex flex-col
+            w-full
+            px-4
+            py-4
+            space-y-4
+            justify-evenly
+            bg-indigo-800
+            items-center"
+        >
 
         <form #f="ngForm" (ngSubmit)="submit()">
-          <div class="custom-input-holder" *ngIf="teacherRoles$ | async as teacherRoles">
+          <div *ngIf="teacherRoles$ | async as teacherRoles">
+            <div class="custom-input-holder w-full">
             <select
               required
               id="teacherRole"
@@ -48,28 +49,78 @@
                 </div>
               </div>
             </div>
+            </div>
           </div>
         </form>
-        <a
-          class="btn btn-green items-center mt-2"
-          (click)="onNewTeacherRoleClick()"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+
+          <div class="custom-input-holder w-full">
+            <button
+              class="btn btn-green inline-flex items-center item-underlined w-full"
+              (click)="onNewTeacherRoleClick()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              New role
+            </button>
+          </div>
+
+          <div class="custom-input-holder w-full" *ngIf="options.state === FORM_STATE.ADD">
+            <button class="btn btn-green inline-flex items-center item-underlined w-full"
+                    (click)="showTeachers = !showTeachers"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Select teacher
+            </button>
+            <div
+              *ngIf="teaching.teacher.lastName === ''"
+              class="input-error-holder"
+            >
+              <div class="flex-col space-y-2">
+                <div *ngIf="teaching.teacher.lastName === ''">
+                  You need to select teacher
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="custom-input-holder w-full" *ngIf="teaching.teacher.lastName !== ''">
+            <input
+              disabled
+              id="teacherName"
+              name="teacherName"
+              type="text"
+              placeholder=" "
+              class="input-underlined"
+              [value]="teaching.teacher.lastName + ' ' +teaching.teacher.firstName"
             />
-          </svg>
-          New role
-        </a>
+            <label for="teacherName">Teacher</label>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -84,6 +135,23 @@
       >
         Save
       </button>
+    </div>
+  </ng-container>
+</app-dialog>
+
+<app-dialog [opened]="showTeachers" [modal]="true" xmlns="http://www.w3.org/1999/html">
+  <ng-container class="heading">Select teacher</ng-container>
+  <ng-container class="content">
+    <div
+      teachers
+      (itemTake)="onTeacherTaken($event)"
+      [selectable]="true"
+    >
+    </div>
+  </ng-container>
+  <ng-container class="footer">
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button class="btn-sm-red" (click)="showTeachers = !showTeachers">Cancel</button>
     </div>
   </ng-container>
 </app-dialog>

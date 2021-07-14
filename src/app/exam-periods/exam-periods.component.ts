@@ -19,8 +19,7 @@ import { ExamPeriodFormDialogOptions } from './exam-period-form-dialog/exam-peri
   providers: [DatePipe]
 })
 export class ExamPeriodsComponent implements OnInit {
-
-  @Input('selectable') selectable: boolean = true;
+  @Input('selectable') selectable: boolean = false;
   @Output('itemTake') examPeriodTake : EventEmitter<ExamPeriod> = new EventEmitter();
 
   showSearchBox: boolean = false;
@@ -28,7 +27,7 @@ export class ExamPeriodsComponent implements OnInit {
   examPeriodForEdit: ExamPeriod | undefined = undefined;
   selectedEXamPeriod: ExamPeriod | undefined = undefined;
 
-  examPeriodsPage$ : Observable<ExamPeriodPage> = of();
+  examPeriodsPage$: Observable<ExamPeriodPage> = of();
 
 
   constructor(private examPeriodService: ExamPeriodService,
@@ -51,6 +50,7 @@ export class ExamPeriodsComponent implements OnInit {
 
   onExamPeriodTake(): void{
    this.examPeriodTake.emit(this.selectedEXamPeriod);
+   this.selectable = false;
   }
 
   refreshExamPeriodsPage(){

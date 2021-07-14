@@ -10,6 +10,9 @@ import {TeacherTeachingCourseFormDialogOptions} from '../assign-teacher-to-cours
 import {TeachingService} from '../../services/teaching.service';
 import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confirmation-dialog.component';
 import {take} from 'rxjs/operators';
+import { EnrollmentPage } from 'src/app/model/student/enrollment-page';
+import { EnrollmentService } from 'src/app/services/enrollment.service';
+import { Enrollment } from 'src/app/model/student/enrollment';
 
 
 @Component({
@@ -24,10 +27,12 @@ export class CourseComponent implements OnInit {
   course$: Observable<Course> = of();
   course!: Course;
 
-  teachersTeachingCoursePage$: Observable<TeachingPage> = of ();
+  teachersTeachingCoursePage$: Observable<TeachingPage> = of();
+  courseEnrollmentsPage$: Observable<EnrollmentPage> = of();
 
   showTeachings = false;
   showExams = false;
+  showStudents = false;
 
   teacherTeachingCourseFormDialogOpened: boolean = false;
   teacherTeachingCourseFormDialogOptions: TeacherTeachingCourseFormDialogOptions = {
@@ -48,12 +53,14 @@ export class CourseComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private courseService: CourseService,
-              private teachingService: TeachingService) { }
+              private teachingService: TeachingService,
+              private enrollmentService: EnrollmentService) { }
 
   ngOnInit(): void {
     this.course$ = this.courseService.getCourse(this.selectedCourseId);
     this.courseService.getCourse(this.selectedCourseId).subscribe((course: Course) => this.course = course);
     this.teachersTeachingCoursePage$ = this.teachingService.getTeachersTeachingCourse(this.selectedCourseId);
+    this.courseEnrollmentsPage$ = this.enrollmentService.getCourseEnrollments(this.selectedCourseId);
   }
 
   goBack(): void {
@@ -133,5 +140,11 @@ export class CourseComponent implements OnInit {
       }
     };
   }
+
+  onNewEnrollmentClick(): void {}
+
+  onEditEnrollmentClick(enrollment: Enrollment): void {}
+
+  onDeleteEnrollmentClick(enrollment: Enrollment): void {}
 
 }

@@ -1,15 +1,15 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {Teacher} from '../../model/teacher/teacher';
-import {TeacherRole} from '../../model/teacher/teacher-role';
-import {FORM_STATE} from '../../model/common/form-state';
-import {Teaching} from '../../model/teacher/teaching';
+import {Teacher} from '../../../model/teacher/teacher';
+import {TeacherRole} from '../../../model/teacher/teacher-role';
+import {FORM_STATE} from '../../../model/common/form-state';
+import {Teaching} from '../../../model/teacher/teaching';
 import {Observable, of} from 'rxjs';
 import {take} from 'rxjs/operators';
-import {TeachingService} from '../../services/teaching.service';
-import {TeacherRoleService} from '../../services/teacher-role.service';
-import {TeacherRolePage} from '../../model/teacher/teacher-role-page';
-import {TeacherRoleFormDialogOptions} from '../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
+import {TeachingService} from '../../../services/teaching.service';
+import {TeacherRoleService} from '../../../services/teacher-role.service';
+import {TeacherRolePage} from '../../../model/teacher/teacher-role-page';
+import {TeacherRoleFormDialogOptions} from '../../../users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 
 export interface TeacherTeachingCourseFormDialogOptions {
   state: FORM_STATE;

@@ -1,0 +1,125 @@
+<app-dialog [opened]="opened" [modal]="true" xmlns="http://www.w3.org/1999/html">
+  <ng-container class="heading">{{
+    options.state === FORM_STATE.ADD
+      ? "Create an exam obligation"
+      : "Edit "
+    }}</ng-container>
+  <ng-container class="content">
+    <app-exam-obligation-type
+      [opened]="examObligationTypeFormOpened"
+      [options]="examObligationTypeFormOptions">
+    </app-exam-obligation-type>
+
+    <div class="flex px-8 py-4 space-x-8 justify-evenly bg-indigo-800" >
+      <div class="flex flex-col space-y-4 bg-indigo-800" >
+        <div
+          class="
+            flex flex-col
+            w-full
+            px-4
+            py-4
+            space-y-4
+            justify-evenly
+            bg-indigo-800
+            items-center"
+        >
+
+          <form #f="ngForm" (ngSubmit)="submit()">
+            <div class="custom-input-holder w-full mb-4">
+              <input
+                required
+                id="description"
+                name="description"
+                type="text"
+                placeholder=" "
+                class="input-underlined"
+                [(ngModel)]="examObligation.description"
+                #description="ngModel"
+              />
+              <label for="description">Description</label>
+              <div
+                *ngIf="description.touched && description.invalid"
+                class="input-error-holder"
+              >
+                <div class="flex-col space-y-2">
+                  <div *ngIf="description.errors?.required">
+                    Description is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="examObligationTypePage$ | async as examObligationType">
+              <div class="custom-input-holder w-full">
+                <select
+                  required
+                  id="examObligationType"
+                  name="examObligationType"
+                  class="input-underlined"
+                  [(ngModel)]="examObligation.examObligationType"
+                  #examObligations="ngModel">
+                  <option
+                    *ngFor="let examObligations of examObligationType.content"
+                    [ngValue]="examObligations"
+                  >
+                    {{examObligations.name}}
+                  </option>
+                </select>
+                <label for="examObligationType">Exam obligation type</label>
+                <div *ngIf="examObligations.touched && examObligations.invalid"
+                     class="input-error-holder">
+                  <div class="flex-col space-y-2">
+                    <div *ngIf="examObligations.errors?.required">
+                      Exam obligation type is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="custom-input-holder w-full mt-4">
+            <button
+              class="btn btn-green inline-flex items-center item-underlined w-full"
+              (click)="onNewExamObligationTypeClick()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+               Exam obligation type
+            </button>
+          </div>
+
+
+
+
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+  <ng-container class="footer">
+    <div class="inline-flex w-full justify-end space-x-2">
+      <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
+      <button
+        [disabled]="f.invalid"
+        class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+        (click)="f.onSubmit($event)"
+      >
+        Save
+      </button>
+    </div>
+  </ng-container>
+
+</app-dialog>
+
+

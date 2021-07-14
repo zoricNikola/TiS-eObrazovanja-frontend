@@ -6,7 +6,7 @@ import {Observable, of} from 'rxjs';
 import {TeachingPage} from '../../model/teacher/teaching-page';
 import {FORM_STATE} from '../../model/common/form-state';
 import {Teaching} from '../../model/teacher/teaching';
-import {TeacherTeachingCourseFormDialogOptions} from '../assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import {TeacherTeachingCourseFormDialogOptions} from './assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import {TeachingService} from '../../services/teaching.service';
 import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confirmation-dialog.component';
 import {take} from 'rxjs/operators';
@@ -28,6 +28,7 @@ export class CourseComponent implements OnInit {
 
   showTeachings = false;
   showExams = false;
+  showExamObligations = false;
 
   teacherTeachingCourseFormDialogOpened: boolean = false;
   teacherTeachingCourseFormDialogOptions: TeacherTeachingCourseFormDialogOptions = {

@@ -44,7 +44,7 @@ import { StudentsComponent } from './users/students/students.component';
 import { StudentFormDialogComponent } from './users/students/student-form-dialog/student-form-dialog.component';
 import { TeacherFormDialogComponent } from './users/teachers/teacher-form-dialog/teacher-form-dialog.component';
 import { CourseComponent } from './courses/course/course.component';
-import { AssignTeacherToCourseFormDialogComponent } from './courses/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
+import { AssignTeacherToCourseFormDialogComponent } from './courses/course/assign-teacher-to-course-form-dialog/assign-teacher-to-course-form-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TeacherRoleFormDialogComponent } from './users/teachers/teacher-role-form-dialog/teacher-role-form-dialog.component';
 import { ExamsComponent } from './courses/exams/exams.component';
@@ -55,6 +55,9 @@ import { TransactionFormDialogComponent } from './financial-card/transactions/tr
 import { StudentEnrollmentsComponent } from './users/students/student-enrollments/student-enrollments.component';
 import { StudentEnrollmentFormDialogComponent } from './users/students/student-enrollments/student-enrollment-form-dialog/student-enrollment-form-dialog.component';
 import { SelectCourseDialogComponent } from './courses/select-course-dialog/select-course-dialog.component';
+import { ExamObligationComponent} from './courses/exam-obligation/exam-obligation.component';
+import { ExamObligationFormDialogComponent} from './courses/exam-obligation/exam-obligation-form-dialog/exam-obligation-form-dialog.component';
+import { ExamObligationTypeComponent} from './courses/exam-obligation-type/exam-obligation-type.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +97,9 @@ import { SelectCourseDialogComponent } from './courses/select-course-dialog/sele
     StudentEnrollmentsComponent,
     StudentEnrollmentFormDialogComponent,
     SelectCourseDialogComponent,
+    ExamObligationComponent,
+    ExamObligationFormDialogComponent,
+    ExamObligationTypeComponent
   ],
   imports: [
     BrowserModule,

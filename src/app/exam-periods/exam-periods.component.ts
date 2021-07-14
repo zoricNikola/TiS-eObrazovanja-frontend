@@ -27,7 +27,7 @@ export class ExamPeriodsComponent implements OnInit {
   examPeriodForEdit: ExamPeriod | undefined = undefined;
   selectedEXamPeriod: ExamPeriod | undefined = undefined;
 
-  examPeriodsPage$ : Observable<ExamPeriodPage> = of();
+  examPeriodsPage$: Observable<ExamPeriodPage> = of();
 
 
   constructor(private examPeriodService: ExamPeriodService,

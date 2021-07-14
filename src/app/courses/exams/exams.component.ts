@@ -19,7 +19,7 @@ import {Course} from '../../model/course/course';
   styleUrls: ['./exams.component.css']
 })
 export class ExamsComponent implements OnInit {
-  @Input('selectable') selectable = true;
+  @Input('selectable') selectable = false;
   @Input('courseId') courseId: number | undefined;
   @Output('itemTake') examTake: EventEmitter<Exam> = new EventEmitter<Exam>();
 

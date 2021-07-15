@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from 'src/app/model/user/user';
-import { Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import { AdminPage } from './../../model/user/admin-page';
 import { AdminsService } from './../../services/admins.service';
 import { switchMap, take } from 'rxjs/operators';
@@ -22,6 +22,13 @@ export class AdminsComponent implements OnInit {
 
   selectedAdmin: User | undefined = undefined;
 
+  adminsQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
+
   adminsPage$: Observable<AdminPage> = of();
 
   showSearchBox: boolean = false;
@@ -34,56 +41,92 @@ export class AdminsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.adminsPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
+    if (!this.selectable) {
+      this.adminsPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          let pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+
+          let queryParams = {
+            firstName: paramMap.get('firstName'),
+            lastName: paramMap.get('lastName'),
+            username: paramMap.get('username'),
+            email: paramMap.get('email'),
+            phoneNumber: paramMap.get('phoneNumber'),
+            sort: paramMap.getAll('sort'),
+          };
+
+          return this.adminsService.filterAdmins(pageParams, queryParams);
+        })
+      );
+    } else {
+      this.adminsPage$ = this.adminsQueryMap.pipe(switchMap((paramMap) => {
+        const pageParams: PageParams = new PageParams(
+          paramMap.page,
+          paramMap.size
         );
 
-        let queryParams = {
-          firstName: paramMap.get('firstName'),
-          lastName: paramMap.get('lastName'),
-          username: paramMap.get('username'),
-          email: paramMap.get('email'),
-          phoneNumber: paramMap.get('phoneNumber'),
-          sort: paramMap.getAll('sort'),
+        const queryParams = {
+          sort: paramMap.sort,
+          name: paramMap.name
         };
 
         return this.adminsService.filterAdmins(pageParams, queryParams);
-      })
-    );
+      }));
+    }
   }
 
   onPageChange(selectedPage: number): void {
-    this.selectable ? (this.selectedAdmin = undefined) : {};
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.adminsQueryMap.next({
+        ...this.adminsQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.selectable ? (this.selectedAdmin = undefined) : {};
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.adminsQueryMap.next({
+        ...this.adminsQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
-    this.selectable ? (this.selectedAdmin = undefined) : {};
-    for (let key of Object.keys(queryParams)) {
-      if (!queryParams[key]) queryParams[key] = null;
+    for (const key of Object.keys(queryParams)) {
+      if (!queryParams[key]) {
+        queryParams[key] = null;
+      }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.adminsQueryMap.next({
+        ...this.adminsQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -92,11 +135,19 @@ export class AdminsComponent implements OnInit {
       sortParams,
       triggeredProperty
     );
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.adminsQueryMap.next({
+        ...this.adminsQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 
   onAdminSelect(admin: User): void {
@@ -104,17 +155,26 @@ export class AdminsComponent implements OnInit {
   }
 
   onAdminTake(): void {
-    this.adminTake.emit(this.selectedAdmin);
+    let admin: User = {...this.selectedAdmin as User};
+    this.selectedAdmin = undefined;
+    this.adminTake.emit(admin);
   }
 
   refreshAdminsPage(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.adminsQueryMap.next({
+        ...this.adminsQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   adminFormDialogOpened: boolean = false;

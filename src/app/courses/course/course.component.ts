@@ -28,7 +28,6 @@ export class CourseComponent implements OnInit {
   course!: Course;
 
   teachersTeachingCoursePage$: Observable<TeachingPage> = of();
-  courseEnrollmentsPage$: Observable<EnrollmentPage> = of();
 
   showTeachings = false;
   showExams = false;
@@ -54,14 +53,12 @@ export class CourseComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private courseService: CourseService,
-              private teachingService: TeachingService,
-              private enrollmentService: EnrollmentService) { }
+              private teachingService: TeachingService) { }
 
   ngOnInit(): void {
     this.course$ = this.courseService.getCourse(this.selectedCourseId);
     this.courseService.getCourse(this.selectedCourseId).subscribe((course: Course) => this.course = course);
     this.teachersTeachingCoursePage$ = this.teachingService.getTeachersTeachingCourse(this.selectedCourseId);
-    this.courseEnrollmentsPage$ = this.enrollmentService.getCourseEnrollments(this.selectedCourseId);
   }
 
   goBack(): void {
@@ -141,11 +138,5 @@ export class CourseComponent implements OnInit {
       }
     };
   }
-
-  onNewEnrollmentClick(): void {}
-
-  onEditEnrollmentClick(enrollment: Enrollment): void {}
-
-  onDeleteEnrollmentClick(enrollment: Enrollment): void {}
 
 }

@@ -1,0 +1,72 @@
+<app-dialog [opened]="opened" [modal]="true">
+    <ng-container class="heading">
+        Assign {{ options.course?.name }} to the student
+    </ng-container>
+
+    <ng-container class="content">
+        <select-student-dialog
+        [opened]="selectStudentDialogOpened"
+        (canceled)="selectStudentDialogOpened = false"
+        (taken)="onStudentSelected($event)">
+        </select-student-dialog>
+
+        <form #f="ngForm">
+            <div
+              class="
+                flex flex-col
+                w-full
+                px-8
+                py-4
+                space-y-4
+                justify-evenly
+                bg-indigo-800
+              ">
+                <div class="custom-input-holder">
+                    <input
+                        disabled 
+                        required 
+                        id="student" 
+                        name="student" 
+                        type="text" 
+                        placeholder=" "
+                        class="input-underlined w-9/12"
+                        [(ngModel)]="enrollment.student.firstName + '  ' + enrollment.student.lastName"
+                        #student="ngModel"/>
+                    <label for="student">Student</label>
+                    <button
+                        title="Choose a student"
+                        class="absolute right-0 top-2 w-1/5 text-base btn btn-yellow inline-flex items-center"
+                        (click)="selectStudentDialogOpened = true"
+                        >
+                            <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+                        />
+                            </svg>
+                            Take
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container class="footer">
+        <div class="inline-flex w-full justify-end space-x-2">
+            <button class="btn-sm-red" (click)="options.cancel()">Cancel</button>
+            <button
+              [disabled]="f.invalid || !enrollment.student.id"
+              class="btn-sm-blue disabled:bg-gray-600 disabled:opacity-50"
+              (click)="submit()"
+            >
+              Save
+            </button>
+          </div>
+    </ng-container>
+</app-dialog>

@@ -9,6 +9,8 @@ import { ResponsePage } from '../model/http/response-page';
 import { Course } from '../model/course/course';
 import { BaseService } from './base.service';
 import {AuthService} from './auth.service';
+import { Enrollment } from '../model/student/enrollment';
+import { EnrollmentPage } from '../model/student/enrollment-page';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +81,31 @@ export class CoursesService extends BaseService{
           return page;
         })
       );
+    }
+
+    filterEnrollments(courseId: number, pageParams: PageParams, queryParams?: any): Observable<EnrollmentPage> {
+      let params: any = {
+        page: pageParams.page,
+        size: pageParams.size,
+      };
+  
+      if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+  
+      return this.http.get(`${environment.apiUrl}/courses/${courseId}/enrollments`, { params, observe: 'response' })
+        .pipe(map((response) => response.body)).pipe(catchError(this.handleError))
+        .pipe(map((responseBody) => {
+          const body = responseBody as ResponsePage<Enrollment>;
+          let page: EnrollmentPage = {
+            content: body.content,
+            contentCount: body.numberOfElements,
+            totalItemsCount: body.totalElements,
+            totalPagesCount: body.totalPages,
+            pageSize: pageParams.size,
+            currentPage: pageParams.page,
+            queryParams: queryParams,
+          };
+          return page;
+        }));
     }
 
     createCourse(course: Course): Observable<Course> {

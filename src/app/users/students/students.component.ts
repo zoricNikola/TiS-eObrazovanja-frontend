@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import { Student } from 'src/app/model/student/student';
 import { StudentPage } from './../../model/student/student-page';
 import { StudentsService } from './../../services/students.service';
@@ -22,6 +22,13 @@ export class StudentsComponent implements OnInit {
 
   selectedStudent: Student | undefined = undefined;
 
+  studentsQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
+
   studentsPage$: Observable<StudentPage> = of();
 
   showSearchBox: boolean = false;
@@ -34,62 +41,97 @@ export class StudentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.studentsPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
+    if (!this.selectable) {
+      this.studentsPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          let pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+
+          let queryParams = {
+            firstName: paramMap.get('firstName'),
+            lastName: paramMap.get('lastName'),
+            studentCard: paramMap.get('studentCard'),
+            address: paramMap.get('address'),
+            generationFrom: paramMap.get('generationFrom'),
+            generationTo: paramMap.get('generationTo'),
+            dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
+            dateOfBirthTo: paramMap.get('dateOfBirthTo'),
+            username: paramMap.get('username'),
+            email: paramMap.get('email'),
+            phoneNumber: paramMap.get('phoneNumber'),
+            sort: paramMap.getAll('sort'),
+          };
+          return this.studentsService.filterStudents(pageParams, queryParams);
+        })
+      );
+    } else {
+      this.studentsPage$ = this.studentsQueryMap.pipe(switchMap((paramMap) => {
+        const pageParams: PageParams = new PageParams(
+          paramMap.page,
+          paramMap.size
         );
 
-        let queryParams = {
-          firstName: paramMap.get('firstName'),
-          lastName: paramMap.get('lastName'),
-          studentCard: paramMap.get('studentCard'),
-          address: paramMap.get('address'),
-          generationFrom: paramMap.get('generationFrom'),
-          generationTo: paramMap.get('generationTo'),
-          dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
-          dateOfBirthTo: paramMap.get('dateOfBirthTo'),
-          username: paramMap.get('username'),
-          email: paramMap.get('email'),
-          phoneNumber: paramMap.get('phoneNumber'),
-          sort: paramMap.getAll('sort'),
+        const queryParams = {
+          sort: paramMap.sort,
+          name: paramMap.name
         };
 
         return this.studentsService.filterStudents(pageParams, queryParams);
-      })
-    );
+      }));
+    }
   }
 
   onPageChange(selectedPage: number): void {
-    this.selectable ? (this.selectedStudent = undefined) : {};
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.studentsQueryMap.next({
+        ...this.studentsQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.selectable ? (this.selectedStudent = undefined) : {};
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.studentsQueryMap.next({
+        ...this.studentsQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
-    this.selectable ? (this.selectedStudent = undefined) : {};
-    for (let key of Object.keys(queryParams)) {
-      if (!queryParams[key]) queryParams[key] = null;
+    for (const key of Object.keys(queryParams)) {
+      if (!queryParams[key]) {
+        queryParams[key] = null;
+      }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.studentsQueryMap.next({
+        ...this.studentsQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -98,11 +140,19 @@ export class StudentsComponent implements OnInit {
       sortParams,
       triggeredProperty
     );
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.studentsQueryMap.next({
+        ...this.studentsQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 
   onStudentSelect(student: Student): void {
@@ -111,17 +161,26 @@ export class StudentsComponent implements OnInit {
   }
 
   onStudentTake(): void {
-    this.studentTake.emit(this.selectedStudent);
+    let student: Student = {...this.selectedStudent as Student};
+    this.selectedStudent = undefined;
+    this.studentTake.emit(student);
   }
 
   refreshStudentsPage(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.studentsQueryMap.next({
+        ...this.studentsQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   studentFormDialogOpened: boolean = false;

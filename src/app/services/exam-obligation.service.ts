@@ -73,7 +73,7 @@ export class ExamObligationService extends BaseService{
 
   getExamObligations(params: any, courseId?: number): Observable<any> {
     return this.http.get(
-      `${environment.apiUrl}/examObligations/${courseId}/course`,
+      `${environment.apiUrl}/courses/${courseId}/examObligations`,
       {params, observe: 'response'}
     ).pipe(map((response) => response.body))
       .pipe(catchError(this.handleError));

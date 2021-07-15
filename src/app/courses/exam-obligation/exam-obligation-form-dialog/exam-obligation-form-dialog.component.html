@@ -48,6 +48,29 @@
                 </div>
               </div>
             </div>
+            <div class="custom-input-holder w-full mb-4">
+              <input
+                required
+                id="points"
+                name="points"
+                type="text"
+                placeholder=" "
+                class="input-underlined"
+                [(ngModel)]="examObligation.points"
+                #points="ngModel"
+              />
+              <label for="points">Points</label>
+              <div
+                *ngIf="points.touched && points.invalid"
+                class="input-error-holder"
+              >
+                <div class="flex-col space-y-2">
+                  <div *ngIf="points.errors?.required">
+                    Points are required
+                  </div>
+                </div>
+              </div>
+            </div>
             <div *ngIf="examObligationTypePage$ | async as examObligationType">
               <div class="custom-input-holder w-full">
                 <select

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Exam} from '../../model/exam/exam';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {ExamPage} from '../../model/exam/exam-page';
 import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confirmation-dialog.component';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -25,6 +25,13 @@ export class ExamsComponent implements OnInit {
 
   selectedExam: Exam | undefined = undefined;
   course!: Course;
+
+  examQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
 
   examsPage$: Observable<ExamPage> = of();
 
@@ -53,41 +60,71 @@ export class ExamsComponent implements OnInit {
               public sortParamUtils: SortParamsUtils) { }
 
   ngOnInit(): void {
-    this.examsPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
+    if (!this.selectable) {
+      this.examsPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          const pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+
+          const queryParams = {
+            description: paramMap.get('description'),
+            classroom: paramMap.get('classroom'),
+            points: paramMap.get('points'),
+            dateFrom: paramMap.get('startDate'),
+            dateTo: paramMap.get('endDate'),
+            sort: paramMap.getAll('sort'),
+          };
+          return this.examService.filterCourseExams(pageParams, queryParams, this.courseId);
+        })
+      );
+    } else {
+      this.examsPage$ = this.examQueryMap.pipe(switchMap((paramMap) => {
         const pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
+          paramMap.page,
+          paramMap.size
         );
 
         const queryParams = {
-          description: paramMap.get('description'),
-          classroom: paramMap.get('classroom'),
-          points: paramMap.get('points'),
-          dateFrom: paramMap.get('startDate'),
-          dateTo: paramMap.get('endDate'),
-          sort: paramMap.getAll('sort'),
+          sort: paramMap.sort,
+          name: paramMap.name
         };
+
         return this.examService.filterCourseExams(pageParams, queryParams, this.courseId);
-      })
-    );
+      }));
+    }
     this.courseService.getCourse(this.courseId).subscribe((course: Course) => this.course = course);
   }
 
   onPageChange(selectedPage: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examQueryMap.next({
+        ...this.examQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examQueryMap.next({
+        ...this.examQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
@@ -97,11 +134,18 @@ export class ExamsComponent implements OnInit {
       }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examQueryMap.next({
+        ...this.examQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -111,11 +155,18 @@ export class ExamsComponent implements OnInit {
       triggeredProperty
     );
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examQueryMap.next({
+        ...this.examQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 
   onExamSelect(exam: Exam): void {
@@ -123,17 +174,26 @@ export class ExamsComponent implements OnInit {
   }
 
   onExamTake(): void {
-    this.examTake.emit(this.selectedExam);
+    let exam: Exam = {...this.selectedExam as Exam};
+    this.selectedExam = undefined;
+    this.examTake.emit(exam);
   }
 
   refreshExamsPage(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examQueryMap.next({
+        ...this.examQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   onNewExamClick(): void {

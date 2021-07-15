@@ -2,6 +2,7 @@
   <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
     <div *ngIf="teachersTeachingCoursePage$ | async as teachings">
       <assign-teacher-to-course-form-dialog
+      *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
         [opened]="teacherTeachingCourseFormDialogOpened"
         [options]="teacherTeachingCourseFormDialogOptions"
       ></assign-teacher-to-course-form-dialog>
@@ -73,6 +74,7 @@
 
     <div accordion [opened]="showTeachings">
       <button
+      *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
         class="btn btn-green inline-flex items-center"
         (click)="onNewTeacherTeachingCourseClick()"
       >
@@ -156,6 +158,7 @@
 
           <td class="w-16">
             <button
+            *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
               class="btn-sm-yellow"
               (click)="onEditTeacherTeachingCourseClick(teaching)"
             >
@@ -177,6 +180,7 @@
           </td>
           <td class="w-16">
             <button
+              *ngIf="authService.currentUser?.authorities!.includes('ADMIN')"
               class="btn-sm-red"
               (click)="onDeleteTeacherTeacnihgCourseClick(teaching)"
             >

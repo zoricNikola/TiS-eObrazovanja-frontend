@@ -10,9 +10,7 @@ import {TeacherTeachingCourseFormDialogOptions} from './assign-teacher-to-course
 import {TeachingService} from '../../services/teaching.service';
 import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confirmation-dialog.component';
 import {take} from 'rxjs/operators';
-import { EnrollmentPage } from 'src/app/model/student/enrollment-page';
-import { EnrollmentService } from 'src/app/services/enrollment.service';
-import { Enrollment } from 'src/app/model/student/enrollment';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -53,7 +51,8 @@ export class CourseComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private courseService: CourseService,
-              private teachingService: TeachingService) { }
+              private teachingService: TeachingService,
+              public authService: AuthService) { }
 
   ngOnInit(): void {
     this.course$ = this.courseService.getCourse(this.selectedCourseId);

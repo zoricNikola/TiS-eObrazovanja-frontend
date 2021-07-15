@@ -21,6 +21,8 @@ import { CourseComponent } from './courses/course/course.component';
 import { StudentComponent } from './users/students/student/student.component';
 import { CoursesComponent } from './courses/courses.component';
 import { EnrollmentsComponent } from './enrollments/enrollments.component';
+import { TeachingsComponent } from './users/teachers/teachings/teachings.component';
+import { TeacherAuthGuardService } from './services/auth-guards/teacher-auth-guard.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -51,6 +53,11 @@ const routes: Routes = [
     path: 'teachers/:id',
     component: TeacherComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'teachings',
+    component: TeachingsComponent,
+    canActivate: [AuthGuard, TeacherAuthGuardService]
   },
   {
     path: 'students',

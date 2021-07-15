@@ -62,7 +62,8 @@
                 <tbody>
                     <tr class="hover:bg-indigo-600 text-white shadow-md min-h"
                         *ngFor="let teaching of teachings.content">
-                        <td>{{ teaching.course?.name }}</td>
+                        <td><a [routerLink]="'/courses/' + teaching.course?.id"
+                            class="hover:text-orange-500">{{ teaching.course?.name }}</a></td>
                         <td>{{ teaching.startDate }}</td>
                         <td>{{ teaching.teacherRole.name }}</td>
                         <td class="w-16" *ngIf="authService.currentUser?.authorities!.includes('ADMIN')">

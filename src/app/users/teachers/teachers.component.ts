@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { ConfirmationDialogOptions } from 'src/app/common/confirmation-dialog/confirmation-dialog.component';
 import { FORM_STATE } from 'src/app/model/common/form-state';
@@ -22,6 +22,13 @@ export class TeachersComponent implements OnInit {
 
   teacherPage$: Observable<TeacherPage> = of();
 
+  teachersQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
+
   selectedTeacher: Teacher | undefined = undefined;
 
   showSearchBox: boolean = false;
@@ -34,7 +41,43 @@ export class TeachersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.onLoadTeachers();
+    if (!this.selectable) {
+      this.teacherPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          let pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+          let queryParams = {
+            firstName: paramMap.get('firstName'),
+            lastName: paramMap.get('lastName'),
+            username: paramMap.get('username'),
+            address: paramMap.get('address'),
+            teacherTitleName: paramMap.get('teacherTitle'),
+            dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
+            dateOfBirthTo: paramMap.get('dateOfBirthTo'),
+            email: paramMap.get('email'),
+            phoneNumber: paramMap.get('phoneNumber'),
+            sort: paramMap.getAll('sort'),
+          };
+          return this.teachersService.filterTeachers(pageParams, queryParams);
+        })
+      );
+    } else {
+      this.teacherPage$ = this.teachersQueryMap.pipe(switchMap((paramMap) => {
+        const pageParams: PageParams = new PageParams(
+          paramMap.page,
+          paramMap.size
+        );
+
+        const queryParams = {
+          sort: paramMap.sort,
+          name: paramMap.name
+        };
+
+        return this.teachersService.filterTeachers(pageParams, queryParams);
+      }));
+    }
   }
 
   onTeacherSelect(teacher: Teacher): void {
@@ -43,32 +86,9 @@ export class TeachersComponent implements OnInit {
   }
 
   onTeacherTake(): void {
-    this.teacherTake.emit(this.selectedTeacher);
-    this.selectable = false;
-  }
-
-  onLoadTeachers(): void {
-    this.teacherPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
-        );
-        let queryParams = {
-          firstName: paramMap.get('firstName'),
-          lastName: paramMap.get('lastName'),
-          username: paramMap.get('username'),
-          address: paramMap.get('address'),
-          teacherTitleName: paramMap.get('teacherTitle'),
-          dateOfBirthFrom: paramMap.get('dateOfBirthFrom'),
-          dateOfBirthTo: paramMap.get('dateOfBirthTo'),
-          email: paramMap.get('email'),
-          phoneNumber: paramMap.get('phoneNumber'),
-          sort: paramMap.getAll('sort'),
-        };
-        return this.teachersService.filterTeachers(pageParams, queryParams);
-      })
-    );
+    let teacher: Teacher = {...this.selectedTeacher as Teacher};
+    this.selectedTeacher = undefined;
+    this.teacherTake.emit(teacher);
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -77,50 +97,87 @@ export class TeachersComponent implements OnInit {
       sortParams,
       triggeredProperty
     );
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.teachersQueryMap.next({
+        ...this.teachersQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 
   onPageChange(selectedPage: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.teachersQueryMap.next({
+        ...this.teachersQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.teachersQueryMap.next({
+        ...this.teachersQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
-    this.selectable ? (this.selectedTeacher = undefined) : {};
-    for (let key of Object.keys(queryParams)) {
-      if (!queryParams[key]) queryParams[key] = null;
+    for (const key of Object.keys(queryParams)) {
+      if (!queryParams[key]) {
+        queryParams[key] = null;
+      }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.teachersQueryMap.next({
+        ...this.teachersQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   refreshTeachersPage(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.teachersQueryMap.next({
+        ...this.teachersQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   teacherFormDialogOpened: boolean = false;

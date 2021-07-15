@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { ConfirmationDialogOptions } from '../common/confirmation-dialog/confirmation-dialog.component';
 import { FORM_STATE } from '../model/common/form-state';
@@ -23,6 +23,13 @@ export class ExamPeriodsComponent implements OnInit {
   @Output('itemTake') examPeriodTake : EventEmitter<ExamPeriod> = new EventEmitter();
 
   showSearchBox: boolean = false;
+
+  examPeriodsQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
 
   examPeriodForEdit: ExamPeriod | undefined = undefined;
   selectedEXamPeriod: ExamPeriod | undefined = undefined;
@@ -49,38 +56,61 @@ export class ExamPeriodsComponent implements OnInit {
   }
 
   onExamPeriodTake(): void{
-   this.examPeriodTake.emit(this.selectedEXamPeriod);
-   this.selectable = false;
+    let examPeriod: ExamPeriod = {...this.selectedEXamPeriod as ExamPeriod};
+    this.selectedEXamPeriod = undefined;
+    this.examPeriodTake.emit(examPeriod);
   }
 
   refreshExamPeriodsPage(){
-    this.router.navigate([], {
-    relativeTo: this.route,
-    queryParams: {
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
           r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
         },
         queryParamsHandling: 'merge',
       });
+    } else {
+      this.examPeriodsQueryMap.next({
+        ...this.examPeriodsQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   onLoadExamPeriods(){
-    this.examPeriodsPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
-        let pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
+    if (!this.selectable) {
+      this.examPeriodsPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          let pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+
+          let queryParams = {
+            name: paramMap.get('name'),
+            startDate: this.datePipe.transform(paramMap.get('startDate'), 'yyyy-MM-dd'),
+            endDate: this.datePipe.transform(paramMap.get('endDate'), 'yyyy-MM-dd'),
+            sort: paramMap.getAll('sort')
+          };
+
+          return this.examPeriodService.filterExamPeriods(pageParams, queryParams);
+        })
+      );
+    } else {
+      this.examPeriodsPage$ = this.examPeriodsQueryMap.pipe(switchMap((paramMap) => {
+        const pageParams: PageParams = new PageParams(
+          paramMap.page,
+          paramMap.size
         );
 
-        let queryParams = {
-          name: paramMap.get('name'),
-          startDate: this.datePipe.transform(paramMap.get('startDate'), 'yyyy-MM-dd'),
-          endDate: this.datePipe.transform(paramMap.get('endDate'), 'yyyy-MM-dd'),
-          sort: paramMap.getAll('sort')
+        const queryParams = {
+          sort: paramMap.sort,
+          name: paramMap.name
         };
-
         return this.examPeriodService.filterExamPeriods(pageParams, queryParams);
-      })
-    );
+      }));
+    }
   }
 
   examperiodFormDialogOpened: boolean = false;
@@ -161,44 +191,74 @@ export class ExamPeriodsComponent implements OnInit {
   }
 
   onPageChange(selectedPage: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examPeriodsQueryMap.next({
+        ...this.examPeriodsQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examPeriodsQueryMap.next({
+        ...this.examPeriodsQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
-    this.selectable ? (this.selectedEXamPeriod = undefined) : {};
-    for (let key of Object.keys(queryParams)) {
-      if (!queryParams[key]) queryParams[key] = null;
+    for (const key of Object.keys(queryParams)) {
+      if (!queryParams[key]) {
+        queryParams[key] = null;
+      }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examPeriodsQueryMap.next({
+        ...this.examPeriodsQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void{
-    this.selectable? (this.selectedEXamPeriod = undefined) : {};
+    this.selectable ? (this.selectedEXamPeriod = undefined) : {};
     let newSortParams = this.sortParamsUtils.updateSortParams(
       sortParams,
       triggeredProperty
     );
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examPeriodsQueryMap.next({
+        ...this.examPeriodsQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 }

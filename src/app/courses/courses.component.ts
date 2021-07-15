@@ -85,7 +85,7 @@ export class CoursesComponent implements OnInit {
         };
 
         return this.courseService.filterCourses(pageParams, queryParams);
-      }))
+      }));
     }
   }
 

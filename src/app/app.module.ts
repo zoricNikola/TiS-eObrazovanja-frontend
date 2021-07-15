@@ -65,8 +65,8 @@ import { ExamObligationTypeComponent } from './courses/exam-obligation-type/exam
 import { EnrollmentsComponent } from './enrollments/enrollments.component';
 import { CourseEnrollmentsComponent } from './courses/course-enrollments/course-enrollments.component';
 import { CourseEnrollmentFormDialogComponent } from './courses/course-enrollments/course-enrollment-form-dialog/course-enrollment-form-dialog.component';
-import { SelectTeacherDialogComponent } from './users/teachers/select-teacher-dialog/select-teacher-dialog.component';
 import { SelectStudentDialogComponent } from './users/students/select-student-dialog/select-student-dialog.component';
+import { TeacherTeachingsComponent } from './users/teachers/teacher-teachings/teacher-teachings.component';
 
 @NgModule({
   declarations: [
@@ -116,8 +116,8 @@ import { SelectStudentDialogComponent } from './users/students/select-student-di
     EnrollmentsComponent,
     CourseEnrollmentsComponent,
     CourseEnrollmentFormDialogComponent,
-    SelectTeacherDialogComponent,
     SelectStudentDialogComponent,
+    TeacherTeachingsComponent
   ],
   imports: [
     BrowserModule,

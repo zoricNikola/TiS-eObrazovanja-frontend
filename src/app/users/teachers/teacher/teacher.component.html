@@ -1,14 +1,6 @@
 <div class="flex flex-col flex-auto justify-center items-center">
     <div class="w-full lg:w-1/2 bg-indigo-800 h-full my-10 p-4">
         <div *ngIf="teachersTeachingPage$ | async as teachings">
-            <assign-course-to-teacher-form-dialog
-            [opened]="teacherTeachingCourseFormDialogOpened"
-            [options]="teacherTeachingCourseFormDialogOptions">
-            </assign-course-to-teacher-form-dialog>
-            <confirmation-dialog
-            [opened]="confirmationDialogOpened"
-            [options]="confirmationDialogOptions">
-            </confirmation-dialog>
             <div class="w-full my-3">
                 <button
                     class="btn btn-indigo inline-flex items-center ml-2"
@@ -108,98 +100,7 @@
             </div>
 
             <div accordion [opened]="showCourses">
-                <button
-                    class="btn btn-green inline-flex items-center my-3"
-                    (click)="onNewTeacherTeachingCourseClick()">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Assign
-                </button>
-
-                <table
-                    class="
-                    w-full
-                    table-fixed
-                    text-center
-                    border-separate
-                    table-row-spacing-y-4
-                    font-semibold">
-                <thead>
-                    <tr class="bg-red-300 text-indigo-800 shadow-md">
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
-                            <div class="flex justify-center">
-                                Course name
-                            </div>
-                        </th>
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
-                            <div class="flex justify-center">
-                                Teaching since
-                            </div>
-                        </th>
-                        <th class="hover:bg-red-400 active:bg-orange-400 cursor-pointer">
-                            <div class="flex justify-center">
-                                Teacher role
-                            </div>
-                        </th>
-                        <th class="w-16"></th>
-                        <th class="w-16"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="hover:bg-indigo-600 text-white shadow-md min-h"
-                        *ngFor="let teaching of teachings.content">
-                        <td>{{ teaching.course?.name }}</td>
-                        <td>{{ teaching.startDate }}</td>
-                        <td>{{ teaching.teacherRole.name }}</td>
-                        <td class="w-16">
-                            <button
-                              class="btn-sm-yellow"
-                              (click)="onEditTeacherTeachingCourseClick(teaching)">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                              </svg>
-                            </button>
-                        </td>
-                        <td class="w-16">
-                            <button
-                              class="btn-sm-red"
-                              (click)="onDeleteTeacherTeachingCourseClick(teaching)">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                              </svg>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
+                <div teacher-teachings [teacherX]="teacher"></div>
             </div>
         </div>
     </div>

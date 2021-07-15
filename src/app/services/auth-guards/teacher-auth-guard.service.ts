@@ -12,7 +12,7 @@ import { AuthService } from '../auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class StudentAuthGuardService implements CanActivate {
+export class TeacherAuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
 
   canActivate(
@@ -23,7 +23,7 @@ export class StudentAuthGuardService implements CanActivate {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    if (this.authService.currentUser?.authorities.includes('STUDENT'))
+    if (this.authService.currentUser?.authorities.includes('TEACHER'))
       return true;
 
     this.router.navigate(['/login']);

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import {BaseService} from './base.service';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {ExamObligation} from '../model/exam-obligation/exam-obligation';
-import {Observable} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {PageParams} from '../model/http/page-params';
-import {ExamObligationPage} from '../model/exam-obligation/exam-obligation-page';
-import {ResponsePage} from '../model/http/response-page';
+import { BaseService } from './base.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { ExamObligation } from '../model/exam-obligation/exam-obligation';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { PageParams } from '../model/http/page-params';
+import { ExamObligationPage } from '../model/exam-obligation/exam-obligation-page';
+import { ResponsePage } from '../model/http/response-page';
+import { ExamObligationTakingPage } from '../model/exam-obligation/exam-obligation-taking-page';
+import { ExamObligationTaking } from '../model/exam-obligation/exam-obligation-taking';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ExamObligationService extends BaseService{
-
+export class ExamObligationService extends BaseService {
   constructor(http: HttpClient) {
     super(`${environment.apiUrl}/examObligations`, http);
   }
@@ -21,13 +22,16 @@ export class ExamObligationService extends BaseService{
   createExamObligation(examObligation: ExamObligation): Observable<number> {
     let { points, description, examObligationType, course } = examObligation;
 
-    return this.create({points, description, examObligationType, course});
+    return this.create({ points, description, examObligationType, course });
   }
 
-  updateExamObligation(id: number, examObligation: ExamObligation): Observable<void> {
+  updateExamObligation(
+    id: number,
+    examObligation: ExamObligation
+  ): Observable<void> {
     let { points, description, examObligationType, course } = examObligation;
 
-    return this.update(id, {points, description, examObligationType, course});
+    return this.update(id, { points, description, examObligationType, course });
   }
 
   deleteExamObligation(id: number): Observable<void> {
@@ -35,7 +39,9 @@ export class ExamObligationService extends BaseService{
   }
 
   getExamObligation(id: number): Observable<ExamObligation> {
-    return this.getOne(id).pipe(map((responseBody) => responseBody as ExamObligation));
+    return this.getOne(id).pipe(
+      map((responseBody) => responseBody as ExamObligation)
+    );
   }
 
   filterExamObligations(
@@ -50,8 +56,10 @@ export class ExamObligationService extends BaseService{
 
     if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
     if (queryParams.points) params['points'] = queryParams.points;
-    if (queryParams.description) params['description'] = queryParams.description;
-    if (queryParams.examObligationType) params['examObligationType'] = queryParams.examObligationType;
+    if (queryParams.description)
+      params['description'] = queryParams.description;
+    if (queryParams.examObligationType)
+      params['examObligationType'] = queryParams.examObligationType;
     if (queryParams.course) params['course'] = queryParams.course;
 
     return this.getExamObligations(params, courseId).pipe(
@@ -72,10 +80,49 @@ export class ExamObligationService extends BaseService{
   }
 
   getExamObligations(params: any, courseId?: number): Observable<any> {
-    return this.http.get(
-      `${environment.apiUrl}/courses/${courseId}/examObligations`,
-      {params, observe: 'response'}
-    ).pipe(map((response) => response.body))
+    return this.http
+      .get(`${environment.apiUrl}/courses/${courseId}/examObligations`, {
+        params,
+        observe: 'response',
+      })
+      .pipe(map((response) => response.body))
       .pipe(catchError(this.handleError));
+  }
+
+  filterExamObligationTakings(
+    obligationId: number,
+    pageParams: PageParams,
+    queryParams: any
+  ): Observable<ExamObligationTakingPage> {
+    let params: any = {
+      page: pageParams.page,
+      size: pageParams.size,
+    };
+
+    if (queryParams.sort.length > 0) params['sort'] = queryParams.sort;
+
+    return this.http
+      .get(`${this.url}/${obligationId}/examObligationTakings`, {
+        params,
+        observe: 'response',
+      })
+      .pipe(map((response) => response.body))
+      .pipe(catchError(this.handleError))
+      .pipe(
+        map((responseBody) => {
+          const body = responseBody as ResponsePage<ExamObligationTaking>;
+
+          let page: ExamObligationTakingPage = {
+            content: body.content,
+            contentCount: body.numberOfElements,
+            totalItemsCount: body.totalElements,
+            totalPagesCount: body.totalPages,
+            pageSize: pageParams.size,
+            currentPage: pageParams.page,
+            queryParams: queryParams,
+          };
+          return page;
+        })
+      );
   }
 }

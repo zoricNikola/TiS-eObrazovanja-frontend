@@ -1,0 +1,22 @@
+<div class="page-content-holder">
+  <div class="page-content-card w-3/5">
+    <div *ngIf="examObligation">
+      <div class="mb-4 text-4xl font-bold text-center">
+        <h1>
+          <a
+            [routerLink]="'/courses/' + examObligation.course.id"
+            class="hover:text-orange-500 underline"
+            >{{ examObligation.course.name }}</a
+          >
+          - {{ examObligation.description }}
+        </h1>
+        <h3>
+          Points: {{ examObligation.points }} Type:
+          {{ examObligation.examObligationType.name }}
+        </h3>
+      </div>
+      <h1 class="text-2xl font-bold my-2">Exam obligation takings:</h1>
+      <div obligation-takings [obligation]="examObligation"></div>
+    </div>
+  </div>
+</div>

@@ -27,7 +27,7 @@ export class CoursesComponent implements OnInit {
     size: null,
     sort: [],
     name: null
-  })
+  });
 
   coursesPage$: Observable<CoursePage> = of();
 

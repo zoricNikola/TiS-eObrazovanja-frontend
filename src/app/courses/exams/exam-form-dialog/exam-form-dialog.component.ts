@@ -20,7 +20,7 @@ export interface ExamFormDialogOptions {
 export class ExamFormDialogComponent implements OnInit {
   @Input('opened') opened = false;
   @Input('options') options!: ExamFormDialogOptions;
-  @Input('selectable') selectable = true;
+  @Input('selectable') selectable = false;
   @Input('selectedExamPeriod') selectedExamPeriod: ExamPeriod | undefined = undefined;
 
   @ViewChild('f') form!: NgForm;
@@ -29,7 +29,7 @@ export class ExamFormDialogComponent implements OnInit {
   originalDescription: string | undefined;
   originalClassroom: string | undefined;
   originalPoints: number | undefined;
- // originalExamPeriod: ExamPeriod | undefined;
+  originalExamPeriod: ExamPeriod | undefined;
 
   showExamPeriods = false;
 
@@ -55,7 +55,7 @@ export class ExamFormDialogComponent implements OnInit {
     ) {
       this.originalClassroom = this.options.examForEdit.classroom;
       this.originalDescription = this.options.examForEdit.description;
-      this.selectedExamPeriod = this.options.examForEdit.examPeriod;
+      this.originalExamPeriod = this.options.examForEdit.examPeriod;
       this.originalPoints = this.options.examForEdit.points;
       this.originalExamDateTime = this.options.examForEdit.dateTime;
       this.exam = { ...this.options.examForEdit };

@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {Course} from '../../model/course/course';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {TeachingPage} from '../../model/teacher/teaching-page';
 import {FORM_STATE} from '../../model/common/form-state';
 import {Teaching} from '../../model/teacher/teaching';
@@ -69,9 +69,12 @@ export class CourseComponent implements OnInit {
   }
 
   refreshCoursePage(): void {
-    this.router.navigate([])
-      .then(() => {
-        window.location.reload();
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
       });
   }
 
@@ -92,7 +95,6 @@ export class CourseComponent implements OnInit {
           .subscribe(() => {
             this.teacherTeachingCourseFormDialogOpened = false;
             this.refreshCoursePage();
-            this.showTeachings = true;
           });
         }
       };
@@ -114,7 +116,6 @@ export class CourseComponent implements OnInit {
           .subscribe(() => {
             this.teacherTeachingCourseFormDialogOpened = false;
             this.refreshCoursePage();
-            this.showTeachings = true;
           });
       }
     };
@@ -136,7 +137,6 @@ export class CourseComponent implements OnInit {
           .subscribe(() => {
             this.confirmationDialogOpened = false;
             this.refreshCoursePage();
-            this.showTeachings = true;
           });
       }
     };

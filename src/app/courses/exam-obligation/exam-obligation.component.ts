@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Course} from '../../model/course/course';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {FORM_STATE} from '../../model/common/form-state';
 import {ExamObligation} from '../../model/exam-obligation/exam-obligation';
 import {ConfirmationDialogOptions} from '../../common/confirmation-dialog/confirmation-dialog.component';
@@ -27,6 +27,13 @@ export class ExamObligationComponent implements OnInit {
   course!: Course;
   examObligationPage$: Observable<ExamObligationPage> = of();
 
+  examObligationQueryMap: BehaviorSubject<any> = new BehaviorSubject({
+    page: null,
+    size: null,
+    sort: [],
+    name: null
+  });
+
   examObligationDialogOpened: boolean = false;
   examObligationDialogOptions: ExamObligationDialogOptions = {
     state: FORM_STATE.ADD,
@@ -52,41 +59,69 @@ export class ExamObligationComponent implements OnInit {
               public sortParamUtils: SortParamsUtils) { }
 
   ngOnInit(): void {
-    this.examObligationPage$ = this.route.queryParamMap.pipe(
-      switchMap((paramMap) => {
+    if (!this.selectable) {
+      this.examObligationPage$ = this.route.queryParamMap.pipe(
+        switchMap((paramMap) => {
+          const pageParams: PageParams = new PageParams(
+            paramMap.get('page'),
+            paramMap.get('size')
+          );
+
+          const queryParams = {
+            description: paramMap.get('points'),
+            classroom: paramMap.get('description'),
+            points: paramMap.get('examObligationType'),
+            dateFrom: paramMap.get('course'),
+            sort: paramMap.getAll('sort'),
+          };
+          return this.examObligationService.filterExamObligations(pageParams, this.courseId, queryParams);
+        })
+      );
+    } else {
+      this.examObligationPage$ = this.examObligationQueryMap.pipe(switchMap((paramMap) => {
         const pageParams: PageParams = new PageParams(
-          paramMap.get('page'),
-          paramMap.get('size')
+          paramMap.size,
+          paramMap.page
         );
 
         const queryParams = {
-          description: paramMap.get('points'),
-          classroom: paramMap.get('description'),
-          points: paramMap.get('examObligationType'),
-          dateFrom: paramMap.get('course'),
-          sort: paramMap.getAll('sort'),
+          sort: paramMap.sort,
+          name: paramMap.name
         };
         return this.examObligationService.filterExamObligations(pageParams, this.courseId, queryParams);
-      })
-    );
+      }));
+    }
     this.courseService.getCourse(this.courseId).subscribe((course: Course) => this.course = course);
-    this.examObligationPage$.subscribe(res => console.log(res));
   }
 
   onPageChange(selectedPage: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage === 1 ? null : selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: selectedPage === 1 ? null : selectedPage },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examObligationQueryMap.next({
+        ...this.examObligationQueryMap.value,
+        page: selectedPage
+      });
+    }
   }
 
   onPageSizeChange(selectedPageSize: number): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { size: selectedPageSize },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { size: selectedPageSize },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examObligationQueryMap.next({
+        ...this.examObligationQueryMap.value,
+        size: selectedPageSize
+      });
+    }
   }
 
   onSearchOptionsChange(queryParams: any): void {
@@ -96,11 +131,18 @@ export class ExamObligationComponent implements OnInit {
       }
     }
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examObligationQueryMap.next({
+        ...this.examObligationQueryMap.value,
+        ...queryParams
+      });
+    }
   }
 
   onSortOptionsChange(sortParams: string[], triggeredProperty: string): void {
@@ -110,11 +152,18 @@ export class ExamObligationComponent implements OnInit {
       triggeredProperty
     );
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sort: newSortParams },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { sort: newSortParams },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examObligationQueryMap.next({
+        ...this.examObligationQueryMap.value,
+        sort: newSortParams
+      });
+    }
   }
 
   onExamObligationSelect(examObligation: ExamObligation): void {
@@ -122,17 +171,26 @@ export class ExamObligationComponent implements OnInit {
   }
 
   onExamObligationTake(): void {
-    this.examObligationTake.emit(this.selectedExamObligation);
+    let examObligation: ExamObligation = {...this.selectedExamObligation as ExamObligation};
+    this.selectedExamObligation = undefined;
+    this.examObligationTake.emit(examObligation);
   }
 
   refreshExamObligationsPage(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (!this.selectable) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          r: this.route.snapshot.queryParamMap.get('r') ? null : 'r',
+        },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.examObligationQueryMap.next({
+        ...this.examObligationQueryMap.value,
+        r: 'r'
+      });
+    }
   }
 
   onNewExamObligationClick(): void{

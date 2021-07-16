@@ -23,12 +23,27 @@ import { CoursesComponent } from './courses/courses.component';
 import { EnrollmentsComponent } from './enrollments/enrollments.component';
 import { TeachingsComponent } from './users/teachers/teachings/teachings.component';
 import { TeacherAuthGuardService } from './services/auth-guards/teacher-auth-guard.service';
+import { SingleExamObligationComponent } from './courses/exam-obligation/single-exam-obligation/single-exam-obligation.component';
+import { AdminTeacherAuthGuardService } from './services/auth-guards/admin-teacher-auth-guard.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'courses', component: CoursesComponent, canActivate: [AuthGuard] },
-  { path: 'courses/:id', component: CourseComponent, canActivate: [AuthGuard] },
+  {
+    path: 'courses',
+    component: CoursesComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'courses/:id',
+    component: CourseComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'examObligations/:id',
+    component: SingleExamObligationComponent,
+    canActivate: [AuthGuard, AdminTeacherAuthGuardService],
+  },
   {
     path: 'examPeriods',
     component: ExamPeriodsComponent,
@@ -100,6 +115,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-exports: [RouterModule],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
